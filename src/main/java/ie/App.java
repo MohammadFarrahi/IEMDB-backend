@@ -1,7 +1,10 @@
 package ie;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Not a 'Hello World'");
+        Cli cli = new Cli();
+        cli.run();
     }
 }
