@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0d0dd9b-af60-40de-b293-19d7a7b4c507" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ie/Actor.java" afterDir="false" />
+    <list default="true" id="a0d0dd9b-af60-40de-b293-19d7a7b4c507" name="Changes" comment="Add exception handling and runCommand method for top level Iemdb">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ie/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ie/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ie/Cli.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ie/Cli.java" afterDir="false" />
@@ -18,12 +18,21 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -39,6 +48,9 @@
     <option name="delegateBuildToMaven" value="true" />
   </component>
   <component name="ProjectId" id="25QcM3EUyaXum1ozkL55qo9qXH8" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -47,6 +59,7 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -63,7 +76,7 @@
       <module name="iemdb" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ie.*" />
+          <option name="PATTERN" value="ie.user.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -86,6 +99,28 @@
       <option name="presentableId" value="Default" />
       <updated>1645462714893</updated>
     </task>
+    <task id="LOCAL-00001" summary="Add utility classes and enums">
+      <created>1645566117739</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1645566117739</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add User model and its manager">
+      <created>1645566365154</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1645566365154</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add exception handling and runCommand method for top level Iemdb">
+      <created>1645566473457</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1645566473457</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -98,5 +133,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add utility classes and enums" />
+    <MESSAGE value="Add User model and its manager" />
+    <MESSAGE value="Add exception handling and runCommand method for top level Iemdb" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add exception handling and runCommand method for top level Iemdb" />
   </component>
 </project>

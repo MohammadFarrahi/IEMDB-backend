@@ -1,4 +1,6 @@
 package ie;
+import ie.types.Command;
+
 import java.util.Scanner;
 
 public class Cli {
@@ -20,10 +22,11 @@ public class Cli {
 
     private void execCommand(String[] commandParts) throws IllegalStateException {
         String command = commandParts[0];
+        String data = commandParts.length == 1 ? "" : commandParts[1];
 
         switch (command) {
-            case "addActor" -> System.out.println("FUCK");
-            default -> throw new IllegalStateException("Unexpected value: " + command);
+            case "addUser" -> iemdb.runCommand(Command.ADD_USER, data);
+            default -> iemdb.runCommand(Command.INVALID_COMMAND, null);
         }
     }
 }
