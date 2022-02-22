@@ -49,6 +49,11 @@ public class Film {
         this.cast = cast;
     }
 
+    @JsonProperty(value = "releaseDate", required = true)
+    private void setReleaseDate(String releaseDate){
+        this.releaseDate = LocalDate.parse(releaseDate);
+    }
+
     @JsonProperty(value="writers", required = true)
     private void setWriters (ArrayList<String> writers){
         this.writers = writers;
