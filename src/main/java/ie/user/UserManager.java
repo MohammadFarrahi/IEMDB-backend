@@ -28,7 +28,7 @@ public class UserManager {
             return user;
         }
         else
-            throw new Exception("Not found");
+            throw new Exception("User Not found");
     }
 
 }
