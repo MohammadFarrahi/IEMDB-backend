@@ -2,6 +2,6 @@ package ie.types;
 
 public enum Command {
     ADD_USER,
-    ADD_FILM,
+    ADD_MOVIE,
     INVALID_COMMAND,
 }
