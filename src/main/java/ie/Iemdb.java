@@ -24,17 +24,17 @@ public class Iemdb {
     }
 
     public void runCommand(Command command, String data) {
-        String resData = "";
+        String resData;
         try {
             switch (command) {
-                case ADD_USER -> addUser(data);
-                case ADD_MOVIE -> addMovie(data);
+                case ADD_USER -> resData = addUser(data);
+                case ADD_MOVIE -> resData = addMovie(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
 
         }catch (JsonProcessingException e) {
-            setJsonResponse(false, "Invalid Command");
+            setJsonResponse(false, e.getMessage());
         }
         catch (Exception e){
             setJsonResponse(false, e.getMessage());
@@ -45,16 +45,18 @@ public class Iemdb {
         this.response = new Response(status, message);
     }
 
-    private void addUser(String dataJson) throws Exception {
+    private String addUser(String dataJson) throws Exception {
         userManager.addUser(dataJson);
+        return "user added successfully";
     }
 
-    private void addMovie(String data) throws Exception {
+    private String addMovie(String data) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList <String> cast = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
         if (!isCastValid(cast))
             throw new Exception("Actor Not Found");
         filmManager.addMovie(data);
+        return "movie added successfully";
     }
 
     private Boolean isCastValid(ArrayList<String> cast) {
