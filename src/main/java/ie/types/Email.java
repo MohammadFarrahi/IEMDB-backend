@@ -1,6 +1,5 @@
 package ie.types;
 
-import javax.management.InvalidAttributeValueException;
 import java.util.regex.Pattern;
 
 public class Email {

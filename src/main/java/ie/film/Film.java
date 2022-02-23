@@ -2,8 +2,6 @@ package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
-import ie.Actor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

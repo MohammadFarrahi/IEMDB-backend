@@ -7,7 +7,6 @@ import ie.types.Command;
 import ie.types.Response;
 import ie.user.UserManager;
 
-import javax.management.InvalidAttributeValueException;
 import java.util.ArrayList;
 
 public class Iemdb {

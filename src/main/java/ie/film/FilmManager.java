@@ -1,9 +1,7 @@
 package ie.film;
 
-import com.fasterxml.jackson.databind.JsonNode;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import ie.user.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
