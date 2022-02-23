@@ -24,6 +24,7 @@ public class Response {
 
     @Override
     public String toString() {
+        // TODO: resolve this issue : if message is a string of json, printing response will be not well-formatted
         try {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(this);

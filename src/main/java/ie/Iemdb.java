@@ -2,6 +2,7 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.film.ActorManager;
 import ie.film.FilmManager;
 import ie.types.Command;
 import ie.types.Response;
@@ -13,9 +14,11 @@ public class Iemdb {
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;
+    private final ActorManager actorManager;
     public Iemdb() {
         this.userManager = new UserManager();
         this.filmManager = new FilmManager();
+        this.actorManager = new ActorManager();
     }
 
     public String getResponse() {
@@ -28,6 +31,7 @@ public class Iemdb {
             switch (command) {
                 case ADD_USER -> resData = addUser(data);
                 case ADD_MOVIE -> resData = addMovie(data);
+                case ADD_ACTOR -> resData = addActor(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -63,5 +67,9 @@ public class Iemdb {
         return true;
     }
 
+    private String addActor(String data) throws Exception {
+        var x = actorManager.updateOrAddActor(data);
+        return "actor added successfully";
+    }
 
 }
