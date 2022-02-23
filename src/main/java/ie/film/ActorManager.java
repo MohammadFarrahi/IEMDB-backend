@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 public class ActorManager {
     private final HashMap<String, Actor> actorMap;
@@ -23,5 +25,11 @@ public class ActorManager {
         var newActor = deserializer.readValue(jsonData, Actor.class);
         actorMap.put(objectId, newActor);
         return newActor;
+    }
+//    public boolean isActorPresent(String id) {
+//        return actorMap.containsKey(id);
+//    }
+    public boolean isActorPresent(List<String> ids) {
+        return actorMap.keySet().containsAll(ids);
     }
 }

@@ -54,17 +54,17 @@ public class Iemdb {
     }
 
     private String addMovie(String data) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList <String> cast = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
-        if (!isCastValid(cast))
+        if (!checkCastExistance(data)) {
             throw new Exception("Actor Not Found");
+        }
         filmManager.addMovie(data);
         return "movie added successfully";
     }
 
-    private Boolean isCastValid(ArrayList<String> cast) {
-        //TODO: implement this part after making actor manager
-        return true;
+    private boolean checkCastExistance(String data) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList <String> castIds = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
+        return actorManager.isActorPresent(castIds);
     }
 
     private String addActor(String data) throws Exception {
