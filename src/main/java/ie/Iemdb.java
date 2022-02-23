@@ -2,7 +2,7 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.film.ActorManager;
+import ie.actor.ActorManager;
 import ie.film.FilmManager;
 import ie.types.Command;
 import ie.types.Response;

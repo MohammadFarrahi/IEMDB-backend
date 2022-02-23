@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.film.Comment;
 import ie.types.Email;
 
 import javax.management.InvalidAttributeValueException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class User {
     private Email email;
@@ -16,6 +18,8 @@ public class User {
     private String nickname;
     private String name;
     private LocalDate birthDate;
+
+    private ArrayList<Comment> userComments;
 
     @JsonCreator
     private User(){}
@@ -78,5 +82,9 @@ public class User {
         } catch (JsonProcessingException e) {
             return "";
         }
+    }
+
+    public void addUserComment(Comment newComment) {
+        userComments.add(newComment);
     }
 }

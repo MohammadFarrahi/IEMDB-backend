@@ -1,6 +1,7 @@
 package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
@@ -18,6 +19,8 @@ public class Film {
     private Float imdbRate;
     private Integer duration;
     private Integer ageLimit;
+
+    private ArrayList<Comment> comments;
 
     @JsonCreator
     private Film(){}
@@ -78,6 +81,7 @@ public class Film {
     }
 
 
-
-
+    public void addFilmComment(Comment newComment) {
+        comments.add(newComment);
+    }
 }

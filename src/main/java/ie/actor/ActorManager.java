@@ -1,10 +1,9 @@
-package ie.film;
+package ie.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class ActorManager {

@@ -1,4 +1,4 @@
-package ie.film;
+package ie.actor;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
