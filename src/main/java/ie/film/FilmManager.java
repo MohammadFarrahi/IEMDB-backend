@@ -1,9 +1,5 @@
 package ie.film;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FilmManager {
@@ -13,15 +9,18 @@ public class FilmManager {
         filmMap = new HashMap<>();
     }
 
-    public void addMovie (String data) throws Exception {
+    public Film addMovie (String data) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String id = objectMapper.readTree(data).get("id").toString();
 
-        if (filmMap.containsKey(id))
-            throw new Exception("Duplicate");
-
-        Film film = objectMapper.readValue(data, Film.class);
-        filmMap.put(id, film);
+        if (filmMap.containsKey(id)) {
+            var existingFilm = filmMap.get(id);
+            objectMapper.readerForUpdating(existingFilm).readValue(data);
+            return existingFilm;
+        }
+        var newFilm = objectMapper.readValue(data, Film.class);
+        filmMap.put(id, newFilm);
+        return newFilm;
     }
 
     public Film getFilm(String id) throws Exception {
