@@ -28,6 +28,7 @@ public class Cli {
             case "addUser" -> iemdb.runCommand(Command.ADD_USER, data);
             case "addMovie" -> iemdb.runCommand(Command.ADD_MOVIE, data);
             case "addActor" -> iemdb.runCommand(Command.ADD_ACTOR, data);
+            case "addComment" -> iemdb.runCommand(Command.ADD_COMMENT, data);
             default -> iemdb.runCommand(Command.INVALID_COMMAND, null);
         }
     }

@@ -3,6 +3,7 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
+import ie.film.CommentManager;
 import ie.film.FilmManager;
 import ie.types.Command;
 import ie.types.Response;
@@ -15,10 +16,12 @@ public class Iemdb {
     private final UserManager userManager;
     private final FilmManager filmManager;
     private final ActorManager actorManager;
+    private final CommentManager commentManager;
     public Iemdb() {
         this.userManager = new UserManager();
         this.filmManager = new FilmManager();
         this.actorManager = new ActorManager();
+        this.commentManager = new CommentManager();
     }
 
     public String getResponse() {
@@ -32,6 +35,7 @@ public class Iemdb {
                 case ADD_USER -> resData = addUser(data);
                 case ADD_MOVIE -> resData = addMovie(data);
                 case ADD_ACTOR -> resData = addActor(data);
+                case ADD_COMMENT -> resData = addComment(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -70,6 +74,11 @@ public class Iemdb {
     private String addActor(String data) throws Exception {
         var x = actorManager.updateOrAddActor(data);
         return "actor added successfully";
+    }
+
+    private String addComment(String data) throws Exception{
+        commentManager.addComment(data, filmManager, userManager);
+        return "comment added successfully";
     }
 
 }

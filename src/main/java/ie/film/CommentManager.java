@@ -50,7 +50,7 @@ public class CommentManager {
         if(!Comment.commentJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)))
             return false;
         if(!(commentJsonNode.get("movieId").isInt() && commentJsonNode.get("userEmail").isTextual() &&
-                commentJsonNode.get("test").isTextual()))
+                commentJsonNode.get("text").isTextual()))
             return false;
 
         return true;
