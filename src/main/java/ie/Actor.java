@@ -1,7 +1,10 @@
 package ie;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -15,10 +18,9 @@ public class Actor {
 
     // For jackson usage
     @JsonProperty(value= "id", required = true)
-    private void setId(String id) {
+    private void setId(String id) throws Exception {
         if(Integer.parseInt(id) < 1) {
-            // TODO: throw exception
-            System.out.println("id invalid");
+            throw new Exception("invalid actor id");
         }
         this.id = id;
     }
@@ -28,17 +30,27 @@ public class Actor {
     }
     @JsonProperty(value= "birthDate", required = true)
     private void setBirthDate(String birthDate) {
-        try {
-            this.birthDate = LocalDate.parse(birthDate);
-        }
-        catch(DateTimeException e) {
-            // TODO: throw exception
-            System.out.println("date invalid");
-        }
+        this.birthDate = LocalDate.parse(birthDate);
     }
     @JsonProperty(value= "nationality", required = true)
     private void setNationality(String nationality) {
         this.nationality = nationality;
+    }
+    @JsonGetter("id")
+    private String getId() {
+        return id;
+    }
+    @JsonGetter("name")
+    private String getName() {
+        return name;
+    }
+    @JsonGetter("birthDate")
+    private String getBirthDate() {
+        return birthDate.toString();
+    }
+    @JsonGetter("nationality")
+    private String getNationality() {
+        return nationality;
     }
     @JsonCreator
     private Actor(){}
@@ -48,7 +60,7 @@ public class Actor {
              String name,
              String birthDate,
              String nationality
-    ) {
+    ) throws Exception {
         // TODO: handle validation on name and nationality
         setId(id);
         setName(name);
@@ -56,17 +68,13 @@ public class Actor {
         setNationality(nationality);
     }
 
-    public String getId(){
-        return id;
-    }
-
     @Override
     public String toString() {
-        return "Actor{" +
-                "id='" + id + '\'' +
-                ", name=" + name +
-                ", nationality='" + nationality + '\'' +
-                '}';
+        ObjectMapper serializer = new ObjectMapper();
+        try {
+            return serializer.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            return "";
+        }
     }
-    // TODO: serialization methods must be added.
 }
