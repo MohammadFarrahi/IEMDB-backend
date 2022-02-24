@@ -60,7 +60,7 @@ public class FilmManager {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
         var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        if (!userManager.isUserPresent(userEmail)) {
+        if (!userManager.isIdValid(userEmail)) {
             throw new Exception("ne user with this id");
         }
         if (filmMap.get(filmId) == null) {
@@ -84,5 +84,9 @@ public class FilmManager {
         if (exceptionFlag) {
             throw new Exception("invalid input vote");
         }
+    }
+
+    public boolean isIdValid(String id){
+        return filmMap.containsKey(id);
     }
 }

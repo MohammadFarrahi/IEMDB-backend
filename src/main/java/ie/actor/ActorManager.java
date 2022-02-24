@@ -34,7 +34,10 @@ public class ActorManager {
 //    public boolean isActorPresent(String id) {
 //        return actorMap.containsKey(id);
 //    }
-    public boolean isActorPresent(List<String> ids) {
+    public boolean isIdListValid(List<String> ids) {
         return actorMap.keySet().containsAll(ids);
+    }
+    public boolean isIdValid(String id){
+        return actorMap.containsKey(id);
     }
 }

@@ -70,7 +70,7 @@ public class Iemdb {
     private boolean checkCastExistance(String data) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList <String> castIds = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
-        return actorManager.isActorPresent(castIds);
+        return actorManager.isIdListValid(castIds);
     }
 
     private String addActor(String data) throws Exception {
@@ -86,5 +86,17 @@ public class Iemdb {
     private String rateMovie(String data) throws Exception {
         filmManager.rateMovie(data, userManager);
         return "movie rated successfully";
+    }
+
+    public Boolean modelExists(String id, Constant.Model modelType) {
+        boolean res;
+        switch (modelType) {
+            case FILM -> res = filmManager.isIdValid(id);
+            case USER -> res = userManager.isIdValid(id);
+            case ACTOR -> res = actorManager.isIdValid(id);
+            case COMMENT -> res = commentManager.isIdValid(id);
+            default -> res = false;
+        }
+        return res;
     }
 }

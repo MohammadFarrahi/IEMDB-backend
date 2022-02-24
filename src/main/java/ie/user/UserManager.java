@@ -35,7 +35,7 @@ public class UserManager {
         else
             throw new Exception("User Not found");
     }
-    public boolean isUserPresent(String email) {
+    public boolean isIdValid(String email) {
         return userMap.containsKey(email);
     }
 
