@@ -22,6 +22,8 @@ public class Constant {
         public static final String DURATION = "duration";
         public static final String AGE_L = "ageLimit";
         public static final String IMDB = "imdbRate";
+        public static final String RATING = "rating";
+
     }
     public static class User {
         public static final String E_ID = "email";
