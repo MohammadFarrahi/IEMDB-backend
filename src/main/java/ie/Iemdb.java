@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
 import ie.film.CommentManager;
 import ie.film.FilmManager;
-import ie.types.Command;
 import ie.types.Response;
 import ie.user.UserManager;
+import ie.types.Constant;
 
 import java.util.ArrayList;
 
@@ -28,15 +28,15 @@ public class Iemdb {
         return this.response.toString();
     }
 
-    public void runCommand(Command command, String data) {
+    public void runTextCommand(String command, String data) {
         String resData;
         try {
             switch (command) {
-                case ADD_USER -> resData = addUser(data);
-                case ADD_MOVIE -> resData = addMovie(data);
-                case ADD_ACTOR -> resData = addActor(data);
-                case ADD_COMMENT -> resData = addComment(data);
-                case RATE_MOVIE -> resData = rateMovie(data);
+                case Constant.Command.ADD_USER -> resData = addUser(data);
+                case Constant.Command.ADD_MOVIE -> resData = addMovie(data);
+                case Constant.Command.ADD_ACTOR -> resData = addActor(data);
+                case Constant.Command.ADD_COMMENT -> resData = addComment(data);
+                case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);

@@ -2,21 +2,16 @@ package ie.film;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.user.UserManager;
 
+import ie.user.UserManager;
 import java.util.ArrayList;
+import ie.types.Constant;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class FilmManager {
     private final HashMap<String, Film> filmMap;
     private final ObjectMapper objectJsonMapper;
-    // TODO: Handle this properly (attribute below)
-    private static final HashSet<String> voteJsonFieldNames = new HashSet<String>() {{
-        add("userEmail");
-        add("movieId");
-        add("score");
-    }};
 
     public FilmManager() {
         objectJsonMapper = new ObjectMapper();
@@ -25,7 +20,7 @@ public class FilmManager {
     }
 
     public Film addMovie(String data) throws Exception {
-        String id = objectJsonMapper.readTree(data).get("id").toString();
+        String id = objectJsonMapper.readTree(data).get(Constant.Movie.ID).toString();
 
         if (filmMap.containsKey(id)) {
             var existingFilm = filmMap.get(id);
@@ -51,16 +46,16 @@ public class FilmManager {
         ValidateVoteJson(rateJsonNode);
         ValidateVoteData(rateJsonNode, userManager);
 
-        var userEmail = rateJsonNode.get("userEmail").asText();
-        var filmId = rateJsonNode.get("movieId").asText();
-        var rate = rateJsonNode.get("score").asInt();
+        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
+        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
+        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
     private void ValidateVoteData(JsonNode rateJsonNode, UserManager userManager) throws Exception {
-        var userEmail = rateJsonNode.get("userEmail").asText();
-        var filmId = rateJsonNode.get("movieId").asText();
-        var rate = rateJsonNode.get("score").asInt();
+        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
+        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
+        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
         if (!userManager.isUserPresent(userEmail)) {
             throw new Exception("ne user with this id");
         }
@@ -76,11 +71,12 @@ public class FilmManager {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-        boolean exceptionFlag = (jsonFiledNames.size() != FilmManager.voteJsonFieldNames.size());
-        exceptionFlag |= !(FilmManager.voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
-        exceptionFlag |= !(rateJsonNode.get("movieId").isInt() &&
-                rateJsonNode.get("userEmail").isTextual() &&
-                rateJsonNode.get("score").isInt());
+        var voteJsonFieldNames = Constant.Rate.getSet();
+        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
+        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        exceptionFlag |= !(rateJsonNode.get(Constant.Rate.M_ID).isInt() &&
+                rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
+                rateJsonNode.get(Constant.Rate.RATE).isInt());
         if (exceptionFlag) {
             throw new Exception("invalid input vote");
         }

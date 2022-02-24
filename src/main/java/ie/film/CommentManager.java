@@ -3,6 +3,7 @@ package ie.film;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.types.Constant;
 import ie.user.UserManager;
 
 import java.util.ArrayList;
@@ -31,9 +32,9 @@ public class CommentManager {
     }
 
     private Comment createNewComment(JsonNode commentJsonNode, FilmManager filmManager, UserManager userManager) throws Exception {
-        var commentFilm = filmManager.getFilm(commentJsonNode.get("movieId").asText());
-        var commentOwner = userManager.getUser(commentJsonNode.get("userEmail").asText());
-        var commentText = commentJsonNode.get("text").asText();
+        var commentFilm = filmManager.getFilm(commentJsonNode.get(Constant.Comment.M_ID).asText());
+        var commentOwner = userManager.getUser(commentJsonNode.get(Constant.Comment.U_ID).asText());
+        var commentText = commentJsonNode.get(Constant.Comment.CONTENT).asText();
         var newComment = new Comment((++lastCommentId).toString(), commentFilm, commentOwner, commentText);
 
         commentFilm.addFilmComment(newComment);
@@ -45,12 +46,13 @@ public class CommentManager {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         commentJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-        if(jsonFiledNames.size() != Comment.commentJsonFieldNames.size())
+        var commentJsonFieldNames = Constant.Comment.getSet();
+        if(jsonFiledNames.size() != commentJsonFieldNames.size())
             return false;
-        if(!Comment.commentJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)))
+        if(!commentJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)))
             return false;
-        if(!(commentJsonNode.get("movieId").isInt() && commentJsonNode.get("userEmail").isTextual() &&
-                commentJsonNode.get("text").isTextual()))
+        if(!(commentJsonNode.get(Constant.Comment.M_ID).isInt() && commentJsonNode.get(Constant.Comment.U_ID).isTextual() &&
+                commentJsonNode.get(Constant.Comment.CONTENT).isTextual()))
             return false;
 
         return true;

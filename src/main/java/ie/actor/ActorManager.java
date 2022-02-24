@@ -2,6 +2,7 @@ package ie.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.types.Constant;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ public class ActorManager {
     }
     public Actor updateOrAddActor(String jsonData) throws JsonProcessingException {
         var deserializer = new ObjectMapper();
-        String objectId = deserializer.readTree(jsonData).get("id").toString();
+        String objectId = deserializer.readTree(jsonData).get(Constant.Actor.ID).toString();
 
         if (actorMap.containsKey(objectId)) {
             var existingActor = actorMap.get(objectId);
