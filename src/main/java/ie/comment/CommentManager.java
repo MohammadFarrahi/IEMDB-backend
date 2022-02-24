@@ -8,6 +8,7 @@ import ie.film.FilmManager;
 import ie.types.Constant;
 import ie.user.UserManager;
 
+import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,44 +24,31 @@ public class CommentManager {
 
         mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+        this.commentMap = new HashMap<>();
         lastCommentId = 0;
     }
 
-    public Comment addComment(String jsonData, FilmManager filmManager, UserManager userManager) throws Exception{
-        JsonNode commentJsonNode = mapper.readTree(jsonData);
-        if(!isValidJsonData(commentJsonNode)) {
+    public Comment addComment(String data) throws Exception{
+        JsonNode jsonNode = mapper.readTree(data);
+        var userId = jsonNode.get(Constant.Comment.U_ID).asText();
+        var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
+        if (userId == null || movieId == null)
             throw new Exception("Invalid addComment");
+
+        if (!database.modelExists(userId, Constant.Model.USER)) {
+            System.out.println(userId);
+            throw new Exception("User not found");
         }
-        var newComment = createNewComment(commentJsonNode, filmManager, userManager);
-        commentMap.put(lastCommentId.toString(), newComment);
-        return newComment;
+        if (!database.modelExists(movieId, Constant.Model.FILM))
+            throw new Exception("Movie not found");
+        var comment = mapper.readValue(data, Comment.class);
+        commentMap.put(Comment.lastId.toString(), comment);
+        return comment;
     }
 
-    private Comment createNewComment(JsonNode commentJsonNode, FilmManager filmManager, UserManager userManager) throws Exception {
-        var commentFilm = filmManager.getFilm(commentJsonNode.get(Constant.Comment.M_ID).asText());
-        var commentOwner = userManager.getUser(commentJsonNode.get(Constant.Comment.U_ID).asText());
-        var commentText = commentJsonNode.get(Constant.Comment.CONTENT).asText();
-        var newComment = new Comment((++lastCommentId).toString(), commentFilm, commentOwner, commentText);
-
-        commentFilm.addFilmComment(newComment);
-        commentOwner.addUserComment(newComment);
-
-        return newComment;
+    public boolean isIdValid(String id) {
+        return commentMap.containsKey(id);
     }
-    private boolean isValidJsonData(JsonNode commentJsonNode) {
-        ArrayList<String> jsonFiledNames = new ArrayList<>();
-        commentJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-        var commentJsonFieldNames = Constant.Comment.getSet();
-        if(jsonFiledNames.size() != commentJsonFieldNames.size())
-            return false;
-        if(!commentJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)))
-            return false;
-        if(!(commentJsonNode.get(Constant.Comment.M_ID).isInt() && commentJsonNode.get(Constant.Comment.U_ID).isTextual() &&
-                commentJsonNode.get(Constant.Comment.CONTENT).isTextual()))
-            return false;
-
-        return true;
-    }
 }
 
