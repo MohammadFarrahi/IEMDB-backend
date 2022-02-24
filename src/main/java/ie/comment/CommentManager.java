@@ -29,19 +29,17 @@ public class CommentManager {
     }
 
     public Comment addComment(String data) throws Exception{
+        var comment = mapper.readValue(data, Comment.class);
+
         JsonNode jsonNode = mapper.readTree(data);
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
-        if (userId == null || movieId == null)
-            throw new Exception("Invalid addComment");
-
         if (!database.modelExists(userId, Constant.Model.USER)) {
-            System.out.println(userId);
             throw new Exception("User not found");
         }
+
         if (!database.modelExists(movieId, Constant.Model.FILM))
             throw new Exception("Movie not found");
-        var comment = mapper.readValue(data, Comment.class);
         commentMap.put(Comment.lastId.toString(), comment);
         return comment;
     }
