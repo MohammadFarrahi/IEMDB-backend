@@ -57,12 +57,12 @@ public class Iemdb {
     }
 
     private String addUser(String dataJson) throws Exception {
-        userManager.addUser(dataJson);
+        userManager.updateOrAddElement(dataJson);
         return "user added successfully";
     }
 
     private String addMovie(String data) throws Exception {
-        filmManager.addMovie(data);
+        filmManager.updateOrAddElement(data);
         return "movie added successfully";
     }
 
@@ -83,12 +83,12 @@ public class Iemdb {
     }
 
     private String addActor(String data) throws Exception {
-        var x = actorManager.updateOrAddActor(data);
-        return "actor added successfully";
+        var x = actorManager.updateOrAddElement(data);
+        return "actor " + x  + " added successfully";
     }
 
     private String addComment(String data) throws Exception {
-        commentManager.addComment(data);
+        commentManager.addElement(data);
         return "comment added successfully";
     }
 
