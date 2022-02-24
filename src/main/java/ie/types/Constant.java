@@ -32,9 +32,11 @@ public class Constant {
         public static final String B_DATE = "birthDate";
     }
     public static class Comment {
+        public static final String ID = "id";
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
         public static final String CONTENT = "text";
+        public static final String C_DATE = "createdDate";
 
         public static Set<String> getSet(){
             return new HashSet<String>(){{
