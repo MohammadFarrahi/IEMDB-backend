@@ -17,12 +17,12 @@ public class Comment {
     private String commentOwner;
     private String text;
 
-    @JsonCreator
-    private Comment() {}
+    private static Integer lastId = 0;
 
-    @JsonProperty(value = Constant.Comment.ID, required = true)
-    private void setId(String id) {
-        this.id = id;
+    @JsonCreator
+    private Comment() {
+        this.createdDate = LocalDate.now();
+        this.id = String.valueOf(++lastId);
     }
 
     @JsonProperty(value = Constant.Comment.M_ID, required = true)
@@ -38,11 +38,6 @@ public class Comment {
     @JsonProperty(value = Constant.Comment.CONTENT, required = true)
     private void setText(String text) {
         this.text = text;
-    }
-
-    @JsonProperty(value = Constant.Comment.C_DATE, required = true)
-    private void setCreatedDate(String createdDate){
-        this.createdDate = LocalDate.parse(createdDate);
     }
 
 }
