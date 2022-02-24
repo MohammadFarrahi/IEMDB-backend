@@ -38,6 +38,7 @@ public class Iemdb {
                 case Constant.Command.ADD_COMMENT -> resData = addComment(data);
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
+                case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -68,6 +69,11 @@ public class Iemdb {
     private String addToWatchList(String data) throws Exception {
         userManager.addToWatchList(data);
         return "Movie added to watchlist successfully";
+    }
+
+    private String removeFromWatchList(String data) throws Exception {
+        userManager.removeFromWatchList(data);
+        return "Movie removed from watch list";
     }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
