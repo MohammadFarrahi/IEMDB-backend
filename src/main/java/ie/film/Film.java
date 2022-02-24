@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Film {
     private String id;
@@ -21,9 +22,14 @@ public class Film {
     private Integer ageLimit;
 
     private ArrayList<Comment> comments;
+    private HashMap<String, Integer> userRateMap;
+    private double averageRating;
 
     @JsonCreator
-    private Film(){}
+    private Film(){
+        userRateMap = new HashMap<>();
+        averageRating = 0;
+    }
 
     @JsonProperty(value="id", required = true)
     private void setId (String id){
@@ -84,4 +90,13 @@ public class Film {
     public void addFilmComment(Comment newComment) {
         comments.add(newComment);
     }
+
+    public void updateFilmRating(String userEmail, int rate) throws Exception {
+        if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
+        double sumOfRates = averageRating * userRateMap.size();
+        sumOfRates = sumOfRates - userRateMap.getOrDefault(userEmail, 0);
+        userRateMap.put(userEmail, rate);
+        averageRating = (sumOfRates + rate) / userRateMap.size();
+    }
+
 }
