@@ -97,4 +97,10 @@ public class User {
             throw new Exception("Movie is already in watch list");
         watchList.add(id);
     }
+
+    public void removeFromWatchList(String id) throws Exception{
+        if(!watchList.contains(id))
+            throw new Exception("Movie is not in watch list");
+        watchList.remove(id);
+    }
 }
