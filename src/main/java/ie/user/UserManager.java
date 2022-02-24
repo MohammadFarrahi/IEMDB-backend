@@ -60,6 +60,15 @@ public class UserManager {
         user.addToWatchList(movieId);
     }
 
+    public void removeFromWatchList(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+
+        var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
+        var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
+
+        var user = getElement(userId);
+        user.removeFromWatchList(movieId);
+    }
     public User getElement(String id) throws Exception {
         if(userMap.containsKey(id)){
             return userMap.get(id);
