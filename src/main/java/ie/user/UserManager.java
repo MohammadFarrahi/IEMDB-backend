@@ -1,14 +1,17 @@
 package ie.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.Iemdb;
 import ie.types.Constant;
 
 import java.util.HashMap;
 
 public class UserManager {
     private final HashMap<String, User> userMap;
+    private final Iemdb database;
 
-    public UserManager () {
+    public UserManager (Iemdb database) {
+        this.database = database;
         userMap = new HashMap<>();
     }
 

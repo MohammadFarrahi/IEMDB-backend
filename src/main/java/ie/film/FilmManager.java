@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ie.Iemdb;
 import ie.user.UserManager;
 import java.util.ArrayList;
 import ie.types.Constant;
@@ -12,8 +13,11 @@ import java.util.HashSet;
 public class FilmManager {
     private final HashMap<String, Film> filmMap;
     private final ObjectMapper objectJsonMapper;
+    private final Iemdb database;
 
-    public FilmManager() {
+    public FilmManager(Iemdb database) {
+        this.database = database;
+
         objectJsonMapper = new ObjectMapper();
         objectJsonMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         filmMap = new HashMap<>();

@@ -18,10 +18,10 @@ public class Iemdb {
     private final ActorManager actorManager;
     private final CommentManager commentManager;
     public Iemdb() {
-        this.userManager = new UserManager();
-        this.filmManager = new FilmManager();
-        this.actorManager = new ActorManager();
-        this.commentManager = new CommentManager();
+        this.userManager = new UserManager(this);
+        this.filmManager = new FilmManager(this);
+        this.actorManager = new ActorManager(this);
+        this.commentManager = new CommentManager(this);
     }
 
     public String getResponse() {

@@ -3,6 +3,7 @@ package ie.comment;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.Iemdb;
 import ie.film.FilmManager;
 import ie.types.Constant;
 import ie.user.UserManager;
@@ -15,8 +16,11 @@ public class CommentManager {
     ObjectMapper deserializer;
     private Integer lastCommentId;
     private HashMap<String, Comment> commentMap;
+    private final Iemdb database;
 
-    public CommentManager() {
+    public CommentManager(Iemdb database) {
+        this.database = database;
+
         deserializer = new ObjectMapper();
         deserializer.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         lastCommentId = 0;
