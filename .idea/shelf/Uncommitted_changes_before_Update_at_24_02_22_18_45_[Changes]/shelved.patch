@@ -1,0 +1,111 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"a0d0dd9b-af60-40de-b293-19d7a7b4c507\" name=\"Changes\" comment=\"Add exception handling and runCommand method for top level Iemdb\">\n      <change afterPath=\"$PROJECT_DIR$/.idea/uiDesigner.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/ie/App.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/ie/App.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/java/ie/Cli.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/java/ie/Cli.java\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Enum\" />\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"GitSEFilterConfiguration\">\n    <file-type-list>\n      <filtered-out-file-type name=\"LOCAL_BRANCH\" />\n      <filtered-out-file-type name=\"REMOTE_BRANCH\" />\n      <filtered-out-file-type name=\"TAG\" />\n      <filtered-out-file-type name=\"COMMIT_BY_MESSAGE\" />\n    </file-type-list>\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"MavenImportPreferences\">\n    <option name=\"generalSettings\">\n      <MavenGeneralSettings>\n        <option name=\"useMavenConfig\" value=\"true\" />\n      </MavenGeneralSettings>\n    </option>\n  </component>\n  <component name=\"MavenRunner\">\n    <option name=\"delegateBuildToMaven\" value=\"true\" />\n  </component>\n  <component name=\"ProjectId\" id=\"25QcM3EUyaXum1ozkL55qo9qXH8\" />\n  <component name=\"ProjectLevelVcsManager\">\n    <ConfirmationsSetting value=\"2\" id=\"Add\" />\n  </component>\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"ASKED_SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"RunOnceActivity.ShowReadmeOnStart\" value=\"true\" />\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\n    <property name=\"project.structure.last.edited\" value=\"Modules\" />\n    <property name=\"project.structure.proportion\" value=\"0.17\" />\n    <property name=\"project.structure.side.proportion\" value=\"0.2\" />\n    <property name=\"settings.editor.selected.configurable\" value=\"reference.settings.project.maven.runner\" />\n  </component>\n  <component name=\"RecentsManager\">\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$\" />\n    </key>\n  </component>\n  <component name=\"RunManager\">\n    <configuration name=\"App\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"ie.App\" />\n      <module name=\"iemdb\" />\n      <extension name=\"coverage\">\n        <pattern>\n          <option name=\"PATTERN\" value=\"ie.user.*\" />\n          <option name=\"ENABLED\" value=\"true\" />\n        </pattern>\n      </extension>\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Application.App\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"a0d0dd9b-af60-40de-b293-19d7a7b4c507\" name=\"Changes\" comment=\"\" />\n      <created>1645462714893</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1645462714893</updated>\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"Add utility classes and enums\">\n      <created>1645566117739</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1645566117739</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"Add User model and its manager\">\n      <created>1645566365154</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1645566365154</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"Add exception handling and runCommand method for top level Iemdb\">\n      <created>1645566473457</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1645566473457</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"4\" />\n    <servers />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"Add utility classes and enums\" />\n    <MESSAGE value=\"Add User model and its manager\" />\n    <MESSAGE value=\"Add exception handling and runCommand method for top level Iemdb\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Add exception handling and runCommand method for top level Iemdb\" />\n  </component>\n</project>
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -4,11 +4,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="a0d0dd9b-af60-40de-b293-19d7a7b4c507" name="Changes" comment="Add exception handling and runCommand method for top level Iemdb">
+-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
++    <list default="true" id="a0d0dd9b-af60-40de-b293-19d7a7b4c507" name="Changes" comment="Add response for commands: addMovie and addUser">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/ie/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ie/App.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/java/ie/Cli.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ie/Cli.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -120,7 +117,70 @@
+       <option name="project" value="LOCAL" />
+       <updated>1645566473457</updated>
+     </task>
+-    <option name="localTasksCounter" value="4" />
++    <task id="LOCAL-00004" summary="Remove mock data from App.java">
++      <created>1645566509094</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1645566509094</updated>
++    </task>
++    <task id="LOCAL-00005" summary="Change minor syntax">
++      <created>1645566549432</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1645566549432</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Change Not Found exception to User Not Found">
++      <created>1645572352026</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1645572352026</updated>
++    </task>
++    <task id="LOCAL-00007" summary="Add Film class and its setters">
++      <created>1645572601804</created>
++      <option name="number" value="00007" />
++      <option name="presentableId" value="LOCAL-00007" />
++      <option name="project" value="LOCAL" />
++      <updated>1645572601804</updated>
++    </task>
++    <task id="LOCAL-00008" summary="Add FilmManager class and add getFilm and addFilm methods">
++      <created>1645572626173</created>
++      <option name="number" value="00008" />
++      <option name="presentableId" value="LOCAL-00008" />
++      <option name="project" value="LOCAL" />
++      <updated>1645572626173</updated>
++    </task>
++    <task id="LOCAL-00009" summary="Rename ADD_FILM to ADD_MOVIE">
++      <created>1645573087167</created>
++      <option name="number" value="00009" />
++      <option name="presentableId" value="LOCAL-00009" />
++      <option name="project" value="LOCAL" />
++      <updated>1645573087167</updated>
++    </task>
++    <task id="LOCAL-00010" summary="Add addMovie command to the system">
++      <created>1645573293553</created>
++      <option name="number" value="00010" />
++      <option name="presentableId" value="LOCAL-00010" />
++      <option name="project" value="LOCAL" />
++      <updated>1645573293553</updated>
++    </task>
++    <task id="LOCAL-00011" summary="Add missing setter for releaseDate field in Film class">
++      <created>1645573848482</created>
++      <option name="number" value="00011" />
++      <option name="presentableId" value="LOCAL-00011" />
++      <option name="project" value="LOCAL" />
++      <updated>1645573848482</updated>
++    </task>
++    <task id="LOCAL-00012" summary="Add response for commands: addMovie and addUser">
++      <created>1645573941500</created>
++      <option name="number" value="00012" />
++      <option name="presentableId" value="LOCAL-00012" />
++      <option name="project" value="LOCAL" />
++      <updated>1645573941500</updated>
++    </task>
++    <option name="localTasksCounter" value="13" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -138,6 +198,15 @@
+     <MESSAGE value="Add utility classes and enums" />
+     <MESSAGE value="Add User model and its manager" />
+     <MESSAGE value="Add exception handling and runCommand method for top level Iemdb" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Add exception handling and runCommand method for top level Iemdb" />
++    <MESSAGE value="Remove mock data from App.java" />
++    <MESSAGE value="Change minor syntax" />
++    <MESSAGE value="Change Not Found exception to User Not Found" />
++    <MESSAGE value="Add Film class and its setters" />
++    <MESSAGE value="Add FilmManager class and add getFilm and addFilm methods" />
++    <MESSAGE value="Rename ADD_FILM to ADD_MOVIE" />
++    <MESSAGE value="Add addMovie command to the system" />
++    <MESSAGE value="Add missing setter for releaseDate field in Film class" />
++    <MESSAGE value="Add response for commands: addMovie and addUser" />
++    <option name="LAST_COMMIT_MESSAGE" value="Add response for commands: addMovie and addUser" />
+   </component>
+ </project>
+\ No newline at end of file

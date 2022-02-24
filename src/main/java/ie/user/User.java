@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.film.Comment;
+import ie.comment.Comment;
 import ie.types.Constant;
 import ie.types.Email;
 
-import javax.management.InvalidAttributeValueException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 

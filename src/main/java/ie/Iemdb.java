@@ -3,7 +3,7 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
-import ie.film.CommentManager;
+import ie.comment.CommentManager;
 import ie.film.FilmManager;
 import ie.types.Response;
 import ie.user.UserManager;

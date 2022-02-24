@@ -1,8 +1,7 @@
-package ie.film;
+package ie.comment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ie.types.Email;
+import ie.film.Film;
 import ie.user.User;
 
 import java.util.Date;

@@ -1,8 +1,8 @@
 package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ie.comment.Comment;
 import ie.types.Constant;
 
 import java.time.LocalDate;
