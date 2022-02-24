@@ -77,6 +77,12 @@ public class Iemdb {
         return actorManager.isIdListValid(castIds);
     }
 
+    public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
+        ArrayList <String> stringList = new ArrayList<>();
+        intList.forEach((n) -> {stringList.add(String.valueOf(n));});
+        return stringList;
+    }
+
     private String addActor(String data) throws Exception {
         var x = actorManager.updateOrAddActor(data);
         return "actor added successfully";
