@@ -37,6 +37,7 @@ public class Iemdb {
                 case Constant.Command.ADD_ACTOR -> resData = addActor(data);
                 case Constant.Command.ADD_COMMENT -> resData = addComment(data);
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
+                case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -64,6 +65,10 @@ public class Iemdb {
         return "movie added successfully";
     }
 
+    private String addToWatchList(String data) throws Exception {
+        userManager.addToWatchList(data);
+        return "Movie added to watchlist successfully";
+    }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
         ArrayList <String> stringList = new ArrayList<>();
