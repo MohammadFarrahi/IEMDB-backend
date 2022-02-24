@@ -45,6 +45,12 @@ public class Constant {
             }};
         }
     }
+
+    public static class WatchList {
+        public static final String U_ID = "userEmail";
+        public static final String M_ID = "movieId";
+    }
+
     public static class Rate {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
