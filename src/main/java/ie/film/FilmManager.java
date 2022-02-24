@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.user.UserManager;
 import java.util.ArrayList;
@@ -35,15 +36,6 @@ public class FilmManager {
         }
         filmMap.put(id, newFilm);
         return newFilm;
-    }
-
-    public Film getFilm(String id) throws Exception {
-        var film = filmMap.get(id);
-        if (film != null) {
-            return film;
-        } else {
-            throw new Exception("Movie Not Found");
-        }
     }
 
     public void rateMovie(String jsonData, UserManager userManager) throws Exception {
@@ -98,4 +90,32 @@ public class FilmManager {
         }
         return true;
     }
+
+    public Film getElement(String id) throws Exception{
+        if (filmMap.containsKey(id)) {
+            return filmMap.get(id);
+        }
+    throw new Exception("Movie not found");
+    }
+
+    public JsonNode serializeElement(String id, Constant.SER_MODE mode){
+        try {
+            var film = getElement(id);
+            var jsonNode = mapper.valueToTree(film);
+
+            if(mode == Constant.SER_MODE.LONG) {
+                var castList = film.getCast();
+                var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
+                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
+                return newNode;
+            }
+
+            return jsonNode;
+
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
 }
