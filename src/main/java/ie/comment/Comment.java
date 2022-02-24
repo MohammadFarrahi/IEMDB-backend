@@ -17,7 +17,8 @@ public class Comment {
     private String commentOwner;
     private String text;
 
-    private static Integer lastId = 0;
+    public static Integer lastId = 0;
+
 
     @JsonCreator
     private Comment() {
