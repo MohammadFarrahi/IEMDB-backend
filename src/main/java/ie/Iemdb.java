@@ -36,6 +36,7 @@ public class Iemdb {
                 case Constant.Command.ADD_MOVIE -> resData = addMovie(data);
                 case Constant.Command.ADD_ACTOR -> resData = addActor(data);
                 case Constant.Command.ADD_COMMENT -> resData = addComment(data);
+                case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -44,6 +45,7 @@ public class Iemdb {
             setJsonResponse(false, e.getMessage());
         }
         catch (Exception e){
+            e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
     }
@@ -76,9 +78,13 @@ public class Iemdb {
         return "actor added successfully";
     }
 
-    private String addComment(String data) throws Exception{
+    private String addComment(String data) throws Exception {
         commentManager.addComment(data, filmManager, userManager);
         return "comment added successfully";
     }
 
+    private String rateMovie(String data) throws Exception {
+        filmManager.rateMovie(data, userManager);
+        return "movie rated successfully";
+    }
 }
