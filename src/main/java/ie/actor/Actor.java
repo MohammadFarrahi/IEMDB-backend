@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.types.Constant;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -14,41 +15,40 @@ public class Actor {
     private String name;
     private LocalDate birthDate;
     private String nationality;
-//    private static final String[] jsonFieldNames;
 
     // For jackson usage
-    @JsonProperty(value= "id", required = true)
+    @JsonProperty(value= Constant.Actor.ID, required = true)
     private void setId(String id) throws Exception {
         if(Integer.parseInt(id) < 1) {
             throw new Exception("invalid actor id");
         }
         this.id = id;
     }
-    @JsonProperty(value= "name", required = true)
+    @JsonProperty(value= Constant.Actor.NAME, required = true)
     private void setName(String name) {
         this.name = name;
     }
-    @JsonProperty(value= "birthDate", required = true)
+    @JsonProperty(value= Constant.Actor.B_DATE, required = true)
     private void setBirthDate(String birthDate) {
         this.birthDate = LocalDate.parse(birthDate);
     }
-    @JsonProperty(value= "nationality", required = true)
+    @JsonProperty(value= Constant.Actor.NATION, required = true)
     private void setNationality(String nationality) {
         this.nationality = nationality;
     }
-    @JsonGetter("id")
+    @JsonGetter(Constant.Actor.ID)
     private String getId() {
         return id;
     }
-    @JsonGetter("name")
+    @JsonGetter(Constant.Actor.NAME)
     private String getName() {
         return name;
     }
-    @JsonGetter("birthDate")
+    @JsonGetter(Constant.Actor.B_DATE)
     private String getBirthDate() {
         return birthDate.toString();
     }
-    @JsonGetter("nationality")
+    @JsonGetter(Constant.Actor.NATION)
     private String getNationality() {
         return nationality;
     }

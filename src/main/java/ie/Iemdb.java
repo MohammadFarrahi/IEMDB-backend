@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
 import ie.film.CommentManager;
 import ie.film.FilmManager;
-import ie.types.Command;
 import ie.types.Response;
 import ie.user.UserManager;
+import ie.types.Constant;
 
 import java.util.ArrayList;
 
@@ -28,15 +28,14 @@ public class Iemdb {
         return this.response.toString();
     }
 
-    public void runCommand(Command command, String data) {
+    public void runTextCommand(String command, String data) {
         String resData;
         try {
             switch (command) {
-                case ADD_USER -> resData = addUser(data);
-                case ADD_MOVIE -> resData = addMovie(data);
-                case ADD_ACTOR -> resData = addActor(data);
-                case ADD_COMMENT -> resData = addComment(data);
-                case RATE_MOVIE -> resData = rateMovie(data);
+                case Constant.Command.ADD_USER -> resData = addUser(data);
+                case Constant.Command.ADD_MOVIE -> resData = addMovie(data);
+                case Constant.Command.ADD_ACTOR -> resData = addActor(data);
+                case Constant.Command.ADD_COMMENT -> resData = addComment(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -45,7 +44,6 @@ public class Iemdb {
             setJsonResponse(false, e.getMessage());
         }
         catch (Exception e){
-            e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
     }
@@ -78,13 +76,9 @@ public class Iemdb {
         return "actor added successfully";
     }
 
-    private String addComment(String data) throws Exception {
+    private String addComment(String data) throws Exception{
         commentManager.addComment(data, filmManager, userManager);
         return "comment added successfully";
     }
 
-    private String rateMovie(String data) throws Exception {
-        filmManager.rateMovie(data, userManager);
-        return "movie rated successfully";
-    }
 }

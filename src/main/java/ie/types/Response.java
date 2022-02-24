@@ -12,12 +12,12 @@ public class Response {
         this.status = status;
     }
 
-    @JsonGetter("data")
+    @JsonGetter(Constant.Response.DATA)
     private String getMessage() {
         return message;
     }
 
-    @JsonGetter("success")
+    @JsonGetter(Constant.Response.STATUS)
     private boolean getStatus() {
         return status;
     }
