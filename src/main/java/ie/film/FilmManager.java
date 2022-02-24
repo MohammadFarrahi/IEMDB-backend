@@ -24,14 +24,15 @@ public class FilmManager {
     }
 
     public Film addMovie(String data) throws Exception {
-        String id = mapper.readTree(data).get(Constant.Movie.ID).toString();
-
-        if (filmMap.containsKey(id)) {
-            var existingFilm = filmMap.get(id);
-            mapper.readerForUpdating(existingFilm).readValue(data);
-            return existingFilm;
-        }
         var newFilm = mapper.readValue(data, Film.class);
+
+        var jsonNode = mapper.readTree(data);
+        var id = jsonNode.get(Constant.Movie.ID).asText();
+        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(data).get(Constant.Movie.CAST), ArrayList.class));
+
+        if(!database.modelListExists(cast, Constant.Model.ACTOR)) {
+            throw new Exception("Actor not found");
+        }
         filmMap.put(id, newFilm);
         return newFilm;
     }

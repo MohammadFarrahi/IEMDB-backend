@@ -60,22 +60,10 @@ public class Iemdb {
     }
 
     private String addMovie(String data) throws Exception {
-        if (!checkCastExistance(data)) {
-            throw new Exception("Actor Not Found");
-        }
         filmManager.addMovie(data);
         return "movie added successfully";
     }
 
-    private boolean checkCastExistance(String data) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList <Integer> temp = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
-        ArrayList <String> castIds = new ArrayList<>();
-        temp.forEach((n) -> {castIds.add(String.valueOf(n));});
-
-
-        return actorManager.isIdListValid(castIds);
-    }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
         ArrayList <String> stringList = new ArrayList<>();
