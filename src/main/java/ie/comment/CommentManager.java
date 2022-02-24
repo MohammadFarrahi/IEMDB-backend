@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class CommentManager {
-    ObjectMapper deserializer;
+    ObjectMapper mapper;
     private Integer lastCommentId;
     private HashMap<String, Comment> commentMap;
     private final Iemdb database;
@@ -21,13 +21,13 @@ public class CommentManager {
     public CommentManager(Iemdb database) {
         this.database = database;
 
-        deserializer = new ObjectMapper();
-        deserializer.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+        mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         lastCommentId = 0;
     }
 
     public Comment addComment(String jsonData, FilmManager filmManager, UserManager userManager) throws Exception{
-        JsonNode commentJsonNode = deserializer.readTree(jsonData);
+        JsonNode commentJsonNode = mapper.readTree(jsonData);
         if(!isValidJsonData(commentJsonNode)) {
             throw new Exception("Invalid addComment");
         }

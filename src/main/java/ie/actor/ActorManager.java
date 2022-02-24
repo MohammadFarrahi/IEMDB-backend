@@ -11,21 +11,23 @@ import java.util.List;
 public class ActorManager {
     private final HashMap<String, Actor> actorMap;
     private final Iemdb database;
+    private final ObjectMapper mapper;
 
     public ActorManager(Iemdb database) {
+        mapper = new ObjectMapper();
+
         this.database = database;
         actorMap = new HashMap<String, Actor>();
     }
     public Actor updateOrAddActor(String jsonData) throws JsonProcessingException {
-        var deserializer = new ObjectMapper();
-        String objectId = deserializer.readTree(jsonData).get(Constant.Actor.ID).toString();
+        String objectId = mapper.readTree(jsonData).get(Constant.Actor.ID).toString();
 
         if (actorMap.containsKey(objectId)) {
             var existingActor = actorMap.get(objectId);
-            deserializer.readerForUpdating(existingActor).readValue(jsonData);
+            mapper.readerForUpdating(existingActor).readValue(jsonData);
             return existingActor;
         }
-        var newActor = deserializer.readValue(jsonData, Actor.class);
+        var newActor = mapper.readValue(jsonData, Actor.class);
         actorMap.put(objectId, newActor);
         return newActor;
     }

@@ -9,19 +9,21 @@ import java.util.HashMap;
 public class UserManager {
     private final HashMap<String, User> userMap;
     private final Iemdb database;
+    private final ObjectMapper mapper;
 
     public UserManager (Iemdb database) {
+        mapper = new ObjectMapper();
+
         this.database = database;
         userMap = new HashMap<>();
     }
 
     public void addUser(String jsonData) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String email = objectMapper.readTree(jsonData).get(Constant.User.E_ID).asText();
+        String email = mapper.readTree(jsonData).get(Constant.User.E_ID).asText();
         if (userMap.containsKey(email))
             throw new Exception("Duplicate");
 
-        User user = objectMapper.readValue(jsonData, User.class);
+        User user = mapper.readValue(jsonData, User.class);
         this.userMap.put(email, user);
     }
 

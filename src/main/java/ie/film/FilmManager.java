@@ -12,26 +12,26 @@ import java.util.HashSet;
 
 public class FilmManager {
     private final HashMap<String, Film> filmMap;
-    private final ObjectMapper objectJsonMapper;
+    private final ObjectMapper mapper;
     private final Iemdb database;
 
     public FilmManager(Iemdb database) {
         this.database = database;
 
-        objectJsonMapper = new ObjectMapper();
-        objectJsonMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+        mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         filmMap = new HashMap<>();
     }
 
     public Film addMovie(String data) throws Exception {
-        String id = objectJsonMapper.readTree(data).get(Constant.Movie.ID).toString();
+        String id = mapper.readTree(data).get(Constant.Movie.ID).toString();
 
         if (filmMap.containsKey(id)) {
             var existingFilm = filmMap.get(id);
-            objectJsonMapper.readerForUpdating(existingFilm).readValue(data);
+            mapper.readerForUpdating(existingFilm).readValue(data);
             return existingFilm;
         }
-        var newFilm = objectJsonMapper.readValue(data, Film.class);
+        var newFilm = mapper.readValue(data, Film.class);
         filmMap.put(id, newFilm);
         return newFilm;
     }
@@ -46,7 +46,7 @@ public class FilmManager {
     }
 
     public void rateMovie(String jsonData, UserManager userManager) throws Exception {
-        JsonNode rateJsonNode = objectJsonMapper.readTree(jsonData);
+        JsonNode rateJsonNode = mapper.readTree(jsonData);
         ValidateVoteJson(rateJsonNode);
         ValidateVoteData(rateJsonNode, userManager);
 
