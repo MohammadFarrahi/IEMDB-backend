@@ -139,6 +139,10 @@ public class Film {
         return this.ageLimit;
     }
 
+    public ArrayList<String> getCast() {
+        return this.cast;
+    }
+
 
     public void addFilmComment(Comment newComment) {
         comments.add(newComment);
