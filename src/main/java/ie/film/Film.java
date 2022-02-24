@@ -62,7 +62,7 @@ public class Film {
         this.releaseDate = LocalDate.parse(releaseDate);
     }
 
-    @JsonProperty(value=Constant.Movie.WRITER, required = true)
+    @JsonProperty(value=Constant.Movie.WRITERS, required = true)
     private void setWriters (ArrayList<String> writers){
         this.writers = writers;
     }

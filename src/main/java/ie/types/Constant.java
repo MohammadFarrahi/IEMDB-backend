@@ -1,6 +1,5 @@
 package ie.types;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ public class Constant {
         public static final String SUMM = "summary";
         public static final String R_DATE = "releaseDate";
         public static final String DIRECTOR = "director";
-        public static final String WRITER = "writer";
+        public static final String WRITERS = "writers";
         public static final String GENRE = "genres";
         public static final String CAST = "cast";
         public static final String DURATION = "duration";
