@@ -48,4 +48,22 @@ public class UserManager {
         return true;
     }
 
+    public void addToWatchList(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+
+        var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
+        var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
+
+        if(!database.modelExists(movieId, Constant.Model.FILM))
+            throw new Exception("Movie not found");
+        var user = getElement(userId);
+        user.addToWatchList(movieId);
+    }
+
+    public User getElement(String id) throws Exception {
+        if(userMap.containsKey(id)){
+            return userMap.get(id);
+        }
+        throw new Exception("User not found");
+    }
 }
