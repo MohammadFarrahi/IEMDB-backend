@@ -89,4 +89,12 @@ public class FilmManager {
     public boolean isIdValid(String id){
         return filmMap.containsKey(id);
     }
+
+    public boolean isIdListValid(ArrayList<String> ids) {
+        for (var id : ids){
+            if(!filmMap.containsKey(id))
+                return false;
+        }
+        return true;
+    }
 }

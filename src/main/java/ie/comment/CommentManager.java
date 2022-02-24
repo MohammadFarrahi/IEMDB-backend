@@ -48,5 +48,12 @@ public class CommentManager {
         return commentMap.containsKey(id);
     }
 
+    public boolean isIdListValid(ArrayList<String> ids) {
+        for (var id : ids){
+            if(!commentMap.containsKey(id))
+                return false;
+        }
+        return true;
+    }
 }
 

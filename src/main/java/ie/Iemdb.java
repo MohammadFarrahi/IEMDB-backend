@@ -92,6 +92,18 @@ public class Iemdb {
         return "movie rated successfully";
     }
 
+    public Boolean modelListExists(ArrayList<String> id, Constant.Model modelType) {
+        boolean res;
+        switch (modelType) {
+            case FILM -> res = filmManager.isIdListValid(id);
+            case USER -> res = userManager.isIdListValid(id);
+            case ACTOR -> res = actorManager.isIdListValid(id);
+            case COMMENT -> res = commentManager.isIdListValid(id);
+            default -> res = false;
+        }
+        return res;
+    }
+
     public Boolean modelExists(String id, Constant.Model modelType) {
         boolean res;
         switch (modelType) {

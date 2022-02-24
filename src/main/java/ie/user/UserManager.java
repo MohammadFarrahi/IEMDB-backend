@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
 import ie.types.Constant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserManager {
@@ -37,6 +38,14 @@ public class UserManager {
     }
     public boolean isIdValid(String email) {
         return userMap.containsKey(email);
+    }
+
+    public boolean isIdListValid(ArrayList<String> ids) {
+        for (var id : ids){
+            if(!userMap.containsKey(id))
+                return false;
+        }
+        return true;
     }
 
 }
