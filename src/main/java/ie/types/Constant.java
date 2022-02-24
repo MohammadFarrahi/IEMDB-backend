@@ -64,7 +64,7 @@ public class Constant {
         public static final String STATUS = "success";
         public static final String DATA = "data";
     }
-        public static class RateVoteWList {
+    public static class RateVoteWList {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
         public static final String RATE = "score";
@@ -76,5 +76,11 @@ public class Constant {
         public static final String ADD_ACTOR = "addActor";
         public static final String ADD_COMMENT = "addComment";
         public static final String RATE_MOVIE = "rateMovie";
+    }
+    public static enum Model {
+        ACTOR,
+        FILM,
+        USER,
+        COMMENT
     }
 }
