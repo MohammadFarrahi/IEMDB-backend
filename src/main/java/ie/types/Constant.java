@@ -45,6 +45,12 @@ public class Constant {
             }};
         }
     }
+
+    public static class WatchList {
+        public static final String U_ID = "userEmail";
+        public static final String M_ID = "movieId";
+    }
+
     public static class Rate {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
@@ -75,6 +81,8 @@ public class Constant {
         public static final String ADD_ACTOR = "addActor";
         public static final String ADD_COMMENT = "addComment";
         public static final String RATE_MOVIE = "rateMovie";
+        public static final String ADD_TO_WATCH_LIST = "addToWatchList";
+
     }
     public static enum Model {
         ACTOR,
