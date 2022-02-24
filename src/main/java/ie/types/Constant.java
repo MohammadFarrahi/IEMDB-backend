@@ -93,4 +93,8 @@ public class Constant {
         USER,
         COMMENT
     }
+    public static enum SER_MODE {
+        SHORT,
+        LONG
+    }
 }
