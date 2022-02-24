@@ -6,15 +6,8 @@ import ie.types.Email;
 import ie.user.User;
 
 import java.util.Date;
-import java.util.HashSet;
 
 public class Comment {
-    // TODO: Handle this properly (attribute below)
-    public static final HashSet<String> commentJsonFieldNames = new HashSet<String>(){{
-        add("userEmail");
-        add("movieId");
-        add("text");
-    }};
     private String id;
     private Date createdDate;
     private Film commentFilm;

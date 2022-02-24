@@ -1,5 +1,7 @@
 package ie.film;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.types.Constant;
+
 import java.util.HashMap;
 
 public class FilmManager {
@@ -11,7 +13,7 @@ public class FilmManager {
 
     public Film addMovie (String data) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String id = objectMapper.readTree(data).get("id").toString();
+        String id = objectMapper.readTree(data).get(Constant.Movie.ID).toString();
 
         if (filmMap.containsKey(id)) {
             var existingFilm = filmMap.get(id);

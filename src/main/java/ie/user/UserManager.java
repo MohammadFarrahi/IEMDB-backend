@@ -1,6 +1,7 @@
 package ie.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.types.Constant;
 
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ public class UserManager {
 
     public void addUser(String jsonData) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        String email = objectMapper.readTree(jsonData).get("email").asText();
+        String email = objectMapper.readTree(jsonData).get(Constant.User.E_ID).asText();
         if (userMap.containsKey(email))
             throw new Exception("Duplicate");
 

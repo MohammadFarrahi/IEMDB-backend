@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.film.Comment;
+import ie.types.Constant;
 import ie.types.Email;
 
 import javax.management.InvalidAttributeValueException;
@@ -24,52 +25,52 @@ public class User {
     @JsonCreator
     private User(){}
 
-    @JsonProperty(value = "email", required = true)
+    @JsonProperty(value = Constant.User.E_ID, required = true)
     private void setEmail(String email) throws Exception {
         this.email = new Email(email);
     }
 
-    @JsonProperty(value = "password", required = true)
+    @JsonProperty(value = Constant.User.PASS, required = true)
     private void setPassword(String password){
         this.password = password;
     }
 
-    @JsonProperty(value = "nickname", required = true)
+    @JsonProperty(value = Constant.User.NICKNAME, required = true)
     private void setNickname(String nickname){
         this.nickname = nickname;
     }
 
-    @JsonProperty(value = "name", required = true)
+    @JsonProperty(value = Constant.User.NAME, required = true)
     private void setName(String name){
         this.name = name;
     }
 
-    @JsonProperty(value = "birthDate", required = true)
+    @JsonProperty(value = Constant.User.B_DATE, required = true)
     private void setBirthDate(String birthDate){
         this.birthDate = LocalDate.parse(birthDate);
     }
 
-    @JsonGetter("name")
+    @JsonGetter(Constant.User.NAME)
     private String getName() {
         return this.name;
     }
 
-    @JsonGetter("email")
+    @JsonGetter(Constant.User.E_ID)
     private String getEmail() {
         return this.email.toString();
     }
 
-    @JsonGetter("password")
+    @JsonGetter(Constant.User.PASS)
     private String getPassword() {
         return this.password;
     }
 
-    @JsonGetter("nickname")
+    @JsonGetter(Constant.User.NICKNAME)
     private String getNickname() {
         return this.nickname;
     }
 
-    @JsonGetter("birthDate")
+    @JsonGetter(Constant.User.B_DATE)
     private String getBirthDate() {
         return this.birthDate.toString();
     }
