@@ -28,7 +28,7 @@ public class CommentManager {
         lastCommentId = 0;
     }
 
-    public Comment addComment(String data) throws Exception{
+    public String addElement(String data) throws Exception {
         var comment = mapper.readValue(data, Comment.class);
 
         JsonNode jsonNode = mapper.readTree(data);
@@ -37,11 +37,11 @@ public class CommentManager {
         if (!database.modelExists(userId, Constant.Model.USER)) {
             throw new Exception("User not found");
         }
-
-        if (!database.modelExists(movieId, Constant.Model.FILM))
+        if (!database.modelExists(movieId, Constant.Model.FILM)) {
             throw new Exception("Movie not found");
+        }
         commentMap.put(Comment.lastId.toString(), comment);
-        return comment;
+        return Comment.lastId.toString();
     }
 
     public boolean isIdValid(String id) {

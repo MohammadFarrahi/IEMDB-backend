@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ie.Iemdb;
+import ie.actor.Actor;
 import ie.user.UserManager;
 import java.util.ArrayList;
 import ie.types.Constant;
@@ -23,18 +24,36 @@ public class FilmManager {
         filmMap = new HashMap<>();
     }
 
-    public Film addMovie(String data) throws Exception {
-        var newFilm = mapper.readValue(data, Film.class);
-
-        var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get(Constant.Movie.ID).asText();
-        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(data).get(Constant.Movie.CAST), ArrayList.class));
+    public String updateOrAddElement(String jsonData) throws Exception {
+        var jsonNode = mapper.readTree(jsonData);
+        var filmId = jsonNode.get(Constant.Movie.ID).asText();
+        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
 
         if(!database.modelListExists(cast, Constant.Model.ACTOR)) {
             throw new Exception("Actor not found");
         }
-        filmMap.put(id, newFilm);
-        return newFilm;
+        if (isIdValid(filmId)) {
+            updateElement(filmId, jsonData);
+        }
+        else {
+            addElement(jsonData);
+        }
+        return filmId;
+    }
+    public String addElement(String jsonData) throws Exception {
+        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID).asText();
+        if (isIdValid(filmId)) {
+            throw new Exception("movie already exist");
+        }
+        var newFilm = mapper.readValue(jsonData, Film.class);
+        filmMap.put(filmId, newFilm);
+        return filmId;
+    }
+    public void updateElement(String id, String jsonData) throws Exception {
+        if (!isIdValid(id)) {
+            throw new Exception("movie not found");
+        }
+        mapper.readerForUpdating(filmMap.get(id)).readValue(jsonData);
     }
 
     public Film getFilm(String id) throws Exception {

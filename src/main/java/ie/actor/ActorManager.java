@@ -20,19 +20,33 @@ public class ActorManager {
         this.database = database;
         actorMap = new HashMap<String, Actor>();
     }
-    public Actor updateOrAddActor(String jsonData) throws JsonProcessingException {
-        String objectId = mapper.readTree(jsonData).get(Constant.Actor.ID).toString();
+    public String updateOrAddElement(String jsonData) throws Exception {
+        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID).asText(); // TODO: Check method call chain arise same type of error
 
-        if (actorMap.containsKey(objectId)) {
-            var existingActor = actorMap.get(objectId);
-            mapper.readerForUpdating(existingActor).readValue(jsonData);
-            return existingActor;
+        if (isIdValid(actorId)) {
+            updateElement(actorId, jsonData);
+        }
+        else {
+            addElement(jsonData);
+        }
+        return actorId;
+    }
+    public String addElement(String jsonData) throws Exception {
+        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID).asText();
+        if (isIdValid(actorId)) {
+            throw new Exception("actor already exists");
         }
         var newActor = mapper.readValue(jsonData, Actor.class);
-        actorMap.put(objectId, newActor);
-        return newActor;
+        actorMap.put(actorId, newActor);
+        return actorId;
     }
-
+    public void updateElement(String id, String jsonData) throws Exception {
+        if (!isIdValid(id)) {
+            throw new Exception("actor not found");
+        }
+        mapper.readerForUpdating(actorMap.get(id)).readValue(jsonData);
+        // TODO: Check if it is needed to put object to hashMap again
+    }
     public boolean isIdListValid(ArrayList<String> ids) {
         for (var id : ids){
             if(!actorMap.containsKey(id))
