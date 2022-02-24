@@ -19,10 +19,14 @@ public class User {
     private String name;
     private LocalDate birthDate;
 
+    private ArrayList<String> watchList;
+
     private ArrayList<Comment> userComments;
 
     @JsonCreator
-    private User(){}
+    private User(){
+        this.watchList = new ArrayList<>();
+    }
 
     @JsonProperty(value = Constant.User.E_ID, required = true)
     private void setEmail(String email) throws Exception {
@@ -86,5 +90,11 @@ public class User {
 
     public void addUserComment(Comment newComment) {
         userComments.add(newComment);
+    }
+
+    public void addToWatchList(String id) throws Exception{
+        if(watchList.contains(id))
+            throw new Exception("Movie is already in watch list");
+        watchList.add(id);
     }
 }
