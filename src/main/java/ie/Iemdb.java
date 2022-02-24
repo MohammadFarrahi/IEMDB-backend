@@ -1,6 +1,7 @@
 package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
@@ -97,13 +98,13 @@ public class Iemdb {
         return "movie rated successfully";
     }
 
-    public Boolean modelListExists(ArrayList<String> id, Constant.Model modelType) {
+    public Boolean modelListExists(ArrayList<String> idList, Constant.Model modelType) {
         boolean res;
         switch (modelType) {
-            case FILM -> res = filmManager.isIdListValid(id);
-            case USER -> res = userManager.isIdListValid(id);
-            case ACTOR -> res = actorManager.isIdListValid(id);
-            case COMMENT -> res = commentManager.isIdListValid(id);
+            case FILM -> res = filmManager.isIdListValid(idList);
+            case USER -> res = userManager.isIdListValid(idList);
+            case ACTOR -> res = actorManager.isIdListValid(idList);
+            case COMMENT -> res = commentManager.isIdListValid(idList);
             default -> res = false;
         }
         return res;
@@ -119,5 +120,23 @@ public class Iemdb {
             default -> res = false;
         }
         return res;
+    }
+
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
+        switch (modelType) {
+            case ACTOR :
+                return actorManager.serializeElementList(idList, mode);
+            default:
+                return null;
+        }
+    }
+
+    public JsonNode serializeElement(String id, Constant.Model modelType, Constant.SER_MODE mode) {
+        switch (modelType) {
+            case ACTOR :
+                return actorManager.serializeElement(id, mode);
+            default:
+                return null;
+        }
     }
 }
