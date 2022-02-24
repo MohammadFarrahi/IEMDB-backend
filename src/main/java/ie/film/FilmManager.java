@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ie.Iemdb;
 import ie.user.UserManager;
 import java.util.ArrayList;
 import ie.types.Constant;
@@ -11,23 +12,26 @@ import java.util.HashSet;
 
 public class FilmManager {
     private final HashMap<String, Film> filmMap;
-    private final ObjectMapper objectJsonMapper;
+    private final ObjectMapper mapper;
+    private final Iemdb database;
 
-    public FilmManager() {
-        objectJsonMapper = new ObjectMapper();
-        objectJsonMapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+    public FilmManager(Iemdb database) {
+        this.database = database;
+
+        mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         filmMap = new HashMap<>();
     }
 
     public Film addMovie(String data) throws Exception {
-        String id = objectJsonMapper.readTree(data).get(Constant.Movie.ID).toString();
+        String id = mapper.readTree(data).get(Constant.Movie.ID).toString();
 
         if (filmMap.containsKey(id)) {
             var existingFilm = filmMap.get(id);
-            objectJsonMapper.readerForUpdating(existingFilm).readValue(data);
+            mapper.readerForUpdating(existingFilm).readValue(data);
             return existingFilm;
         }
-        var newFilm = objectJsonMapper.readValue(data, Film.class);
+        var newFilm = mapper.readValue(data, Film.class);
         filmMap.put(id, newFilm);
         return newFilm;
     }
@@ -42,7 +46,7 @@ public class FilmManager {
     }
 
     public void rateMovie(String jsonData, UserManager userManager) throws Exception {
-        JsonNode rateJsonNode = objectJsonMapper.readTree(jsonData);
+        JsonNode rateJsonNode = mapper.readTree(jsonData);
         ValidateVoteJson(rateJsonNode);
         ValidateVoteData(rateJsonNode, userManager);
 
@@ -56,7 +60,7 @@ public class FilmManager {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
         var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        if (!userManager.isUserPresent(userEmail)) {
+        if (!userManager.isIdValid(userEmail)) {
             throw new Exception("ne user with this id");
         }
         if (filmMap.get(filmId) == null) {
@@ -80,5 +84,9 @@ public class FilmManager {
         if (exceptionFlag) {
             throw new Exception("invalid input vote");
         }
+    }
+
+    public boolean isIdValid(String id){
+        return filmMap.containsKey(id);
     }
 }

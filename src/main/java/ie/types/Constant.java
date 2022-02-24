@@ -1,6 +1,5 @@
 package ie.types;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ public class Constant {
         public static final String SUMM = "summary";
         public static final String R_DATE = "releaseDate";
         public static final String DIRECTOR = "director";
-        public static final String WRITER = "writer";
+        public static final String WRITERS = "writers";
         public static final String GENRE = "genres";
         public static final String CAST = "cast";
         public static final String DURATION = "duration";
@@ -32,9 +31,11 @@ public class Constant {
         public static final String B_DATE = "birthDate";
     }
     public static class Comment {
+        public static final String ID = "id";
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
         public static final String CONTENT = "text";
+        public static final String C_DATE = "createdDate";
 
         public static Set<String> getSet(){
             return new HashSet<String>(){{
@@ -62,7 +63,7 @@ public class Constant {
         public static final String STATUS = "success";
         public static final String DATA = "data";
     }
-        public static class RateVoteWList {
+    public static class RateVoteWList {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
         public static final String RATE = "score";
@@ -74,5 +75,11 @@ public class Constant {
         public static final String ADD_ACTOR = "addActor";
         public static final String ADD_COMMENT = "addComment";
         public static final String RATE_MOVIE = "rateMovie";
+    }
+    public static enum Model {
+        ACTOR,
+        FILM,
+        USER,
+        COMMENT
     }
 }

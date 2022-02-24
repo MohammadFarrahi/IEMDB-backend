@@ -1,8 +1,8 @@
 package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ie.comment.Comment;
 import ie.types.Constant;
 
 import java.time.LocalDate;
@@ -62,7 +62,7 @@ public class Film {
         this.releaseDate = LocalDate.parse(releaseDate);
     }
 
-    @JsonProperty(value=Constant.Movie.WRITER, required = true)
+    @JsonProperty(value=Constant.Movie.WRITERS, required = true)
     private void setWriters (ArrayList<String> writers){
         this.writers = writers;
     }
