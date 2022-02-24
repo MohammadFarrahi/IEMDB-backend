@@ -69,7 +69,11 @@ public class Iemdb {
 
     private boolean checkCastExistance(String data) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList <String> castIds = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
+        ArrayList <Integer> temp = mapper.convertValue(mapper.readTree(data).get("cast"), ArrayList.class);
+        ArrayList <String> castIds = new ArrayList<>();
+        temp.forEach((n) -> {castIds.add(String.valueOf(n));});
+
+
         return actorManager.isIdListValid(castIds);
     }
 
@@ -79,7 +83,7 @@ public class Iemdb {
     }
 
     private String addComment(String data) throws Exception {
-        commentManager.addComment(data, filmManager, userManager);
+        commentManager.addComment(data);
         return "comment added successfully";
     }
 

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
 import ie.types.Constant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,11 +32,13 @@ public class ActorManager {
         actorMap.put(objectId, newActor);
         return newActor;
     }
-//    public boolean isActorPresent(String id) {
-//        return actorMap.containsKey(id);
-//    }
-    public boolean isIdListValid(List<String> ids) {
-        return actorMap.keySet().containsAll(ids);
+
+    public boolean isIdListValid(ArrayList<String> ids) {
+        for (var id : ids){
+            if(!actorMap.containsKey(id))
+                return false;
+        }
+        return true;
     }
     public boolean isIdValid(String id){
         return actorMap.containsKey(id);
