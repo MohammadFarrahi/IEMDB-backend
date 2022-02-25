@@ -43,11 +43,12 @@ public class Iemdb {
                 case Constant.Command.ADD_ACTOR -> resData = addActor(data);
                 case Constant.Command.ADD_COMMENT -> resData = addComment(data);
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
+                case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
-                case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
+                case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenre(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -102,6 +103,11 @@ public class Iemdb {
         return mapper.writeValueAsString(jsonNode);
 
 
+    }
+
+    private String getMoviesByGenre(String data) throws Exception {
+        var jsonNode = filmManager.getMoviesByGenre(data);
+        return mapper.writeValueAsString(jsonNode);
     }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
