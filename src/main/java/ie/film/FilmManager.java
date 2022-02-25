@@ -1,4 +1,5 @@
 package ie.film;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,8 +8,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.actor.Actor;
 import ie.user.UserManager;
+
 import java.util.ArrayList;
+
 import ie.types.Constant;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -30,13 +34,12 @@ public class FilmManager {
         var filmId = jsonNode.get(Constant.Movie.ID).asText();
         var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
 
-        if(!database.modelListExists(cast, Constant.Model.ACTOR)) {
+        if (!database.modelListExists(cast, Constant.Model.ACTOR)) {
             throw new Exception("Actor not found");
         }
         if (isIdValid(filmId)) {
             updateElement(filmId, jsonData);
-        }
-        else {
+        } else {
             addElement(jsonData);
         }
         return filmId;
@@ -97,35 +100,48 @@ public class FilmManager {
         }
     }
 
-    public boolean isIdValid(String id){
+    public boolean isIdValid(String id) {
         return filmMap.containsKey(id);
     }
 
     public boolean isIdListValid(ArrayList<String> ids) {
-        for (var id : ids){
-            if(!filmMap.containsKey(id))
+        for (var id : ids) {
+            if (!filmMap.containsKey(id))
                 return false;
         }
         return true;
     }
 
-    public Film getElement(String id) throws Exception{
+    public Film getElement(String id) throws Exception {
         if (filmMap.containsKey(id)) {
             return filmMap.get(id);
         }
-    throw new Exception("Movie not found");
+        throw new Exception("Movie not found");
     }
 
-    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception{
+    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception {
         ArrayList<Film> res = new ArrayList<>();
 
-        for(var id: idList) {
+        for (var id : idList) {
             res.add(getElement(id));
         }
         return res;
     }
 
+    public ArrayList<Film> filterElement(String genre) {
+        try {
 
+            ArrayList<String> filteredIdList = new ArrayList<>();
+            for (var pair : filmMap.entrySet()) {
+                if (pair.getValue().includeGenre(genre))
+                    filteredIdList.add(pair.getKey());
+            }
+            return getElementList(filteredIdList);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
 
     public JsonNode getMovie(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
@@ -134,18 +150,18 @@ public class FilmManager {
         return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMovieList() throws Exception{
+    public JsonNode getMovieList() throws Exception {
         ArrayList<String> idList = new ArrayList<>();
         idList.addAll(filmMap.keySet());
         var filmList = getElementList(idList);
         return serializeElementList(filmList, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode serializeElement(Film film, Constant.SER_MODE mode){
+    public JsonNode serializeElement(Film film, Constant.SER_MODE mode) {
         try {
             var jsonNode = mapper.valueToTree(film);
 
-            if(mode == Constant.SER_MODE.LONG) {
+            if (mode == Constant.SER_MODE.LONG) {
                 var castList = film.getCast();
                 var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
 //                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
@@ -156,7 +172,7 @@ public class FilmManager {
             }
             return jsonNode;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -165,7 +181,7 @@ public class FilmManager {
         try {
             var jsonNode = mapper.valueToTree(filmList);
             return jsonNode;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
