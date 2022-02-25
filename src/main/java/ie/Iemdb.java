@@ -120,7 +120,7 @@ public class Iemdb {
 
     private String addActor(String data) throws Exception {
         var x = actorManager.updateOrAddElement(data);
-        return "actor " + x  + " added successfully";
+        return "actor " + x + " added successfully";
     }
 
     private String addComment(String data) throws Exception {
@@ -158,11 +158,19 @@ public class Iemdb {
     }
 
     public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
-        switch (modelType) {
-            case ACTOR:
-                return actorManager.serializeElementList(idList, mode);
-            default:
-                return null;
+        try {
+            switch (modelType) {
+                case ACTOR:
+                    return actorManager.serializeElementList(idList, mode);
+
+                case FILM:
+                    var filmList = filmManager.getElementList(idList);
+                    return filmManager.serializeElementList(filmList, mode);
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
