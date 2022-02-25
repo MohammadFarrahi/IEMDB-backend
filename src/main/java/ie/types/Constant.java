@@ -90,11 +90,12 @@ public class Constant {
         public static final String ADD_ACTOR = "addActor";
         public static final String ADD_COMMENT = "addComment";
         public static final String RATE_MOVIE = "rateMovie";
+        public static final String VOTE_COMMENT = "voteComment";
         public static final String ADD_TO_WATCH_LIST = "addToWatchList";
         public static final String REMOVE_FROM_WATCH_LIST = "removeFromWatchList";
         public static final String GET_MOVIE_BY_ID = "getMovieById";
         public static final String GET_MOVIE_LIST = "getMovieList";
-        public static final String VOTE_COMMENT = "voteComment";
+        public static final String GET_MOVIES_BY_GENRE = "getMoviesByGenre";
 
     }
     public static enum Model {
