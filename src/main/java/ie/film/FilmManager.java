@@ -99,7 +99,7 @@ public class FilmManager {
                 rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
                 rateJsonNode.get(Constant.Rate.RATE).isInt());
         if (exceptionFlag) {
-            throw new Exception("invalid input vote");
+            throw new Exception("invalid input rate");
         }
     }
 

@@ -60,43 +60,42 @@ public class CommentManager {
 
     public void voteComment(String jsonData) throws Exception {
         JsonNode voteJsonNode = mapper.readTree(jsonData);
-        ValidateVoteJson(voteJsonNode);
-        var validatedData = ValidateVoteData(voteJsonNode);
+        var validatedVoteJson = ValidateVoteJson(voteJsonNode);
+        ValidateVoteData(validatedVoteJson);
 
-        commentMap.get(validatedData.get(Constant.Vote.C_ID).asText())
-                .updateCommentVotes(validatedData.get(Constant.Vote.U_ID).asText(), validatedData.get(Constant.Vote.VOTE).asInt());
+        commentMap.get(validatedVoteJson.get(Constant.Vote.C_ID).asText())
+                .updateCommentVotes(validatedVoteJson.get(Constant.Vote.U_ID).asText(), validatedVoteJson.get(Constant.Vote.VOTE).asInt());
     }
 
-    private Map<String, JsonNode> ValidateVoteData(JsonNode rateJsonNode) throws Exception {
-        Map<String, JsonNode> validatedData = new HashMap<>();
-        validatedData.put(Constant.Vote.U_ID, rateJsonNode.get(Constant.Vote.U_ID));
-        validatedData.put(Constant.Vote.C_ID, rateJsonNode.get(Constant.Vote.C_ID));
-        validatedData.put(Constant.Vote.VOTE, rateJsonNode.get(Constant.Vote.VOTE));
-
-        var userEmail = validatedData.get(Constant.Vote.U_ID).asText();
-        var commentId = validatedData.get(Constant.Vote.C_ID).asText();
+    private void ValidateVoteData(Map<String, JsonNode> validatedJson) throws Exception {
+        var userEmail = validatedJson.get(Constant.Vote.U_ID).asText();
+        var commentId = validatedJson.get(Constant.Vote.C_ID).asText();
         if (!database.modelExists(userEmail, Constant.Model.USER)) {
             throw new Exception("ne user with this id");
         }
         if (!isIdValid(commentId)) {
             throw new Exception("no comment with this id");
         }
-        return validatedData;
     }
 
-    private void ValidateVoteJson(JsonNode rateJsonNode) throws Exception {
+    private Map<String, JsonNode> ValidateVoteJson(JsonNode voteJsonNode) throws Exception {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
-        rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
-
+        voteJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
         var voteJsonFieldNames = Constant.Vote.getSet();
         boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
         exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
-        exceptionFlag |= !(rateJsonNode.get(Constant.Vote.C_ID).isInt() &&
-                rateJsonNode.get(Constant.Vote.U_ID).isTextual() &&
-                rateJsonNode.get(Constant.Vote.VOTE).isInt());
+
+        Map<String, JsonNode> validatedJson = new HashMap<>();
+        validatedJson.put(Constant.Vote.U_ID, voteJsonNode.get(Constant.Vote.U_ID));
+        validatedJson.put(Constant.Vote.C_ID, voteJsonNode.get(Constant.Vote.C_ID));
+        validatedJson.put(Constant.Vote.VOTE, voteJsonNode.get(Constant.Vote.VOTE));
+        exceptionFlag |= !(validatedJson.get(Constant.Vote.C_ID).isInt() &&
+                validatedJson.get(Constant.Vote.U_ID).isTextual() &&
+                validatedJson.get(Constant.Vote.VOTE).isInt());
         if (exceptionFlag) {
             throw new Exception("invalid input vote");
         }
+        return validatedJson;
     }
 }
 

@@ -71,7 +71,7 @@ public class Constant {
     }
     public static class Vote {
         public static final String U_ID = "userEmail";
-        public static final String C_ID = "movieId";
+        public static final String C_ID = "commentId";
         public static final String VOTE = "vote";
 
         public static Set<String> getSet(){
