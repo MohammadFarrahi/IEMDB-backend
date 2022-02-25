@@ -163,27 +163,14 @@ public class Iemdb {
         return res;
     }
 
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
-        try {
-            switch (modelType) {
-                case ACTOR:
-                    return actorManager.serializeElementList(idList, mode);
-
-                case FILM:
-                    var filmList = filmManager.getElementList(idList);
-                    return filmManager.serializeElementList(filmList, mode);
-                default:
-                    return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public JsonNode serializeElement(String id, Constant.Model modelType, Constant.SER_MODE mode) {
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws Exception {
         switch (modelType) {
             case ACTOR:
-                return actorManager.serializeElement(id, mode);
+                return actorManager.serializeElementList(idList, mode);
+            case FILM:
+                return filmManager.serializeElementList(idList, mode);
+            case COMMENT:
+                return commentManager.serializeElementList(idList, mode);
             default:
                 return null;
         }

@@ -9,6 +9,10 @@ public class Constant {
         public static final String NAME = "name";
         public static final String B_DATE = "birthDate";
         public static final String NATION = "nationality";
+        public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
+            add(B_DATE);
+            add(NATION);
+        }};
     }
     public static class Movie {
         public static final String ID = "id";
@@ -50,6 +54,13 @@ public class Constant {
         public static final String M_ID = "movieId";
         public static final String CONTENT = "text";
         public static final String C_DATE = "createdDate";
+        public static final String LIKES = "likes";
+        public static final String DISLIKES = "dislikes";
+
+        public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
+            add(M_ID);
+            add(C_DATE);
+        }};
 
         public static Set<String> getSet(){
             return new HashSet<String>(){{

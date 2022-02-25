@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
+import ie.actor.Actor;
 import ie.film.FilmManager;
 import ie.types.Constant;
 import ie.user.UserManager;
@@ -97,5 +99,33 @@ public class CommentManager {
         }
         return validatedJson;
     }
+
+    public Comment getElement(String id) throws Exception {
+        if (commentMap.containsKey(id)) {
+            return commentMap.get(id);
+        }
+        throw new Exception("Comment not found");
+    }
+
+    public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws Exception {
+        var comment = getElement(commentId);
+        try {
+            var commentJsonNode = (ObjectNode) mapper.valueToTree(comment);
+            if (mode == Constant.SER_MODE.SHORT) {
+                commentJsonNode.remove(Constant.Comment.REMOVABLE_SHORT_SER);
+            }
+            return commentJsonNode;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public JsonNode serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws Exception {
+        var commentJsonList = new ArrayList<JsonNode>();
+        for (var id : commentIds) {
+            commentJsonList.add(serializeElement(id, mode));
+        }
+        return mapper.valueToTree(commentJsonList);
+    }
+
 }
 

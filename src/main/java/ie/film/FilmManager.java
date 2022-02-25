@@ -81,9 +81,7 @@ public class FilmManager {
         if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.M_ID)) {
             throw new Exception("invalid json");
         }
-
-        var film = getElement(jsonNode.get(Constant.WatchList.M_ID).asText());
-        return serializeElement(film, Constant.SER_MODE.LONG);
+        return serializeElement(jsonNode.get(Constant.WatchList.M_ID).asText(), Constant.SER_MODE.LONG);
     }
 
     public JsonNode getMoviesByGenre(String data) throws Exception {
@@ -110,7 +108,7 @@ public class FilmManager {
         return res;
     }
 
-    public ArrayList<Film> filterElement(String genre) {
+    public ArrayList<String> filterElement(String genre) {
         try {
 
             ArrayList<String> filteredIdList = new ArrayList<>();
@@ -118,19 +116,20 @@ public class FilmManager {
                 if (pair.getValue().includeGenre(genre))
                     filteredIdList.add(pair.getKey());
             }
-            return getElementList(filteredIdList);
+            return filteredIdList;
         } catch (Exception e) {
             return null;
         }
 
     }
 
-    public JsonNode serializeElement(Film film, Constant.SER_MODE mode) {
+    public JsonNode serializeElement(String filmId, Constant.SER_MODE mode) throws Exception {
+        var film = getElement(filmId);
         try {
             var filmJsonNode = (ObjectNode) mapper.valueToTree(film);
 
             if (mode == Constant.SER_MODE.LONG) {
-                var castJsonNode = database.serializeElementList(film.getCast(), Constant.Model.ACTOR, Constant.SER_MODE.LONG);
+                var castJsonNode = database.serializeElementList(film.getCast(), Constant.Model.ACTOR, Constant.SER_MODE.SHORT);
                 var commentJsonNode = database.serializeElementList(film.getCast(), Constant.Model.COMMENT, Constant.SER_MODE.LONG);
 
                 filmJsonNode.replace(Constant.Movie.CAST, castJsonNode);
@@ -145,15 +144,13 @@ public class FilmManager {
         }
     }
 
-    public JsonNode serializeElementList(ArrayList<Film> filmList, Constant.SER_MODE mode) {
+    public JsonNode serializeElementList(ArrayList<String> filmIds, Constant.SER_MODE mode) throws Exception {
         var filmJsonList = new ArrayList<JsonNode>();
-        try {
-            filmList.forEach((film) -> filmJsonList.add(serializeElement(film, Constant.SER_MODE.SHORT)));
-            var jsonNode = mapper.valueToTree(filmJsonList);
-            return jsonNode;
-        } catch (Exception e) {
-            return null;
+        for(var id : filmIds) {
+            filmJsonList.add(serializeElement(id, mode));
         }
+        var jsonNode = mapper.valueToTree(filmJsonList);
+        return jsonNode;
     }
 
     private void ValidateRateData(JsonNode rateJsonNode) throws Exception {
