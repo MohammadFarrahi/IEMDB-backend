@@ -9,6 +9,7 @@ import ie.user.User;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Comment {
     private String id;
@@ -16,6 +17,9 @@ public class Comment {
     private String commentFilm;
     private String commentOwner;
     private String text;
+    private HashMap<String, Short> userVoteMap;
+    private Integer commentLikes;
+    private Integer commentDislikes;
 
     public static Integer lastId = 0;
 
@@ -24,6 +28,9 @@ public class Comment {
     private Comment() {
         this.createdDate = LocalDate.now();
         this.id = String.valueOf(++lastId);
+        this.userVoteMap = new HashMap<>();
+        this.commentLikes = 0;
+        this.commentDislikes = 0;
     }
 
     @JsonProperty(value = Constant.Comment.M_ID, required = true)
@@ -41,4 +48,14 @@ public class Comment {
         this.text = text;
     }
 
+    public void updateCommentVotes(String userId, Integer vote) throws Exception {
+        if (!(-1 <= vote && vote <= 1)) {
+            throw new Exception("invalid vote value");
+        }
+        if (vote != 0) {
+            this.commentLikes += vote;
+            this.commentDislikes -= vote;
+            userVoteMap.put(userId, vote.shortValue());
+        }
+    }
 }

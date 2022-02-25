@@ -85,21 +85,21 @@ public class FilmManager {
         }
         if (!isIdValid(filmId)) {
             throw new Exception("no film with this id");
-        }    // TODO: consider using getFilm method
+        }
     }
 
     private void ValidateRateJson(JsonNode rateJsonNode) throws Exception {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-        var voteJsonFieldNames = Constant.Rate.getSet();
-        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
-        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        var rateJsonFieldNames = Constant.Rate.getSet();
+        boolean exceptionFlag = (jsonFiledNames.size() != rateJsonFieldNames.size());
+        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
         exceptionFlag |= !(rateJsonNode.get(Constant.Rate.M_ID).isInt() &&
                 rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
                 rateJsonNode.get(Constant.Rate.RATE).isInt());
         if (exceptionFlag) {
-            throw new Exception("invalid input vote");
+            throw new Exception("invalid input rate");
         }
     }
 

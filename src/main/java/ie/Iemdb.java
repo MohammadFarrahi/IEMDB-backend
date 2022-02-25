@@ -38,6 +38,7 @@ public class Iemdb {
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
+                case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -49,6 +50,11 @@ public class Iemdb {
             e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
+    }
+
+    private String voteComment(String data) throws Exception {
+        commentManager.voteComment(data);
+        return "comment voted successfully";
     }
 
     private void setJsonResponse(boolean status, String message) {

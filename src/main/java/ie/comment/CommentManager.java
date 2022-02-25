@@ -1,5 +1,6 @@
 package ie.comment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class CommentManager {
     ObjectMapper mapper;
@@ -54,6 +56,46 @@ public class CommentManager {
                 return false;
         }
         return true;
+    }
+
+    public void voteComment(String jsonData) throws Exception {
+        JsonNode voteJsonNode = mapper.readTree(jsonData);
+        var validatedVoteJson = ValidateVoteJson(voteJsonNode);
+        ValidateVoteData(validatedVoteJson);
+
+        commentMap.get(validatedVoteJson.get(Constant.Vote.C_ID).asText())
+                .updateCommentVotes(validatedVoteJson.get(Constant.Vote.U_ID).asText(), validatedVoteJson.get(Constant.Vote.VOTE).asInt());
+    }
+
+    private void ValidateVoteData(Map<String, JsonNode> validatedJson) throws Exception {
+        var userEmail = validatedJson.get(Constant.Vote.U_ID).asText();
+        var commentId = validatedJson.get(Constant.Vote.C_ID).asText();
+        if (!database.modelExists(userEmail, Constant.Model.USER)) {
+            throw new Exception("ne user with this id");
+        }
+        if (!isIdValid(commentId)) {
+            throw new Exception("no comment with this id");
+        }
+    }
+
+    private Map<String, JsonNode> ValidateVoteJson(JsonNode voteJsonNode) throws Exception {
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        voteJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        var voteJsonFieldNames = Constant.Vote.getSet();
+        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
+        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+
+        Map<String, JsonNode> validatedJson = new HashMap<>();
+        validatedJson.put(Constant.Vote.U_ID, voteJsonNode.get(Constant.Vote.U_ID));
+        validatedJson.put(Constant.Vote.C_ID, voteJsonNode.get(Constant.Vote.C_ID));
+        validatedJson.put(Constant.Vote.VOTE, voteJsonNode.get(Constant.Vote.VOTE));
+        exceptionFlag |= !(validatedJson.get(Constant.Vote.C_ID).isInt() &&
+                validatedJson.get(Constant.Vote.U_ID).isTextual() &&
+                validatedJson.get(Constant.Vote.VOTE).isInt());
+        if (exceptionFlag) {
+            throw new Exception("invalid input vote");
+        }
+        return validatedJson;
     }
 }
 
