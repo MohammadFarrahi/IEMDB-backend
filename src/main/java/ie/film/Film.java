@@ -136,7 +136,7 @@ public class Film {
     }
 
     @JsonGetter(Constant.Movie.AGE_L)
-    private Integer getAgeLimit() {
+    public Integer getAgeLimit() {
         return this.ageLimit;
     }
 
