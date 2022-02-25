@@ -23,6 +23,18 @@ public class Constant {
         public static final String AGE_L = "ageLimit";
         public static final String IMDB = "imdbRate";
         public static final String RATING = "rating";
+        public static final String COMMENTS = "comments";
+
+        public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
+            add(SUMM);
+            add(R_DATE);
+            add(WRITERS);
+            add(CAST);
+            add(DURATION);
+            add(AGE_L);
+            add(IMDB);
+            add(COMMENTS);
+        }};
 
     }
     public static class User {
