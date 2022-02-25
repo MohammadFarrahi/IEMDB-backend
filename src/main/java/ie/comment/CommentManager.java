@@ -6,12 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
-import ie.actor.Actor;
-import ie.film.FilmManager;
+import ie.exception.*;
 import ie.types.Constant;
-import ie.user.UserManager;
-
-import javax.crypto.spec.PSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,14 +28,14 @@ public class CommentManager {
         lastCommentId = 0;
     }
 
-    public String addElement(String data) throws Exception {
+    public String addElement(String data) throws JsonProcessingException, CustomException {
         var comment = mapper.readValue(data, Comment.class);
         JsonNode jsonNode = mapper.readTree(data);
 
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
         if (!database.modelExists(userId, Constant.Model.USER)) {
-            throw new Exception("Movie not found");
+            throw new MovieNotFoundException();
         }
         var film = database.getFilmById(movieId);
 
@@ -60,7 +56,7 @@ public class CommentManager {
         return true;
     }
 
-    public void voteComment(String jsonData) throws Exception {
+    public void voteComment(String jsonData) throws JsonProcessingException, CustomException {
         JsonNode voteJsonNode = mapper.readTree(jsonData);
         var validatedVoteJson = ValidateVoteJson(voteJsonNode);
         ValidateVoteData(validatedVoteJson);
@@ -69,18 +65,18 @@ public class CommentManager {
                 .updateCommentVotes(validatedVoteJson.get(Constant.Vote.U_ID).asText(), validatedVoteJson.get(Constant.Vote.VOTE).asInt());
     }
 
-    private void ValidateVoteData(Map<String, JsonNode> validatedJson) throws Exception {
+    private void ValidateVoteData(Map<String, JsonNode> validatedJson)  throws CustomException  {
         var userEmail = validatedJson.get(Constant.Vote.U_ID).asText();
         var commentId = validatedJson.get(Constant.Vote.C_ID).asText();
         if (!database.modelExists(userEmail, Constant.Model.USER)) {
-            throw new Exception("ne user with this id");
+            throw new UserNotFoundException();
         }
         if (!isIdValid(commentId)) {
-            throw new Exception("no comment with this id");
+            throw new CommentNotFoundException();
         }
     }
 
-    private Map<String, JsonNode> ValidateVoteJson(JsonNode voteJsonNode) throws Exception {
+    private Map<String, JsonNode> ValidateVoteJson(JsonNode voteJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         voteJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
         var voteJsonFieldNames = Constant.Vote.getSet();
@@ -95,19 +91,19 @@ public class CommentManager {
                 validatedJson.get(Constant.Vote.U_ID).isTextual() &&
                 validatedJson.get(Constant.Vote.VOTE).isInt());
         if (exceptionFlag) {
-            throw new Exception("invalid input vote");
+            throw new InvalidCommandException();
         }
         return validatedJson;
     }
 
-    public Comment getElement(String id) throws Exception {
+    public Comment getElement(String id) throws CustomException {
         if (commentMap.containsKey(id)) {
             return commentMap.get(id);
         }
-        throw new Exception("Comment not found");
+        throw new CommentNotFoundException();
     }
 
-    public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws Exception {
+    public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
         var comment = getElement(commentId);
         try {
             var commentJsonNode = (ObjectNode) mapper.valueToTree(comment);
@@ -119,7 +115,7 @@ public class CommentManager {
             return null;
         }
     }
-    public JsonNode serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws Exception {
+    public JsonNode serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws CustomException {
         var commentJsonList = new ArrayList<JsonNode>();
         for (var id : commentIds) {
             commentJsonList.add(serializeElement(id, mode));

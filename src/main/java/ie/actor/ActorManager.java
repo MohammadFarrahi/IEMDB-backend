@@ -3,10 +3,10 @@ package ie.actor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
-import ie.film.Film;
+import ie.exception.ActorNotFoundException;
+import ie.exception.CustomException;
 import ie.types.Constant;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class ActorManager {
         this.database = database;
         actorMap = new HashMap<String, Actor>();
     }
-    public String updateOrAddElement(String jsonData) throws Exception {
-        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID_S).asText(); // TODO: Check method call chain arise same type of error
+    public String updateOrAddElement(String jsonData) throws JsonProcessingException, CustomException {
+        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID_S).asText();
 
         if (isIdValid(actorId)) {
             updateElement(actorId, jsonData);
@@ -34,21 +34,20 @@ public class ActorManager {
         }
         return actorId;
     }
-    public String addElement(String jsonData) throws Exception {
+    public String addElement(String jsonData) throws JsonProcessingException, CustomException {
         String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID_S).asText();
         if (isIdValid(actorId)) {
-            throw new Exception("actor already exists");
+            throw new CustomException("ActorAlreadyExists");
         }
         var newActor = mapper.readValue(jsonData, Actor.class);
         actorMap.put(actorId, newActor);
         return actorId;
     }
-    public void updateElement(String id, String jsonData) throws Exception {
+    public void updateElement(String id, String jsonData) throws JsonProcessingException, CustomException {
         if (!isIdValid(id)) {
-            throw new Exception("actor not found");
+            throw new ActorNotFoundException();
         }
         mapper.readerForUpdating(actorMap.get(id)).readValue(jsonData);
-        // TODO: Check if it is needed to put object to hashMap again
     }
     public boolean isIdListValid(ArrayList<String> ids) {
         for (var id : ids){
@@ -61,14 +60,14 @@ public class ActorManager {
         return actorMap.containsKey(id);
     }
 
-    public Actor getElement(String id) throws Exception{
+    public Actor getElement(String id) throws CustomException {
         if (actorMap.containsKey(id)) {
             return actorMap.get(id);
         }
-        throw new Exception("Actor not found");
+        throw new ActorNotFoundException();
     }
 
-    public ArrayList<Actor> getElementList(ArrayList<String> idList) throws Exception{
+    public ArrayList<Actor> getElementList(ArrayList<String> idList) throws CustomException {
         ArrayList<Actor> res = new ArrayList<>();
 
         for(var id: idList) {
@@ -77,7 +76,7 @@ public class ActorManager {
         return res;
     }
 
-    public JsonNode serializeElement(String actorId, Constant.SER_MODE mode) throws Exception {
+    public JsonNode serializeElement(String actorId, Constant.SER_MODE mode) throws CustomException {
         var actor = getElement(actorId);
         try {
             var actorJsonNode = (ObjectNode) mapper.valueToTree(actor);
@@ -89,7 +88,7 @@ public class ActorManager {
             return null;
         }
     }
-    public JsonNode serializeElementList(ArrayList<String> actorIds, Constant.SER_MODE mode) throws Exception {
+    public JsonNode serializeElementList(ArrayList<String> actorIds, Constant.SER_MODE mode) throws CustomException {
         var actorJsonList = new ArrayList<JsonNode>();
         for (var id : actorIds) {
             actorJsonList.add(serializeElement(id, mode));

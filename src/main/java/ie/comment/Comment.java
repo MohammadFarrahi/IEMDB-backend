@@ -3,13 +3,10 @@ package ie.comment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ie.film.Film;
+import ie.exception.CustomException;
+import ie.exception.InvalidVoteValueException;
 import ie.types.Constant;
-import ie.types.Email;
-import ie.user.User;
-
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Comment {
@@ -48,9 +45,9 @@ public class Comment {
         this.text = text;
     }
 
-    public void updateCommentVotes(String userId, Integer vote) throws Exception {
+    public void updateCommentVotes(String userId, Integer vote) throws CustomException {
         if (!(-1 <= vote && vote <= 1))
-            throw new Exception("invalid vote value");
+            throw new InvalidVoteValueException();
         if (vote > 0)
             this.commentLikes += vote;
         else

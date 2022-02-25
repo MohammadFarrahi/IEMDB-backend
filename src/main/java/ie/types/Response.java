@@ -26,7 +26,7 @@ public class Response {
         return status;
     }
 
-    public String stringify() throws Exception{
+    public String stringify() throws Exception {
         ObjectNode node = mapper.createObjectNode();
         node.put(Constant.Response.STATUS, status);
         try {
