@@ -157,6 +157,6 @@ public class Film {
         sumOfRates = sumOfRates - userRateMap.getOrDefault(userEmail, 0);
         userRateMap.put(userEmail, rate);
         averageRating = (sumOfRates + rate) / userRateMap.size();
+        averageRating = Math.floor(averageRating * 10) / 10;
     }
-
 }
