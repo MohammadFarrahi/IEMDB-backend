@@ -28,6 +28,7 @@ public class FilmManager {
         var newFilm = mapper.readValue(data, Film.class);
 
         var jsonNode = mapper.readTree(data);
+
         var id = jsonNode.get(Constant.Movie.ID).asText();
         var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(data).get(Constant.Movie.CAST), ArrayList.class));
 
@@ -98,6 +99,12 @@ public class FilmManager {
     throw new Exception("Movie not found");
     }
 
+    public JsonNode getMovie(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+        var id = jsonNode.get("movieId").asText();
+        return serializeElement(id, Constant.SER_MODE.LONG);
+    }
+
     public JsonNode serializeElement(String id, Constant.SER_MODE mode){
         try {
             var film = getElement(id);
@@ -106,8 +113,12 @@ public class FilmManager {
             if(mode == Constant.SER_MODE.LONG) {
                 var castList = film.getCast();
                 var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
-                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
+//                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
+//                return newNode;
+                ObjectNode newNode = (ObjectNode) jsonNode;
+                newNode.set("cast", castNode);
                 return newNode;
+
             }
 
             return jsonNode;
