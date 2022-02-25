@@ -53,7 +53,7 @@ public class Iemdb {
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovieByIdJson(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMoviesListJson();
-                case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenre(data);
+                case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenreJson(data);
                 case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
                 default -> throw new Exception("Invalid Command");
             }
@@ -62,7 +62,6 @@ public class Iemdb {
         } catch (JsonProcessingException e) {
             setJsonResponse(false, e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
     }
@@ -106,7 +105,7 @@ public class Iemdb {
         return mapper.writeValueAsString(serializeElementList(null, Constant.Model.FILM, Constant.SER_MODE.SHORT));
     }
 
-    private String getMoviesByGenre(String data) throws Exception {
+    private String getMoviesByGenreJson(String data) throws Exception {
         var jsonNode = filmManager.getMoviesByGenre(data);
         return mapper.writeValueAsString(jsonNode);
     }
