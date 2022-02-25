@@ -91,8 +91,8 @@ public class Film {
     }
 
     @JsonGetter(Constant.Movie.ID)
-    private String getId() {
-        return this.id;
+    private Integer getId() {
+        return Integer.parseInt(this.id);
     }
 
     @JsonGetter(Constant.Movie.NAME)
