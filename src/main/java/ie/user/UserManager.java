@@ -8,6 +8,8 @@ import ie.types.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class UserManager {
     private final HashMap<String, User> userMap;
@@ -47,13 +49,18 @@ public class UserManager {
             throw new Exception("user not found");
         }
         mapper.readerForUpdating(userMap.get(id)).readValue(jsonData);
-        // TODO: Check if it is needed to put object to hashMap again
     }
 
     public JsonNode getWatchList (String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get("userEmail").asText();
-        var user = getElement(id);
+
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.U_ID))
+            throw new Exception("invalid json");
+
+        var user = getElement(jsonNode.get(Constant.WatchList.U_ID).asText());
         var watchList = database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
 
         var node = mapper.createObjectNode();
@@ -75,25 +82,41 @@ public class UserManager {
 
     public void addToWatchList(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-
+        validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
         var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
-        if(!database.modelExists(movieId, Constant.Model.FILM))
-            throw new Exception("Movie not found");
+
         var user = getElement(userId);
+        if (!user.isOlderThan(database.getFilmById(movieId).getAgeLimit()))
+            throw new Exception("you age is not good");
+
         user.addToWatchList(movieId);
     }
 
     public void removeFromWatchList(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-
+        validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
         var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
         var user = getElement(userId);
         user.removeFromWatchList(movieId);
     }
+
+    private void validatedWListJson(JsonNode WListJsonNode) throws Exception {
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        WListJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        var voteJsonFieldNames = Constant.WatchList.getSet();
+
+        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
+        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        exceptionFlag |= !(WListJsonNode.get(Constant.WatchList.M_ID).isInt() && WListJsonNode.get(Constant.Vote.U_ID).isTextual());
+        if (exceptionFlag) {
+            throw new Exception("invalid input vote");
+        }
+    }
+
     public User getElement(String id) throws Exception {
         if(userMap.containsKey(id)){
             return userMap.get(id);

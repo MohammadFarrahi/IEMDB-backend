@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
+import ie.actor.Actor;
 import ie.film.FilmManager;
 import ie.types.Constant;
 import ie.user.UserManager;
@@ -32,17 +34,17 @@ public class CommentManager {
 
     public String addElement(String data) throws Exception {
         var comment = mapper.readValue(data, Comment.class);
-
         JsonNode jsonNode = mapper.readTree(data);
+
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
         if (!database.modelExists(userId, Constant.Model.USER)) {
-            throw new Exception("User not found");
-        }
-        if (!database.modelExists(movieId, Constant.Model.FILM)) {
             throw new Exception("Movie not found");
         }
+        var film = database.getFilmById(movieId);
+
         commentMap.put(Comment.lastId.toString(), comment);
+        film.addCommentId(Comment.lastId.toString());
         return Comment.lastId.toString();
     }
 
@@ -97,5 +99,33 @@ public class CommentManager {
         }
         return validatedJson;
     }
+
+    public Comment getElement(String id) throws Exception {
+        if (commentMap.containsKey(id)) {
+            return commentMap.get(id);
+        }
+        throw new Exception("Comment not found");
+    }
+
+    public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws Exception {
+        var comment = getElement(commentId);
+        try {
+            var commentJsonNode = (ObjectNode) mapper.valueToTree(comment);
+            if (mode == Constant.SER_MODE.SHORT) {
+                commentJsonNode.remove(Constant.Comment.REMOVABLE_SHORT_SER);
+            }
+            return commentJsonNode;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public JsonNode serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws Exception {
+        var commentJsonList = new ArrayList<JsonNode>();
+        for (var id : commentIds) {
+            commentJsonList.add(serializeElement(id, mode));
+        }
+        return mapper.valueToTree(commentJsonList);
+    }
+
 }
 

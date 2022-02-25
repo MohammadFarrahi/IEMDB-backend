@@ -31,7 +31,7 @@ public class FilmManager {
 
     public String updateOrAddElement(String jsonData) throws Exception {
         var jsonNode = mapper.readTree(jsonData);
-        var filmId = jsonNode.get(Constant.Movie.ID).asText();
+        var filmId = jsonNode.get(Constant.Movie.ID_S).asText();
         var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
 
         if (!database.modelListExists(cast, Constant.Model.ACTOR)) {
@@ -46,7 +46,7 @@ public class FilmManager {
     }
 
     public String addElement(String jsonData) throws Exception {
-        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID).asText();
+        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID_S).asText();
         if (isIdValid(filmId)) {
             throw new Exception("movie already exist");
         }
@@ -73,25 +73,28 @@ public class FilmManager {
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
-    public JsonNode getMovie(String data) throws Exception {
+    public JsonNode getMovieByIdJson(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get("movieId").asText();
-        var film = getElement(id);
-        return serializeElement(film, Constant.SER_MODE.LONG);
-    }
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-    public JsonNode getMovieList() throws Exception {
-        ArrayList<String> idList = new ArrayList<>();
-        idList.addAll(filmMap.keySet());
-        var filmList = getElementList(idList);
-        return serializeElementList(filmList, Constant.SER_MODE.LONG);
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.M_ID)) {
+            throw new Exception("invalid json");
+        }
+        return serializeElement(jsonNode.get(Constant.WatchList.M_ID).asText(), Constant.SER_MODE.LONG);
     }
 
     public JsonNode getMoviesByGenre(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals("genre"))
+            throw new Exception("invalid json");
+
         var genre = jsonNode.get("genre").asText();
-        var filteredFilms = filterElement(genre);
-        return serializeElementList(filteredFilms, Constant.SER_MODE.SHORT);
+        var filteredFilmsIds = filterElement(genre);
+        return serializeElementList(filteredFilmsIds, Constant.SER_MODE.SHORT);
     }
 
     public Film getElement(String id) throws Exception {
@@ -102,15 +105,16 @@ public class FilmManager {
     }
 
     public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception {
+        if (idList == null)
+            return new ArrayList<>(filmMap.values());
         ArrayList<Film> res = new ArrayList<>();
-
         for (var id : idList) {
             res.add(getElement(id));
         }
         return res;
     }
 
-    public ArrayList<Film> filterElement(String genre) {
+    public ArrayList<String> filterElement(String genre) {
         try {
 
             ArrayList<String> filteredIdList = new ArrayList<>();
@@ -118,40 +122,41 @@ public class FilmManager {
                 if (pair.getValue().includeGenre(genre))
                     filteredIdList.add(pair.getKey());
             }
-            return getElementList(filteredIdList);
+            return filteredIdList;
         } catch (Exception e) {
             return null;
         }
 
     }
 
-    public JsonNode serializeElement(Film film, Constant.SER_MODE mode) {
+    public JsonNode serializeElement(String filmId, Constant.SER_MODE mode) throws Exception {
+        var film = getElement(filmId);
         try {
-            var jsonNode = mapper.valueToTree(film);
+            var filmJsonNode = (ObjectNode) mapper.valueToTree(film);
 
             if (mode == Constant.SER_MODE.LONG) {
-                var castList = film.getCast();
-                var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
-//                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
-//                return newNode;
-                ObjectNode newNode = (ObjectNode) jsonNode;
-                newNode.set("cast", castNode);
-                return newNode;
-            }
-            return jsonNode;
+                var castJsonNode = database.serializeElementList(film.getCast(), Constant.Model.ACTOR, Constant.SER_MODE.SHORT);
+                var commentJsonNode = database.serializeElementList(film.getComments(), Constant.Model.COMMENT, Constant.SER_MODE.SHORT);
 
+                filmJsonNode.replace(Constant.Movie.CAST, castJsonNode);
+                filmJsonNode.replace(Constant.Movie.COMMENTS, commentJsonNode);
+            }
+            else {
+                filmJsonNode.remove(Constant.Movie.REMOVABLE_SHORT_SER);
+            }
+            return filmJsonNode;
         } catch (Exception e) {
             return null;
         }
     }
 
-    public JsonNode serializeElementList(ArrayList<Film> filmList, Constant.SER_MODE mode) {
-        try {
-            var jsonNode = mapper.valueToTree(filmList);
-            return jsonNode;
-        } catch (Exception e) {
-            return null;
+    public JsonNode serializeElementList(ArrayList<String> filmIds, Constant.SER_MODE mode) throws Exception {
+        var filmJsonList = new ArrayList<JsonNode>();
+        for(var id : filmIds) {
+            filmJsonList.add(serializeElement(id, mode));
         }
+        var jsonNode = mapper.valueToTree(filmJsonList);
+        return jsonNode;
     }
 
     private void ValidateRateData(JsonNode rateJsonNode) throws Exception {
@@ -172,7 +177,7 @@ public class FilmManager {
 
         var rateJsonFieldNames = Constant.Rate.getSet();
         boolean exceptionFlag = (jsonFiledNames.size() != rateJsonFieldNames.size());
-        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<>(jsonFiledNames)));
         exceptionFlag |= !(rateJsonNode.get(Constant.Rate.M_ID).isInt() &&
                 rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
                 rateJsonNode.get(Constant.Rate.RATE).isInt());

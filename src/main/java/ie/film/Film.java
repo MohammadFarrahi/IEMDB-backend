@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import ie.comment.Comment;
 import ie.types.Constant;
 
@@ -19,23 +20,23 @@ public class Film {
     private String director;
     private ArrayList<String> writers;
     private ArrayList<String> genres;
+    private ArrayList<String> cast;
     private Float imdbRate;
+    private Double averageRating;
     private Integer duration;
     private Integer ageLimit;
-    private double averageRating;
 
-
-    private ArrayList<String> cast;
-    private ArrayList<Comment> comments;
+    private ArrayList<String> comments;
     private HashMap<String, Integer> userRateMap;
 
     @JsonCreator
     private Film(){
         userRateMap = new HashMap<>();
-        averageRating = 0;
+        comments = new ArrayList<>();
+        averageRating = null;
     }
 
-    @JsonProperty(value=Constant.Movie.ID, required = true)
+    @JsonProperty(value=Constant.Movie.ID_S, required = true)
     private void setId (String id){
         this.id = id;
     }
@@ -90,7 +91,7 @@ public class Film {
         this.imdbRate = imdbRate;
     }
 
-    @JsonGetter(Constant.Movie.ID)
+    @JsonGetter(Constant.Movie.ID_G)
     private Integer getId() {
         return Integer.parseInt(this.id);
     }
@@ -126,7 +127,7 @@ public class Film {
     }
 
     @JsonGetter(Constant.Movie.RATING)
-    private double getAverageRating() {
+    private Double getAverageRating() {
         return this.averageRating;
     }
 
@@ -136,13 +137,21 @@ public class Film {
     }
 
     @JsonGetter(Constant.Movie.AGE_L)
-    private Integer getAgeLimit() {
+    public Integer getAgeLimit() {
         return this.ageLimit;
     }
 
-    @JsonIgnore()
+    @JsonGetter(Constant.Movie.CAST)
     public ArrayList<String> getCast() {
         return this.cast;
+    }
+    @JsonGetter(Constant.Movie.COMMENTS)
+    public ArrayList<String> getComments() {
+        return this.comments;
+    }
+
+    public void addCommentId(String commentId) {
+        this.comments.add(commentId);
     }
 
     public boolean includeGenre(String genre) {
@@ -152,10 +161,11 @@ public class Film {
 
     public void updateFilmRating(String userEmail, int rate) throws Exception {
         if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
+        averageRating = averageRating == null ? Double.valueOf(0) : averageRating;
         double sumOfRates = averageRating * userRateMap.size();
         sumOfRates = sumOfRates - userRateMap.getOrDefault(userEmail, 0);
         userRateMap.put(userEmail, rate);
         averageRating = (sumOfRates + rate) / userRateMap.size();
+        averageRating = Math.floor(averageRating * 10) / 10;
     }
-
 }

@@ -11,6 +11,7 @@ import ie.types.Constant;
 import ie.types.Email;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 public class User {
@@ -104,5 +105,9 @@ public class User {
         if(!watchList.contains(id))
             throw new Exception("Movie is not in watch list");
         watchList.remove(id);
+    }
+
+    public boolean isOlderThan(Integer age) {
+        return age <= Period.between(birthDate, LocalDate.now()).getYears();
     }
 }
