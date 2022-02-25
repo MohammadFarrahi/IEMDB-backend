@@ -59,6 +59,7 @@ public class Constant {
         public static final String LIKES = "like";
         public static final String DISLIKES = "dislike";
 
+
         public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
             add(M_ID);
             add(C_DATE);

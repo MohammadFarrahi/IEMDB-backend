@@ -171,7 +171,7 @@ public class FilmManager {
 
         var rateJsonFieldNames = Constant.Rate.getSet();
         boolean exceptionFlag = (jsonFiledNames.size() != rateJsonFieldNames.size());
-        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<>(jsonFiledNames)));
         exceptionFlag |= !(rateJsonNode.get(Constant.Rate.M_ID).isInt() &&
                 rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
                 rateJsonNode.get(Constant.Rate.RATE).isInt());
