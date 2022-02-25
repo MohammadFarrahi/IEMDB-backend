@@ -1,10 +1,12 @@
 package ie.types;
 
+import ie.exception.CustomException;
+
 import java.util.regex.Pattern;
 
 public class Email {
     private final String addr;
-    public Email(String addr) throws Exception{
+    public Email(String addr) throws CustomException {
         boolean isValid = Pattern.compile("^(.+)@(\\S+)$")
                 .matcher(addr)
                 .matches();
@@ -12,7 +14,7 @@ public class Email {
             this.addr = addr;
         }
         else {
-            throw new Exception("Invalid email");
+            throw new CustomException("Invalid email");
         }
     }
     @Override

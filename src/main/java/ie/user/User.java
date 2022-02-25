@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.comment.Comment;
+import ie.exception.CustomException;
+import ie.exception.MovieAlreadyExistsException;
 import ie.types.Constant;
 import ie.types.Email;
 
@@ -95,15 +97,15 @@ public class User {
     }
 
 
-    public void addToWatchList(String id) throws Exception{
+    public void addToWatchList(String id) throws CustomException {
         if(watchList.contains(id))
-            throw new Exception("Movie is already in watch list");
+            throw new MovieAlreadyExistsException();
         watchList.add(id);
     }
 
-    public void removeFromWatchList(String id) throws Exception{
+    public void removeFromWatchList(String id) throws CustomException {
         if(!watchList.contains(id))
-            throw new Exception("Movie is not in watch list");
+            throw new MovieAlreadyExistsException();
         watchList.remove(id);
     }
 

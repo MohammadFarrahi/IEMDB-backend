@@ -1,15 +1,17 @@
 package ie.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
-import ie.actor.Actor;
+import ie.exception.AgeLimitException;
+import ie.exception.CustomException;
+import ie.exception.InvalidCommandException;
+import ie.exception.UserNotFoundException;
 import ie.types.Constant;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class UserManager {
     private final HashMap<String, User> userMap;
@@ -23,7 +25,7 @@ public class UserManager {
         userMap = new HashMap<>();
     }
 
-    public String updateOrAddElement(String jsonData) throws Exception {
+    public String updateOrAddElement(String jsonData) throws JsonProcessingException, CustomException {
         String email = mapper.readTree(jsonData).get(Constant.User.E_ID).asText();
 
         if (isIdValid(email)) {
@@ -35,29 +37,29 @@ public class UserManager {
         return email;
     }
 
-    public String addElement(String jsonData) throws Exception {
+    public String addElement(String jsonData) throws JsonProcessingException, CustomException {
         String email = mapper.readTree(jsonData).get(Constant.User.E_ID).asText();
         if (isIdValid(email)) {
-            throw new Exception("user already exists");
+            throw new CustomException("UserAlreadyExists");
         }
         var newUser = mapper.readValue(jsonData, User.class);
         userMap.put(email, newUser);
         return email;
     }
-    public void updateElement(String id, String jsonData) throws Exception {
+    public void updateElement(String id, String jsonData) throws JsonProcessingException, CustomException {
         if (!isIdValid(id)) {
-            throw new Exception("user not found");
+            throw new UserNotFoundException();
         }
         mapper.readerForUpdating(userMap.get(id)).readValue(jsonData);
     }
 
-    public JsonNode getWatchList (String data) throws Exception {
+    public JsonNode getWatchList (String data) throws JsonProcessingException, CustomException  {
         var jsonNode = mapper.readTree(data);
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
         if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.U_ID))
-            throw new Exception("invalid json");
+            throw new InvalidCommandException();
 
         var user = getElement(jsonNode.get(Constant.WatchList.U_ID).asText());
         return database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
@@ -75,7 +77,7 @@ public class UserManager {
         return true;
     }
 
-    public void addToWatchList(String data) throws Exception {
+    public void addToWatchList(String data) throws JsonProcessingException, CustomException {
         var jsonNode = mapper.readTree(data);
         validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
@@ -84,12 +86,12 @@ public class UserManager {
 
         var user = getElement(userId);
         if (!user.isOlderThan(database.getFilmById(movieId).getAgeLimit()))
-            throw new Exception("you age is not good");
+            throw new AgeLimitException();
 
         user.addToWatchList(movieId);
     }
 
-    public void removeFromWatchList(String data) throws Exception {
+    public void removeFromWatchList(String data) throws JsonProcessingException, CustomException {
         var jsonNode = mapper.readTree(data);
         validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
@@ -99,7 +101,7 @@ public class UserManager {
         user.removeFromWatchList(movieId);
     }
 
-    private void validatedWListJson(JsonNode WListJsonNode) throws Exception {
+    private void validatedWListJson(JsonNode WListJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         WListJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
         var voteJsonFieldNames = Constant.WatchList.getSet();
@@ -108,14 +110,14 @@ public class UserManager {
         exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
         exceptionFlag |= !(WListJsonNode.get(Constant.WatchList.M_ID).isInt() && WListJsonNode.get(Constant.Vote.U_ID).isTextual());
         if (exceptionFlag) {
-            throw new Exception("invalid input vote");
+            throw new InvalidCommandException();
         }
     }
 
-    public User getElement(String id) throws Exception {
+    public User getElement(String id) throws CustomException {
         if(userMap.containsKey(id)){
             return userMap.get(id);
         }
-        throw new Exception("User not found");
+        throw new UserNotFoundException();
     }
 }

@@ -3,8 +3,6 @@ package ie.actor;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.types.Constant;
 
 import java.time.LocalDate;
@@ -17,10 +15,7 @@ public class Actor {
 
     // For jackson usage
     @JsonProperty(value= Constant.Actor.ID_S, required = true)
-    private void setId(String id) throws Exception {
-        if(Integer.parseInt(id) < 1) {
-            throw new Exception("invalid actor id");
-        }
+    private void setId(String id) {
         this.id = id;
     }
     @JsonProperty(value= Constant.Actor.NAME, required = true)
@@ -54,13 +49,4 @@ public class Actor {
     @JsonCreator
     private Actor(){}
 
-    @Override
-    public String toString() {
-        ObjectMapper serializer = new ObjectMapper();
-        try {
-            return serializer.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            return "";
-        }
-    }
 }

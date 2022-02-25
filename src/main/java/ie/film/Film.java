@@ -2,12 +2,10 @@ package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
-import ie.comment.Comment;
+import ie.exception.CustomException;
+import ie.exception.InvalidRateScoreException;
 import ie.types.Constant;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,8 +157,8 @@ public class Film {
     }
 
 
-    public void updateFilmRating(String userEmail, int rate) throws Exception {
-        if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
+    public void updateFilmRating(String userEmail, int rate) throws CustomException {
+        if (!(1 <= rate && rate <= 10)) { throw new InvalidRateScoreException(); }
         averageRating = averageRating == null ? Double.valueOf(0) : averageRating;
         double sumOfRates = averageRating * userRateMap.size();
         sumOfRates = sumOfRates - userRateMap.getOrDefault(userEmail, 0);

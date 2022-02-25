@@ -3,16 +3,15 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
+import ie.exception.CustomException;
+import ie.exception.InvalidCommandException;
 import ie.film.Film;
 import ie.film.FilmManager;
 import ie.types.Response;
 import ie.user.UserManager;
 import ie.types.Constant;
-
 import java.util.ArrayList;
 
 public class Iemdb {
@@ -55,18 +54,18 @@ public class Iemdb {
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMoviesListJson();
                 case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenreJson(data);
                 case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
-                default -> throw new Exception("Invalid Command");
+                default -> throw new InvalidCommandException();
             }
             setJsonResponse(true, resData);
 
-        } catch (JsonProcessingException e) {
+        } catch (CustomException e) {
             setJsonResponse(false, e.getMessage());
         } catch (Exception e) {
-            setJsonResponse(false, e.getMessage());
+            setJsonResponse(false, InvalidCommandException.message);
         }
     }
 
-    private String voteComment(String data) throws Exception {
+    private String voteComment(String data) throws CustomException, JsonProcessingException {
         commentManager.voteComment(data);
         return "comment voted successfully";
     }
@@ -75,37 +74,36 @@ public class Iemdb {
         this.response = new Response(status, message);
     }
 
-    private String addUser(String dataJson) throws Exception {
+    private String addUser(String dataJson) throws CustomException, JsonProcessingException {
         userManager.updateOrAddElement(dataJson);
         return "user added successfully";
     }
 
-    private String addMovie(String data) throws Exception {
+    private String addMovie(String data) throws CustomException, JsonProcessingException {
         filmManager.updateOrAddElement(data);
         return "movie added successfully";
     }
 
-    private String addToWatchList(String data) throws Exception {
+    private String addToWatchList(String data) throws CustomException, JsonProcessingException {
         userManager.addToWatchList(data);
         return "Movie added to watchlist successfully";
     }
 
-    private String removeFromWatchList(String data) throws Exception {
+    private String removeFromWatchList(String data) throws CustomException, JsonProcessingException {
         userManager.removeFromWatchList(data);
         return "Movie removed from watch list";
     }
 
-    private String getMovieByIdJson(String data) throws Exception {
+    private String getMovieByIdJson(String data) throws CustomException, JsonProcessingException {
         var jsonNode = filmManager.getMovieByIdJson(data);
-//        System.out.println(jsonNode.toPrettyString());
         return mapper.writeValueAsString(jsonNode);
     }
 
-    private String getMoviesListJson() throws Exception {
+    private String getMoviesListJson() throws CustomException, JsonProcessingException {
         return mapper.writeValueAsString(serializeElementList(null, Constant.Model.FILM, Constant.SER_MODE.SHORT));
     }
 
-    private String getMoviesByGenreJson(String data) throws Exception {
+    private String getMoviesByGenreJson(String data) throws CustomException, JsonProcessingException {
         var jsonNode = filmManager.getMoviesByGenre(data);
         return mapper.writeValueAsString(jsonNode);
     }
@@ -118,22 +116,22 @@ public class Iemdb {
         return stringList;
     }
 
-    private String addActor(String data) throws Exception {
+    private String addActor(String data)throws CustomException, JsonProcessingException {
         var x = actorManager.updateOrAddElement(data);
         return "actor " + x + " added successfully";
     }
 
-    private String addComment(String data) throws Exception {
+    private String addComment(String data) throws CustomException, JsonProcessingException {
         commentManager.addElement(data);
         return "comment added successfully";
     }
 
-    private String rateMovie(String data) throws Exception {
+    private String rateMovie(String data) throws CustomException, JsonProcessingException {
         filmManager.rateMovie(data);
         return "movie rated successfully";
     }
 
-    private String getWatchList(String data) throws Exception {
+    private String getWatchList(String data) throws CustomException, JsonProcessingException {
         var jsonNode = userManager.getWatchList(data);
         return mapper.writeValueAsString(jsonNode);
     }
@@ -162,7 +160,7 @@ public class Iemdb {
         return res;
     }
 
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws Exception {
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws CustomException {
         switch (modelType) {
             case ACTOR:
                 return actorManager.serializeElementList(idList, mode);
@@ -174,7 +172,7 @@ public class Iemdb {
                 return null;
         }
     }
-     public Film getFilmById(String id) throws Exception {
+     public Film getFilmById(String id) throws CustomException {
         return filmManager.getElement(id);
      }
 }
