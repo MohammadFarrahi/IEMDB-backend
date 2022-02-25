@@ -86,6 +86,7 @@ public class Constant {
         public static final String ADD_TO_WATCH_LIST = "addToWatchList";
         public static final String REMOVE_FROM_WATCH_LIST = "removeFromWatchList";
         public static final String GET_MOVIE_BY_ID = "getMovieById";
+        public static final String GET_MOVIE_LIST = "getMovieList";
 
     }
     public static enum Model {

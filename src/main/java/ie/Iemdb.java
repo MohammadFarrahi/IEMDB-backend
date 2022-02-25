@@ -20,6 +20,7 @@ public class Iemdb {
     private final ActorManager actorManager;
     private final CommentManager commentManager;
     private final ObjectMapper mapper;
+
     public Iemdb() {
         this.userManager = new UserManager(this);
         this.filmManager = new FilmManager(this);
@@ -44,14 +45,14 @@ public class Iemdb {
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
+                case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
 
-        }catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             setJsonResponse(false, e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
@@ -88,9 +89,19 @@ public class Iemdb {
         return mapper.writeValueAsString(jsonNode);
     }
 
-    public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
-        ArrayList <String> stringList = new ArrayList<>();
-        intList.forEach((n) -> {stringList.add(String.valueOf(n));});
+    private String getMovieList() throws Exception {
+        var jsonNode = filmManager.getMovieList();
+//        System.out.println(jsonNode.toPrettyString());
+        return mapper.writeValueAsString(jsonNode);
+
+
+    }
+
+    public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
+        ArrayList<String> stringList = new ArrayList<>();
+        intList.forEach((n) -> {
+            stringList.add(String.valueOf(n));
+        });
         return stringList;
     }
 
@@ -135,7 +146,7 @@ public class Iemdb {
 
     public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
         switch (modelType) {
-            case ACTOR :
+            case ACTOR:
                 return actorManager.serializeElementList(idList, mode);
             default:
                 return null;
@@ -144,7 +155,7 @@ public class Iemdb {
 
     public JsonNode serializeElement(String id, Constant.Model modelType, Constant.SER_MODE mode) {
         switch (modelType) {
-            case ACTOR :
+            case ACTOR:
                 return actorManager.serializeElement(id, mode);
             default:
                 return null;
