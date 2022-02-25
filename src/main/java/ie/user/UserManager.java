@@ -49,13 +49,17 @@ public class UserManager {
             throw new Exception("user not found");
         }
         mapper.readerForUpdating(userMap.get(id)).readValue(jsonData);
-        // TODO: Check if it is needed to put object to hashMap again
     }
 
     public JsonNode getWatchList (String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get("userEmail").asText();
-        var user = getElement(id);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.U_ID))
+            throw new Exception("invalid json");
+
+        var user = getElement(jsonNode.get(Constant.WatchList.U_ID).asText());
         return database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
     }
 

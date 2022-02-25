@@ -140,10 +140,7 @@ public class Film {
     public Integer getAgeLimit() {
         return this.ageLimit;
     }
-    @JsonGetter(Constant.Movie.IMDB)
-    private Float getImdbRate() {
-        return imdbRate;
-    }
+
     @JsonGetter(Constant.Movie.CAST)
     public ArrayList<String> getCast() {
         return this.cast;

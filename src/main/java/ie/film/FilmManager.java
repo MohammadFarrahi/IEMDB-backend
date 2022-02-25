@@ -86,9 +86,15 @@ public class FilmManager {
 
     public JsonNode getMoviesByGenre(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals("genre"))
+            throw new Exception("invalid json");
+
         var genre = jsonNode.get("genre").asText();
-        var filteredFilms = filterElement(genre);
-        return serializeElementList(filteredFilms, Constant.SER_MODE.SHORT);
+        var filteredFilmsIds = filterElement(genre);
+        return serializeElementList(filteredFilmsIds, Constant.SER_MODE.SHORT);
     }
 
     public Film getElement(String id) throws Exception {
