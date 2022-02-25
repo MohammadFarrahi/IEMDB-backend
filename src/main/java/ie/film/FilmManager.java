@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
+import ie.actor.Actor;
 import ie.user.UserManager;
 import java.util.ArrayList;
 import ie.types.Constant;
@@ -99,6 +100,15 @@ public class FilmManager {
     throw new Exception("Movie not found");
     }
 
+    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception{
+        ArrayList<Film> res = new ArrayList<>();
+
+        for(var id: idList) {
+            res.add(getElement(id));
+        }
+        return res;
+    }
+
     public JsonNode getMovie(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
         var id = jsonNode.get("movieId").asText();
@@ -118,15 +128,24 @@ public class FilmManager {
                 ObjectNode newNode = (ObjectNode) jsonNode;
                 newNode.set("cast", castNode);
                 return newNode;
-
             }
-
             return jsonNode;
 
         }catch (Exception e){
             return null;
         }
     }
+
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.SER_MODE mode) {
+        try {
+            var filmList = getElementList(idList);
+            var jsonNode = mapper.valueToTree(filmList);
+            return jsonNode;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
 
 
 }
