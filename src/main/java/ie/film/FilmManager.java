@@ -80,7 +80,7 @@ public class FilmManager {
         return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMovieList() throws Exception {
+    public JsonNode getMoviesList() throws Exception {
         ArrayList<String> idList = new ArrayList<>();
         idList.addAll(filmMap.keySet());
         var filmList = getElementList(idList);
