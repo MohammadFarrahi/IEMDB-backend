@@ -54,7 +54,11 @@ public class UserManager {
         var jsonNode = mapper.readTree(data);
         var id = jsonNode.get("userEmail").asText();
         var user = getElement(id);
-        return database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
+        var watchList = database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
+
+        var node = mapper.createObjectNode();
+        node.set("WatchList", watchList);
+        return (JsonNode) node;
     }
 
     public boolean isIdValid(String email) {
