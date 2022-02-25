@@ -57,7 +57,7 @@ public class FilmManager {
         mapper.readerForUpdating(filmMap.get(id)).readValue(jsonData);
     }
 
-    public void rateMovie(String jsonData, UserManager userManager) throws Exception {
+    public void rateMovie(String jsonData) throws Exception {
         JsonNode rateJsonNode = mapper.readTree(jsonData);
         ValidateRateJson(rateJsonNode);
         ValidateRateData(rateJsonNode);
