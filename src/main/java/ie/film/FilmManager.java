@@ -73,6 +73,87 @@ public class FilmManager {
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
+    public JsonNode getMovie(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+        var id = jsonNode.get("movieId").asText();
+        var film = getElement(id);
+        return serializeElement(film, Constant.SER_MODE.LONG);
+    }
+
+    public JsonNode getMovieList() throws Exception {
+        ArrayList<String> idList = new ArrayList<>();
+        idList.addAll(filmMap.keySet());
+        var filmList = getElementList(idList);
+        return serializeElementList(filmList, Constant.SER_MODE.LONG);
+    }
+
+    public JsonNode getMoviesByGenre(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+        var genre = jsonNode.get("genre").asText();
+        var filteredFilms = filterElement(genre);
+        return serializeElementList(filteredFilms, Constant.SER_MODE.SHORT);
+    }
+
+    public Film getElement(String id) throws Exception {
+        if (filmMap.containsKey(id)) {
+            return filmMap.get(id);
+        }
+        throw new Exception("Movie not found");
+    }
+
+    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception {
+        ArrayList<Film> res = new ArrayList<>();
+
+        for (var id : idList) {
+            res.add(getElement(id));
+        }
+        return res;
+    }
+
+    public ArrayList<Film> filterElement(String genre) {
+        try {
+
+            ArrayList<String> filteredIdList = new ArrayList<>();
+            for (var pair : filmMap.entrySet()) {
+                if (pair.getValue().includeGenre(genre))
+                    filteredIdList.add(pair.getKey());
+            }
+            return getElementList(filteredIdList);
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public JsonNode serializeElement(Film film, Constant.SER_MODE mode) {
+        try {
+            var jsonNode = mapper.valueToTree(film);
+
+            if (mode == Constant.SER_MODE.LONG) {
+                var castList = film.getCast();
+                var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
+//                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
+//                return newNode;
+                ObjectNode newNode = (ObjectNode) jsonNode;
+                newNode.set("cast", castNode);
+                return newNode;
+            }
+            return jsonNode;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JsonNode serializeElementList(ArrayList<Film> filmList, Constant.SER_MODE mode) {
+        try {
+            var jsonNode = mapper.valueToTree(filmList);
+            return jsonNode;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private void ValidateRateData(JsonNode rateJsonNode) throws Exception {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
@@ -110,80 +191,6 @@ public class FilmManager {
                 return false;
         }
         return true;
-    }
-
-    public Film getElement(String id) throws Exception {
-        if (filmMap.containsKey(id)) {
-            return filmMap.get(id);
-        }
-        throw new Exception("Movie not found");
-    }
-
-    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception {
-        ArrayList<Film> res = new ArrayList<>();
-
-        for (var id : idList) {
-            res.add(getElement(id));
-        }
-        return res;
-    }
-
-    public ArrayList<Film> filterElement(String genre) {
-        try {
-
-            ArrayList<String> filteredIdList = new ArrayList<>();
-            for (var pair : filmMap.entrySet()) {
-                if (pair.getValue().includeGenre(genre))
-                    filteredIdList.add(pair.getKey());
-            }
-            return getElementList(filteredIdList);
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
-
-    public JsonNode getMovie(String data) throws Exception {
-        var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get("movieId").asText();
-        var film = getElement(id);
-        return serializeElement(film, Constant.SER_MODE.LONG);
-    }
-
-    public JsonNode getMovieList() throws Exception {
-        ArrayList<String> idList = new ArrayList<>();
-        idList.addAll(filmMap.keySet());
-        var filmList = getElementList(idList);
-        return serializeElementList(filmList, Constant.SER_MODE.LONG);
-    }
-
-    public JsonNode serializeElement(Film film, Constant.SER_MODE mode) {
-        try {
-            var jsonNode = mapper.valueToTree(film);
-
-            if (mode == Constant.SER_MODE.LONG) {
-                var castList = film.getCast();
-                var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
-//                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
-//                return newNode;
-                ObjectNode newNode = (ObjectNode) jsonNode;
-                newNode.set("cast", castNode);
-                return newNode;
-            }
-            return jsonNode;
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public JsonNode serializeElementList(ArrayList<Film> filmList, Constant.SER_MODE mode) {
-        try {
-            var jsonNode = mapper.valueToTree(filmList);
-            return jsonNode;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
 }
