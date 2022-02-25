@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.film.Film;
 import ie.types.Constant;
@@ -76,26 +77,23 @@ public class ActorManager {
         return res;
     }
 
-    public JsonNode serializeElement(String id, Constant.SER_MODE mode){
+    public JsonNode serializeElement(String actorId, Constant.SER_MODE mode) throws Exception {
+        var actor = getElement(actorId);
         try {
-            var actor = getElement(id);
-            var jsonNode = mapper.valueToTree(actor);
-            return jsonNode;
-
-        }catch (Exception e){
+            var actorJsonNode = (ObjectNode) mapper.valueToTree(actor);
+            if (mode == Constant.SER_MODE.SHORT) {
+                actorJsonNode.remove(Constant.Actor.REMOVABLE_SHORT_SER);
+            }
+            return actorJsonNode;
+        } catch (Exception e) {
             return null;
         }
     }
-
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.SER_MODE mode){
-        try {
-            var actorList = getElementList(idList);
-            var jsonNode = mapper.valueToTree(actorList);
-            return jsonNode;
-        }catch (Exception e){
-            return null;
+    public JsonNode serializeElementList(ArrayList<String> actorIds, Constant.SER_MODE mode) throws Exception {
+        var actorJsonList = new ArrayList<JsonNode>();
+        for (var id : actorIds) {
+            actorJsonList.add(serializeElement(id, mode));
         }
+        return mapper.valueToTree(actorJsonList);
     }
-
-
-    }
+}
