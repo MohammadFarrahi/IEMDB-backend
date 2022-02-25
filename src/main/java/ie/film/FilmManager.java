@@ -41,6 +41,7 @@ public class FilmManager {
         }
         return filmId;
     }
+
     public String addElement(String jsonData) throws Exception {
         String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID).asText();
         if (isIdValid(filmId)) {
@@ -50,6 +51,7 @@ public class FilmManager {
         filmMap.put(filmId, newFilm);
         return filmId;
     }
+
     public void updateElement(String id, String jsonData) throws Exception {
         if (!isIdValid(id)) {
             throw new Exception("movie not found");
@@ -123,21 +125,24 @@ public class FilmManager {
         return res;
     }
 
+
+
     public JsonNode getMovie(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
         var id = jsonNode.get("movieId").asText();
-        return serializeElement(id, Constant.SER_MODE.LONG);
+        var film = getElement(id);
+        return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMovieList() {
+    public JsonNode getMovieList() throws Exception{
         ArrayList<String> idList = new ArrayList<>();
         idList.addAll(filmMap.keySet());
-        return serializeElementList(idList, Constant.SER_MODE.LONG);
+        var filmList = getElementList(idList);
+        return serializeElementList(filmList, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode serializeElement(String id, Constant.SER_MODE mode){
+    public JsonNode serializeElement(Film film, Constant.SER_MODE mode){
         try {
-            var film = getElement(id);
             var jsonNode = mapper.valueToTree(film);
 
             if(mode == Constant.SER_MODE.LONG) {
@@ -156,16 +161,13 @@ public class FilmManager {
         }
     }
 
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.SER_MODE mode) {
+    public JsonNode serializeElementList(ArrayList<Film> filmList, Constant.SER_MODE mode) {
         try {
-            var filmList = getElementList(idList);
             var jsonNode = mapper.valueToTree(filmList);
             return jsonNode;
         }catch (Exception e){
             return null;
         }
     }
-
-
 
 }
