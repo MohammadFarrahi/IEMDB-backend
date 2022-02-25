@@ -145,6 +145,10 @@ public class Film {
         return this.cast;
     }
 
+    public boolean includeGenre(String genre) {
+        return genres.contains(genre);
+    }
+
 
     public void updateFilmRating(String userEmail, int rate) throws Exception {
         if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
