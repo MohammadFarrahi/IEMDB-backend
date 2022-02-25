@@ -1,13 +1,11 @@
 package ie.actor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
 import ie.types.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ActorManager {
     private final HashMap<String, Actor> actorMap;

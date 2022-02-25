@@ -22,7 +22,6 @@ public class Film {
     private Integer duration;
     private Integer ageLimit;
 
-    private ArrayList<Comment> comments;
     private HashMap<String, Integer> userRateMap;
     private double averageRating;
 
@@ -87,10 +86,6 @@ public class Film {
         this.imdbRate = imdbRate;
     }
 
-
-    public void addFilmComment(Comment newComment) {
-        comments.add(newComment);
-    }
 
     public void updateFilmRating(String userEmail, int rate) throws Exception {
         if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
