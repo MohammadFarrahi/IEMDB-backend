@@ -69,11 +69,18 @@ public class Constant {
         public static final String STATUS = "success";
         public static final String DATA = "data";
     }
-    public static class RateVoteWList {
+    public static class Vote {
         public static final String U_ID = "userEmail";
-        public static final String M_ID = "movieId";
-        public static final String RATE = "score";
+        public static final String C_ID = "movieId";
         public static final String VOTE = "vote";
+
+        public static Set<String> getSet(){
+            return new HashSet<String>(){{
+                add(U_ID);
+                add(C_ID);
+                add(VOTE);
+            }};
+        }
     }
     public static class Command {
         public static final String ADD_USER = "addUser";
