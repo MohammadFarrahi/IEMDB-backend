@@ -3,6 +3,7 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
 import ie.film.FilmManager;
@@ -18,11 +19,13 @@ public class Iemdb {
     private final FilmManager filmManager;
     private final ActorManager actorManager;
     private final CommentManager commentManager;
+    private final ObjectMapper mapper;
     public Iemdb() {
         this.userManager = new UserManager(this);
         this.filmManager = new FilmManager(this);
         this.actorManager = new ActorManager(this);
         this.commentManager = new CommentManager(this);
+        this.mapper = new ObjectMapper();
     }
 
     public String getResponse() {
@@ -40,6 +43,7 @@ public class Iemdb {
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
+                case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -75,6 +79,13 @@ public class Iemdb {
     private String removeFromWatchList(String data) throws Exception {
         userManager.removeFromWatchList(data);
         return "Movie removed from watch list";
+    }
+
+    private String getMovie(String data) throws Exception {
+        var jsonNode = filmManager.getMovie(data);
+//        System.out.println(jsonNode.toPrettyString());
+        //TODO fix this shit
+        return mapper.writeValueAsString(jsonNode);
     }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
