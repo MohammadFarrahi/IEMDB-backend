@@ -75,8 +75,14 @@ public class FilmManager {
 
     public JsonNode getMovieByIdJson(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-        var id = jsonNode.get("movieId").asText();
-        var film = getElement(id);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.M_ID)) {
+            throw new Exception("invalid json");
+        }
+
+        var film = getElement(jsonNode.get(Constant.WatchList.M_ID).asText());
         return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
