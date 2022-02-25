@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
+import ie.film.Film;
 import ie.film.FilmManager;
 import ie.types.Response;
 import ie.user.UserManager;
@@ -190,4 +191,7 @@ public class Iemdb {
                 return null;
         }
     }
+     public Film getFilmById(String id) throws Exception {
+        return filmManager.getElement(id);
+     }
 }

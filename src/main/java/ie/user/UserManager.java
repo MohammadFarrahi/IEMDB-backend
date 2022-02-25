@@ -77,9 +77,11 @@ public class UserManager {
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
         var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
-        if(!database.modelExists(movieId, Constant.Model.FILM))
-            throw new Exception("Movie not found");
+
         var user = getElement(userId);
+        if (!user.isOlderThan(database.getFilmById(movieId).getAgeLimit()))
+            throw new Exception("you age is not good");
+
         user.addToWatchList(movieId);
     }
 
