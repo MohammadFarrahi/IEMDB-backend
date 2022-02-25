@@ -1,5 +1,7 @@
 package ie;
 
+import ie.exception.*;
+import ie.types.Constant;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +12,16 @@ public class IemdbTest {
 
     public void assertResponse(String message) {
         assertEquals(message, iemdb.getResponse());
+    }
+
+    public void assertExceptionResponse(String exceptionMessage) {
+        String response = "{\"success\":false,\"data\":\"" + exceptionMessage + "\"}";
+        assertResponse(response);
+    }
+
+    public void assertSuccessResponse(String successMessage) {
+        String response = "{\"success\":true,\"data\":\"" + successMessage + "\"}";
+        assertResponse(response);
     }
 
     @Before
@@ -35,34 +47,34 @@ public class IemdbTest {
     @Test
     public void testSimpleRate() {
         iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 8}");
-        assertResponse("{\"success\":true,\"data\":\"movie rated successfully\"}");
+        assertSuccessResponse(Constant.SuccessMessage.RATE_MOVIE);
     }
 
     @Test
     public void testOutOfRangeScore() {
         iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-        assertResponse("{\"success\":false,\"data\":\"invalid rate number\"}");
+        assertExceptionResponse(InvalidRateScoreException.message);
     }
 
     @Test
     public void testRateMovieNotFound() {
         iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 15, \"score\": 18}");
-        assertResponse("{\"success\":false,\"data\":\"no film with this id\"}");
+        assertExceptionResponse(MovieNotFoundException.message);
     }
 
     @Test
     public void testRateUserNotFound() {
         iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjaasdd@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-        assertResponse("{\"success\":false,\"data\":\"ne user with this id\"}");
+        assertExceptionResponse(UserNotFoundException.message);
     }
 
     // Testing vote comment
 
     @Test
     public void testSimpleVote() {
-       iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-       iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
-       assertResponse("{\"success\":true,\"data\":\"comment voted successfully\"}");
+        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
+        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
+        assertSuccessResponse(Constant.SuccessMessage.VOTE_COMMENT);
     }
 
     @Test
@@ -70,7 +82,7 @@ public class IemdbTest {
         iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
         iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjdssdad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
 
-        assertResponse("{\"success\":false,\"data\":\"ne user with this id\"}");
+        assertExceptionResponse(UserNotFoundException.message);
     }
 
     @Test
@@ -78,7 +90,7 @@ public class IemdbTest {
         iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
         iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 21, \"vote\": 1}");
 
-        assertResponse("{\"success\":false,\"data\":\"no comment with this id\"}");
+        assertExceptionResponse(CommentNotFoundException.message);
 
     }
     //Testing get movie by genre
@@ -100,7 +112,7 @@ public class IemdbTest {
     @Test
     public void testSimpleAdd() {
         iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 2}");
-        assertResponse("{\"success\":true,\"data\":\"Movie added to watchlist successfully\"}");
+        assertSuccessResponse(Constant.SuccessMessage.ADD_TO_WATCH_LIST);
 
         iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\"}");
         assertResponse("{\"success\":true,\"data\":{\"WatchList\":[{\"movieId\":2,\"name\":\"The Pianist\",\"director\":\"Roman Polanski\",\"genres\":[\"Biography\",\"Drama\",\"Music\"],\"rating\":null}]}}");
@@ -109,13 +121,13 @@ public class IemdbTest {
     @Test
     public void testMovieNotFound() {
         iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 3}");
-        assertResponse("{\"success\":false,\"data\":\"Movie not found\"}");
+        assertExceptionResponse(MovieNotFoundException.message);
     }
 
     @Test
     public void testAgeLimit() {
         iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"saman@ut.ac.ir\", \"movieId\": 2}");
-        assertResponse("{\"success\":false,\"data\":\"you age is not good\"}");
+        assertExceptionResponse(AgeLimitException.message);
 
         iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"saman@ut.ac.ir\"}");
         assertResponse("{\"success\":true,\"data\":{\"WatchList\":[]}}");
