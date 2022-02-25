@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class IemdbTest {
     Iemdb iemdb;
 
-    public void assertResponse(String message){
+    public void assertResponse(String message) {
         assertEquals(message, iemdb.getResponse());
     }
 
@@ -35,14 +35,66 @@ public class IemdbTest {
     @Test
     public void testSimpleRate() {
         iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 8}");
-        System.out.println(iemdb.getResponse());
         assertResponse("{\"success\":true,\"data\":\"movie rated successfully\"}");
+    }
 
+    @Test
+    public void testOutOfRangeScore() {
+        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
+        assertResponse("{\"success\":false,\"data\":\"invalid rate number\"}");
+    }
+
+    @Test
+    public void testRateMovieNotFound() {
+        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 15, \"score\": 18}");
+        assertResponse("{\"success\":false,\"data\":\"no film with this id\"}");
+    }
+
+    @Test
+    public void testRateUserNotFound() {
+        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjaasdd@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
+        assertResponse("{\"success\":false,\"data\":\"ne user with this id\"}");
     }
 
     // Testing vote comment
 
+    @Test
+    public void testSimpleVote() {
+       iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
+       iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
+       assertResponse("{\"success\":true,\"data\":\"comment voted successfully\"}");
+    }
+
+    @Test
+    public void testVoteUserNotFound() {
+        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
+        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjdssdad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
+
+        assertResponse("{\"success\":false,\"data\":\"ne user with this id\"}");
+    }
+
+    @Test
+    public void testVoteCommentNotFound() {
+        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
+        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 21, \"vote\": 1}");
+
+        assertResponse("{\"success\":false,\"data\":\"no comment with this id\"}");
+
+    }
     //Testing get movie by genre
+
+    @Test
+    public void testSimpleGetMovie() {
+        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Crime\"}");
+        assertResponse("{\"success\":true,\"data\":[{\"movieId\":1,\"name\":\"The Godfather\",\"director\":\"Francis Ford Coppola\",\"genres\":[\"Crime\",\"Drama\"],\"rating\":null}]}");
+    }
+
+    @Test
+    public void testEmptyGetMovie() {
+        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Mystery\"}");
+        assertResponse("{\"success\":true,\"data\":[]}");
+    }
+
 
     // Testing addToWatchList
     @Test
