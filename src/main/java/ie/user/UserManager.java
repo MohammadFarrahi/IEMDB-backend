@@ -1,5 +1,6 @@
 package ie.user;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
 import ie.actor.Actor;
@@ -49,14 +50,13 @@ public class UserManager {
         // TODO: Check if it is needed to put object to hashMap again
     }
 
-    public User getUser(String email) throws Exception {
-        var user = userMap.get(email);
-        if (user != null) {
-            return user;
-        }
-        else
-            throw new Exception("User Not found");
+    public JsonNode getWatchList (String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+        var id = jsonNode.get("userEmail").asText();
+        var user = getElement(id);
+        return database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
     }
+
     public boolean isIdValid(String email) {
         return userMap.containsKey(email);
     }
