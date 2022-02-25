@@ -7,11 +7,13 @@ import static org.junit.Assert.assertEquals;
 
 public class IemdbTest {
     Iemdb iemdb;
+
     @Before
     public void setup() {
         iemdb = new Iemdb();
         iemdb.runTextCommand("addUser", "{\"email\": \"sara@ut.ac.ir\", \"password\": \"sara1234\", \"name\": \"Sara\", \"nickname\": \"sara\", \"birthDate\": \"1998-03-11\"}");
         iemdb.runTextCommand("addUser", "{\"email\": \"sajjad@ut.ac.ir\", \"password\": \"sajjad1234\", \"name\": \"Sajjad\", \"nickname\": \"sajjad\", \"birthDate\": \"2000-06-14\"}");
+        iemdb.runTextCommand("addUser", "{\"email\": \"saman@ut.ac.ir\", \"password\": \"saman1234\", \"name\": \"Saman\", \"nickname\": \"saman\", \"birthDate\": \"2014-01-01\"}");
 
         iemdb.runTextCommand("addActor", "{\"id\": 1, \"name\": \"Marlon Brando\", \"birthDate\": \"1924-04-03\", \"nationality\": \"American\"}");
         iemdb.runTextCommand("addActor", "{\"id\": 2, \"name\": \"Al Pacino\", \"birthDate\": \"1940-04-25\", \"nationality\": \"American\"}");
@@ -24,6 +26,7 @@ public class IemdbTest {
         iemdb.runTextCommand("addMovie", "{\"id\": 2, \"name\": \"The Pianist\", \"summary\": \"A Polish Jewish musician struggles to survive the destruction of the Warsaw ghetto of World War II.\", \"releaseDate\": \"2002-05-24\", \"director\": \"Roman Polanski\", \"writers\": [\"Ronald Harwood\", \"Wladyslaw Szpilman\"], \"genres\": [\"Biography\", \"Drama\", \"Music\"], \"cast\": [4, 5, 6], \"imdbRate\": 8.5, \"duration\": 150, \"ageLimit\": 12}");
     }
 
+    //
 
 
     // Testing addToWatchList
@@ -43,7 +46,11 @@ public class IemdbTest {
 
     @Test
     public void testAgeLimit() {
-        //TODO
+        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"saman@ut.ac.ir\", \"movieId\": 2}");
+        assertEquals(iemdb.getResponse(), "{\"success\":false,\"data\":\"you age is not good\"}");
+
+        iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"saman@ut.ac.ir\"}");
+        assertEquals(iemdb.getResponse(), "{\"success\":true,\"data\":{\"WatchList\":[]}}");
     }
 
 }
