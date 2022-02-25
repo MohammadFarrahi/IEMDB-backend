@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import ie.comment.Comment;
 import ie.types.Constant;
 
@@ -19,19 +20,19 @@ public class Film {
     private String director;
     private ArrayList<String> writers;
     private ArrayList<String> genres;
+    private ArrayList<String> cast;
     private Float imdbRate;
+    private Double averageRating;
     private Integer duration;
     private Integer ageLimit;
-    private Double averageRating;
 
-
-    private ArrayList<String> cast;
-    private ArrayList<Comment> comments;
+    private ArrayList<String> comments;
     private HashMap<String, Integer> userRateMap;
 
     @JsonCreator
     private Film(){
         userRateMap = new HashMap<>();
+        comments = new ArrayList<>();
         averageRating = null;
     }
 
@@ -139,10 +140,21 @@ public class Film {
     private Integer getAgeLimit() {
         return this.ageLimit;
     }
-
-    @JsonIgnore()
+    @JsonGetter(Constant.Movie.IMDB)
+    private Float getImdbRate() {
+        return imdbRate;
+    }
+    @JsonGetter(Constant.Movie.CAST)
     public ArrayList<String> getCast() {
         return this.cast;
+    }
+    @JsonGetter(Constant.Movie.COMMENTS)
+    public ArrayList<String> getComments() {
+        return this.comments;
+    }
+
+    public void addCommentId(String commentId) {
+        this.comments.add(commentId);
     }
 
     public boolean includeGenre(String genre) {
