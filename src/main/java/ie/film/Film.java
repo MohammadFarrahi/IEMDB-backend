@@ -22,7 +22,7 @@ public class Film {
     private Float imdbRate;
     private Integer duration;
     private Integer ageLimit;
-    private double averageRating;
+    private Double averageRating;
 
 
     private ArrayList<String> cast;
@@ -32,7 +32,7 @@ public class Film {
     @JsonCreator
     private Film(){
         userRateMap = new HashMap<>();
-        averageRating = 0;
+        averageRating = null;
     }
 
     @JsonProperty(value=Constant.Movie.ID, required = true)
@@ -126,7 +126,7 @@ public class Film {
     }
 
     @JsonGetter(Constant.Movie.RATING)
-    private double getAverageRating() {
+    private Double getAverageRating() {
         return this.averageRating;
     }
 
@@ -152,6 +152,7 @@ public class Film {
 
     public void updateFilmRating(String userEmail, int rate) throws Exception {
         if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
+        averageRating = averageRating == null ? Double.valueOf(0) : averageRating;
         double sumOfRates = averageRating * userRateMap.size();
         sumOfRates = sumOfRates - userRateMap.getOrDefault(userEmail, 0);
         userRateMap.put(userEmail, rate);
