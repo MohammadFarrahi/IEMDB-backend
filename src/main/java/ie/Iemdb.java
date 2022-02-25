@@ -67,7 +67,7 @@ public class Iemdb {
 
     private String voteComment(String data) throws CustomException, JsonProcessingException {
         commentManager.voteComment(data);
-        return "comment voted successfully";
+        return Constant.SuccessMessage.VOTE_COMMENT;
     }
 
     private void setJsonResponse(boolean status, String message) {
@@ -76,22 +76,22 @@ public class Iemdb {
 
     private String addUser(String dataJson) throws CustomException, JsonProcessingException {
         userManager.updateOrAddElement(dataJson);
-        return "user added successfully";
+        return Constant.SuccessMessage.ADD_USER;
     }
 
     private String addMovie(String data) throws CustomException, JsonProcessingException {
         filmManager.updateOrAddElement(data);
-        return "movie added successfully";
+        return Constant.SuccessMessage.ADD_MOVIE;
     }
 
     private String addToWatchList(String data) throws CustomException, JsonProcessingException {
         userManager.addToWatchList(data);
-        return "Movie added to watchlist successfully";
+        return Constant.SuccessMessage.ADD_TO_WATCH_LIST;
     }
 
     private String removeFromWatchList(String data) throws CustomException, JsonProcessingException {
         userManager.removeFromWatchList(data);
-        return "Movie removed from watch list";
+        return Constant.SuccessMessage.REMOVE_FROM_WATCH_LIST;
     }
 
     private String getMovieByIdJson(String data) throws CustomException, JsonProcessingException {
@@ -118,17 +118,17 @@ public class Iemdb {
 
     private String addActor(String data)throws CustomException, JsonProcessingException {
         var x = actorManager.updateOrAddElement(data);
-        return "actor " + x + " added successfully";
+        return Constant.SuccessMessage.ADD_ACTOR;
     }
 
     private String addComment(String data) throws CustomException, JsonProcessingException {
-        commentManager.addElement(data);
-        return "comment added successfully";
+        var commentId = commentManager.addElement(data);
+        return "comment with id " + commentId + " added successfully";
     }
 
     private String rateMovie(String data) throws CustomException, JsonProcessingException {
         filmManager.rateMovie(data);
-        return "movie rated successfully";
+        return Constant.SuccessMessage.RATE_MOVIE;
     }
 
     private String getWatchList(String data) throws CustomException, JsonProcessingException {
