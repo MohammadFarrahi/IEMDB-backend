@@ -2,6 +2,7 @@ package ie.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,6 +76,11 @@ public class User {
     @JsonGetter(Constant.User.B_DATE)
     private String getBirthDate() {
         return this.birthDate.toString();
+    }
+
+    @JsonIgnore()
+    public ArrayList<String> getWatchList() {
+        return this.watchList;
     }
 
     @Override

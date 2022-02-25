@@ -96,7 +96,7 @@ public class Constant {
         public static final String GET_MOVIE_BY_ID = "getMovieById";
         public static final String GET_MOVIE_LIST = "getMovieList";
         public static final String GET_MOVIES_BY_GENRE = "getMoviesByGenre";
-
+        public static final String GET_WATCH_LIST = "getWatchList";
     }
     public static enum Model {
         ACTOR,

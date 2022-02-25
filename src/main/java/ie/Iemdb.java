@@ -49,6 +49,7 @@ public class Iemdb {
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
                 case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenre(data);
+                case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -120,7 +121,7 @@ public class Iemdb {
 
     private String addActor(String data) throws Exception {
         var x = actorManager.updateOrAddElement(data);
-        return "actor " + x  + " added successfully";
+        return "actor " + x + " added successfully";
     }
 
     private String addComment(String data) throws Exception {
@@ -131,6 +132,11 @@ public class Iemdb {
     private String rateMovie(String data) throws Exception {
         filmManager.rateMovie(data);
         return "movie rated successfully";
+    }
+
+    private String getWatchList(String data) throws Exception {
+        var jsonNode = userManager.getWatchList(data);
+        return mapper.writeValueAsString(jsonNode);
     }
 
     public Boolean modelListExists(ArrayList<String> idList, Constant.Model modelType) {
@@ -158,11 +164,19 @@ public class Iemdb {
     }
 
     public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
-        switch (modelType) {
-            case ACTOR:
-                return actorManager.serializeElementList(idList, mode);
-            default:
-                return null;
+        try {
+            switch (modelType) {
+                case ACTOR:
+                    return actorManager.serializeElementList(idList, mode);
+
+                case FILM:
+                    var filmList = filmManager.getElementList(idList);
+                    return filmManager.serializeElementList(filmList, mode);
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
