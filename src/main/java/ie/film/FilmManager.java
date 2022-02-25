@@ -86,13 +86,6 @@ public class FilmManager {
         return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMoviesListJson() throws Exception {
-        ArrayList<String> idList = new ArrayList<>();
-        idList.addAll(filmMap.keySet());
-        var filmList = getElementList(idList);
-        return serializeElementList(filmList, Constant.SER_MODE.SHORT);
-    }
-
     public JsonNode getMoviesByGenre(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
         var genre = jsonNode.get("genre").asText();
@@ -108,8 +101,9 @@ public class FilmManager {
     }
 
     public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception {
+        if (idList == null)
+            return new ArrayList<>(filmMap.values());
         ArrayList<Film> res = new ArrayList<>();
-
         for (var id : idList) {
             res.add(getElement(id));
         }

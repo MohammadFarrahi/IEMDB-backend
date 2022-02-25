@@ -103,10 +103,7 @@ public class Iemdb {
     }
 
     private String getMoviesListJson() throws Exception {
-        var jsonNode = filmManager.getMoviesListJson();
-        return mapper.writeValueAsString(jsonNode);
-
-
+        return mapper.writeValueAsString(serializeElementList(null, Constant.Model.FILM, Constant.SER_MODE.SHORT));
     }
 
     private String getMoviesByGenre(String data) throws Exception {
