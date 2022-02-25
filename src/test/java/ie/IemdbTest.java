@@ -32,7 +32,7 @@ public class IemdbTest {
         iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 2}");
         assertEquals(iemdb.getResponse(), "{\"success\":true,\"data\":\"Movie added to watchlist successfully\"}");
         iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\"}");
-        assertEquals(iemdb.getResponse(), "{\"success\":true,\"data\":{\"WatchList\":[{\"id\":2,\"name\":\"The Pianist\",\"summary\":\"A Polish Jewish musician struggles to survive the destruction of the Warsaw ghetto of World War II.\",\"releaseDate\":\"2002-05-24\",\"director\":\"Roman Polanski\",\"writers\":[\"Ronald Harwood\",\"Wladyslaw Szpilman\"],\"genres\":[\"Biography\",\"Drama\",\"Music\"],\"duration\":150,\"ageLimit\":12,\"rating\":null}]}}");
+        assertEquals(iemdb.getResponse(), "{\"success\":true,\"data\":{\"WatchList\":[{\"movieId\":2,\"name\":\"The Pianist\",\"director\":\"Roman Polanski\",\"genres\":[\"Biography\",\"Drama\",\"Music\"],\"rating\":null}]}}");
     }
 
     @Test
