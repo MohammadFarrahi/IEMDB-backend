@@ -49,6 +49,7 @@ public class Iemdb {
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
                 case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenre(data);
+                case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -131,6 +132,11 @@ public class Iemdb {
     private String rateMovie(String data) throws Exception {
         filmManager.rateMovie(data);
         return "movie rated successfully";
+    }
+
+    private String getWatchList(String data) throws Exception {
+        var jsonNode = userManager.getWatchList(data);
+        return mapper.writeValueAsString(jsonNode);
     }
 
     public Boolean modelListExists(ArrayList<String> idList, Constant.Model modelType) {
