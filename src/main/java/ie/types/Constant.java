@@ -22,6 +22,8 @@ public class Constant {
         public static final String DURATION = "duration";
         public static final String AGE_L = "ageLimit";
         public static final String IMDB = "imdbRate";
+        public static final String RATING = "rating";
+
     }
     public static class User {
         public static final String E_ID = "email";
@@ -90,6 +92,8 @@ public class Constant {
         public static final String RATE_MOVIE = "rateMovie";
         public static final String ADD_TO_WATCH_LIST = "addToWatchList";
         public static final String REMOVE_FROM_WATCH_LIST = "removeFromWatchList";
+        public static final String GET_MOVIE_BY_ID = "getMovieById";
+        public static final String GET_MOVIE_LIST = "getMovieList";
         public static final String VOTE_COMMENT = "voteComment";
 
     }
@@ -98,5 +102,9 @@ public class Constant {
         FILM,
         USER,
         COMMENT
+    }
+    public static enum SER_MODE {
+        SHORT,
+        LONG
     }
 }

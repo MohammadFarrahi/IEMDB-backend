@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.actor.Actor;
 import ie.user.UserManager;
@@ -56,16 +57,7 @@ public class FilmManager {
         mapper.readerForUpdating(filmMap.get(id)).readValue(jsonData);
     }
 
-    public Film getFilm(String id) throws Exception {
-        var film = filmMap.get(id);
-        if (film != null) {
-            return film;
-        } else {
-            throw new Exception("Movie Not Found");
-        }
-    }
-
-    public void rateMovie(String jsonData) throws Exception {
+    public void rateMovie(String jsonData, UserManager userManager) throws Exception {
         JsonNode rateJsonNode = mapper.readTree(jsonData);
         ValidateRateJson(rateJsonNode);
         ValidateRateData(rateJsonNode);
@@ -114,4 +106,66 @@ public class FilmManager {
         }
         return true;
     }
+
+    public Film getElement(String id) throws Exception{
+        if (filmMap.containsKey(id)) {
+            return filmMap.get(id);
+        }
+    throw new Exception("Movie not found");
+    }
+
+    public ArrayList<Film> getElementList(ArrayList<String> idList) throws Exception{
+        ArrayList<Film> res = new ArrayList<>();
+
+        for(var id: idList) {
+            res.add(getElement(id));
+        }
+        return res;
+    }
+
+    public JsonNode getMovie(String data) throws Exception {
+        var jsonNode = mapper.readTree(data);
+        var id = jsonNode.get("movieId").asText();
+        return serializeElement(id, Constant.SER_MODE.LONG);
+    }
+
+    public JsonNode getMovieList() {
+        ArrayList<String> idList = new ArrayList<>();
+        idList.addAll(filmMap.keySet());
+        return serializeElementList(idList, Constant.SER_MODE.LONG);
+    }
+
+    public JsonNode serializeElement(String id, Constant.SER_MODE mode){
+        try {
+            var film = getElement(id);
+            var jsonNode = mapper.valueToTree(film);
+
+            if(mode == Constant.SER_MODE.LONG) {
+                var castList = film.getCast();
+                var castNode = database.serializeElementList(castList, Constant.Model.ACTOR, Constant.SER_MODE.LONG);
+//                var newNode = ((ObjectNode) jsonNode).putArray("cast").add(castNode);
+//                return newNode;
+                ObjectNode newNode = (ObjectNode) jsonNode;
+                newNode.set("cast", castNode);
+                return newNode;
+            }
+            return jsonNode;
+
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.SER_MODE mode) {
+        try {
+            var filmList = getElementList(idList);
+            var jsonNode = mapper.valueToTree(filmList);
+            return jsonNode;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+
+
 }

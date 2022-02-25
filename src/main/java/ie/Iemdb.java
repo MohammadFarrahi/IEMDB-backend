@@ -1,6 +1,10 @@
 package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
 import ie.film.FilmManager;
@@ -16,11 +20,14 @@ public class Iemdb {
     private final FilmManager filmManager;
     private final ActorManager actorManager;
     private final CommentManager commentManager;
+    private final ObjectMapper mapper;
+
     public Iemdb() {
         this.userManager = new UserManager(this);
         this.filmManager = new FilmManager(this);
         this.actorManager = new ActorManager(this);
         this.commentManager = new CommentManager(this);
+        this.mapper = new ObjectMapper();
     }
 
     public String getResponse() {
@@ -38,15 +45,16 @@ public class Iemdb {
                 case Constant.Command.RATE_MOVIE -> resData = rateMovie(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
+                case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
+                case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
                 case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
 
-        }catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             setJsonResponse(false, e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             setJsonResponse(false, e.getMessage());
         }
@@ -81,9 +89,26 @@ public class Iemdb {
         return "Movie removed from watch list";
     }
 
-    public static ArrayList<String> convertListToString(ArrayList<Integer> intList){
-        ArrayList <String> stringList = new ArrayList<>();
-        intList.forEach((n) -> {stringList.add(String.valueOf(n));});
+    private String getMovie(String data) throws Exception {
+        var jsonNode = filmManager.getMovie(data);
+//        System.out.println(jsonNode.toPrettyString());
+        //TODO fix this shit
+        return mapper.writeValueAsString(jsonNode);
+    }
+
+    private String getMovieList() throws Exception {
+        var jsonNode = filmManager.getMovieList();
+//        System.out.println(jsonNode.toPrettyString());
+        return mapper.writeValueAsString(jsonNode);
+
+
+    }
+
+    public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
+        ArrayList<String> stringList = new ArrayList<>();
+        intList.forEach((n) -> {
+            stringList.add(String.valueOf(n));
+        });
         return stringList;
     }
 
@@ -102,13 +127,13 @@ public class Iemdb {
         return "movie rated successfully";
     }
 
-    public Boolean modelListExists(ArrayList<String> id, Constant.Model modelType) {
+    public Boolean modelListExists(ArrayList<String> idList, Constant.Model modelType) {
         boolean res;
         switch (modelType) {
-            case FILM -> res = filmManager.isIdListValid(id);
-            case USER -> res = userManager.isIdListValid(id);
-            case ACTOR -> res = actorManager.isIdListValid(id);
-            case COMMENT -> res = commentManager.isIdListValid(id);
+            case FILM -> res = filmManager.isIdListValid(idList);
+            case USER -> res = userManager.isIdListValid(idList);
+            case ACTOR -> res = actorManager.isIdListValid(idList);
+            case COMMENT -> res = commentManager.isIdListValid(idList);
             default -> res = false;
         }
         return res;
@@ -124,5 +149,23 @@ public class Iemdb {
             default -> res = false;
         }
         return res;
+    }
+
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
+        switch (modelType) {
+            case ACTOR:
+                return actorManager.serializeElementList(idList, mode);
+            default:
+                return null;
+        }
+    }
+
+    public JsonNode serializeElement(String id, Constant.Model modelType, Constant.SER_MODE mode) {
+        switch (modelType) {
+            case ACTOR:
+                return actorManager.serializeElement(id, mode);
+            default:
+                return null;
+        }
     }
 }

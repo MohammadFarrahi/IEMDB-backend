@@ -1,6 +1,8 @@
 package ie.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.comment.Comment;
 import ie.types.Constant;
@@ -17,13 +19,15 @@ public class Film {
     private String director;
     private ArrayList<String> writers;
     private ArrayList<String> genres;
-    private ArrayList<String> cast;
     private Float imdbRate;
     private Integer duration;
     private Integer ageLimit;
-
-    private HashMap<String, Integer> userRateMap;
     private double averageRating;
+
+
+    private ArrayList<String> cast;
+    private ArrayList<Comment> comments;
+    private HashMap<String, Integer> userRateMap;
 
     @JsonCreator
     private Film(){
@@ -84,6 +88,61 @@ public class Film {
     @JsonProperty(value=Constant.Movie.IMDB, required = true)
     private void setImdbRate (Float imdbRate){
         this.imdbRate = imdbRate;
+    }
+
+    @JsonGetter(Constant.Movie.ID)
+    private String getId() {
+        return this.id;
+    }
+
+    @JsonGetter(Constant.Movie.NAME)
+    private String getName() {
+        return this.name;
+    }
+
+    @JsonGetter(Constant.Movie.SUMM)
+    private String getSummary() {
+        return this.summary;
+    }
+
+    @JsonGetter(Constant.Movie.R_DATE)
+    private String getReleaseDate() {
+        return this.releaseDate.toString();
+    }
+
+    @JsonGetter(Constant.Movie.DIRECTOR)
+    private String getDirector() {
+        return this.director;
+    }
+
+    @JsonGetter(Constant.Movie.WRITERS)
+    private ArrayList<String> getWriters() {
+        return this.writers;
+    }
+
+    @JsonGetter(Constant.Movie.GENRE)
+    private ArrayList<String> getGenres() {
+        return this.genres;
+    }
+
+    @JsonGetter(Constant.Movie.RATING)
+    private double getAverageRating() {
+        return this.averageRating;
+    }
+
+    @JsonGetter(Constant.Movie.DURATION)
+    private Integer getDuration() {
+        return this.duration;
+    }
+
+    @JsonGetter(Constant.Movie.AGE_L)
+    private Integer getAgeLimit() {
+        return this.ageLimit;
+    }
+
+    @JsonIgnore()
+    public ArrayList<String> getCast() {
+        return this.cast;
     }
 
 
