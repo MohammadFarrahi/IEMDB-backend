@@ -1,7 +1,6 @@
 package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
 import ie.film.FilmManager;
@@ -93,7 +92,7 @@ public class Iemdb {
     }
 
     private String rateMovie(String data) throws Exception {
-        filmManager.rateMovie(data, userManager);
+        filmManager.rateMovie(data);
         return "movie rated successfully";
     }
 

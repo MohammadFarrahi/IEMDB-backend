@@ -65,10 +65,10 @@ public class FilmManager {
         }
     }
 
-    public void rateMovie(String jsonData, UserManager userManager) throws Exception {
+    public void rateMovie(String jsonData) throws Exception {
         JsonNode rateJsonNode = mapper.readTree(jsonData);
-        ValidateVoteJson(rateJsonNode);
-        ValidateVoteData(rateJsonNode, userManager);
+        ValidateRateJson(rateJsonNode);
+        ValidateRateData(rateJsonNode);
 
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
@@ -76,22 +76,19 @@ public class FilmManager {
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
-    private void ValidateVoteData(JsonNode rateJsonNode, UserManager userManager) throws Exception {
+    private void ValidateRateData(JsonNode rateJsonNode) throws Exception {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
         var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        if (!userManager.isIdValid(userEmail)) {
+        if (!database.modelExists(userEmail, Constant.Model.USER)) {
             throw new Exception("ne user with this id");
         }
-        if (filmMap.get(filmId) == null) {
-            throw new Exception("ne film with this id");
+        if (!isIdValid(filmId)) {
+            throw new Exception("no film with this id");
         }    // TODO: consider using getFilm method
-        if (!(1 <= rate && rate <= 10)) {
-            throw new Exception("invalid rate number");
-        }
     }
 
-    private void ValidateVoteJson(JsonNode rateJsonNode) throws Exception {
+    private void ValidateRateJson(JsonNode rateJsonNode) throws Exception {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
