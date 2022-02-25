@@ -146,10 +146,6 @@ public class Film {
     }
 
 
-    public void addFilmComment(Comment newComment) {
-        comments.add(newComment);
-    }
-
     public void updateFilmRating(String userEmail, int rate) throws Exception {
         if (!(1 <= rate && rate <= 10)) { throw new Exception("invalid rate number"); }
         double sumOfRates = averageRating * userRateMap.size();

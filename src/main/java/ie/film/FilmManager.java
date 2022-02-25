@@ -25,25 +25,42 @@ public class FilmManager {
         filmMap = new HashMap<>();
     }
 
-    public Film addMovie(String data) throws Exception {
-        var newFilm = mapper.readValue(data, Film.class);
-
-        var jsonNode = mapper.readTree(data);
-
-        var id = jsonNode.get(Constant.Movie.ID).asText();
-        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(data).get(Constant.Movie.CAST), ArrayList.class));
+    public String updateOrAddElement(String jsonData) throws Exception {
+        var jsonNode = mapper.readTree(jsonData);
+        var filmId = jsonNode.get(Constant.Movie.ID).asText();
+        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
 
         if(!database.modelListExists(cast, Constant.Model.ACTOR)) {
             throw new Exception("Actor not found");
         }
-        filmMap.put(id, newFilm);
-        return newFilm;
+        if (isIdValid(filmId)) {
+            updateElement(filmId, jsonData);
+        }
+        else {
+            addElement(jsonData);
+        }
+        return filmId;
+    }
+    public String addElement(String jsonData) throws Exception {
+        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID).asText();
+        if (isIdValid(filmId)) {
+            throw new Exception("movie already exist");
+        }
+        var newFilm = mapper.readValue(jsonData, Film.class);
+        filmMap.put(filmId, newFilm);
+        return filmId;
+    }
+    public void updateElement(String id, String jsonData) throws Exception {
+        if (!isIdValid(id)) {
+            throw new Exception("movie not found");
+        }
+        mapper.readerForUpdating(filmMap.get(id)).readValue(jsonData);
     }
 
     public void rateMovie(String jsonData, UserManager userManager) throws Exception {
         JsonNode rateJsonNode = mapper.readTree(jsonData);
-        ValidateVoteJson(rateJsonNode);
-        ValidateVoteData(rateJsonNode, userManager);
+        ValidateRateJson(rateJsonNode);
+        ValidateRateData(rateJsonNode);
 
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
@@ -51,33 +68,30 @@ public class FilmManager {
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
-    private void ValidateVoteData(JsonNode rateJsonNode, UserManager userManager) throws Exception {
+    private void ValidateRateData(JsonNode rateJsonNode) throws Exception {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
         var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        if (!userManager.isIdValid(userEmail)) {
+        if (!database.modelExists(userEmail, Constant.Model.USER)) {
             throw new Exception("ne user with this id");
         }
-        if (filmMap.get(filmId) == null) {
-            throw new Exception("ne film with this id");
-        }    // TODO: consider using getFilm method
-        if (!(1 <= rate && rate <= 10)) {
-            throw new Exception("invalid rate number");
+        if (!isIdValid(filmId)) {
+            throw new Exception("no film with this id");
         }
     }
 
-    private void ValidateVoteJson(JsonNode rateJsonNode) throws Exception {
+    private void ValidateRateJson(JsonNode rateJsonNode) throws Exception {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
-        var voteJsonFieldNames = Constant.Rate.getSet();
-        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
-        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        var rateJsonFieldNames = Constant.Rate.getSet();
+        boolean exceptionFlag = (jsonFiledNames.size() != rateJsonFieldNames.size());
+        exceptionFlag |= !(rateJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
         exceptionFlag |= !(rateJsonNode.get(Constant.Rate.M_ID).isInt() &&
                 rateJsonNode.get(Constant.Rate.U_ID).isTextual() &&
                 rateJsonNode.get(Constant.Rate.RATE).isInt());
         if (exceptionFlag) {
-            throw new Exception("invalid input vote");
+            throw new Exception("invalid input rate");
         }
     }
 

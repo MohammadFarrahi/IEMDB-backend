@@ -2,6 +2,7 @@ package ie.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.Iemdb;
+import ie.actor.Actor;
 import ie.types.Constant;
 
 import java.util.ArrayList;
@@ -19,13 +20,33 @@ public class UserManager {
         userMap = new HashMap<>();
     }
 
-    public void addUser(String jsonData) throws Exception {
+    public String updateOrAddElement(String jsonData) throws Exception {
         String email = mapper.readTree(jsonData).get(Constant.User.E_ID).asText();
-        if (userMap.containsKey(email))
-            throw new Exception("Duplicate");
 
-        User user = mapper.readValue(jsonData, User.class);
-        this.userMap.put(email, user);
+        if (isIdValid(email)) {
+            updateElement(email, jsonData);
+        }
+        else {
+            addElement(jsonData);
+        }
+        return email;
+    }
+
+    public String addElement(String jsonData) throws Exception {
+        String email = mapper.readTree(jsonData).get(Constant.User.E_ID).asText();
+        if (isIdValid(email)) {
+            throw new Exception("user already exists");
+        }
+        var newUser = mapper.readValue(jsonData, User.class);
+        userMap.put(email, newUser);
+        return email;
+    }
+    public void updateElement(String id, String jsonData) throws Exception {
+        if (!isIdValid(id)) {
+            throw new Exception("user not found");
+        }
+        mapper.readerForUpdating(userMap.get(id)).readValue(jsonData);
+        // TODO: Check if it is needed to put object to hashMap again
     }
 
     public User getUser(String email) throws Exception {

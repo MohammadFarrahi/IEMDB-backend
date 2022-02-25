@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import ie.actor.ActorManager;
 import ie.comment.CommentManager;
 import ie.film.FilmManager;
@@ -46,6 +47,7 @@ public class Iemdb {
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMovieList();
+                case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
                 default -> throw new Exception("Invalid Command");
             }
             setJsonResponse(true, resData);
@@ -58,17 +60,22 @@ public class Iemdb {
         }
     }
 
+    private String voteComment(String data) throws Exception {
+        commentManager.voteComment(data);
+        return "comment voted successfully";
+    }
+
     private void setJsonResponse(boolean status, String message) {
         this.response = new Response(status, message);
     }
 
     private String addUser(String dataJson) throws Exception {
-        userManager.addUser(dataJson);
+        userManager.updateOrAddElement(dataJson);
         return "user added successfully";
     }
 
     private String addMovie(String data) throws Exception {
-        filmManager.addMovie(data);
+        filmManager.updateOrAddElement(data);
         return "movie added successfully";
     }
 
@@ -106,17 +113,17 @@ public class Iemdb {
     }
 
     private String addActor(String data) throws Exception {
-        var x = actorManager.updateOrAddActor(data);
-        return "actor added successfully";
+        var x = actorManager.updateOrAddElement(data);
+        return "actor " + x  + " added successfully";
     }
 
     private String addComment(String data) throws Exception {
-        commentManager.addComment(data);
+        commentManager.addElement(data);
         return "comment added successfully";
     }
 
     private String rateMovie(String data) throws Exception {
-        filmManager.rateMovie(data, userManager);
+        filmManager.rateMovie(data);
         return "movie rated successfully";
     }
 
