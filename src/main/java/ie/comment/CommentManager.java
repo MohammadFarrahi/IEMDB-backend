@@ -34,17 +34,17 @@ public class CommentManager {
 
     public String addElement(String data) throws Exception {
         var comment = mapper.readValue(data, Comment.class);
-
         JsonNode jsonNode = mapper.readTree(data);
+
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
         if (!database.modelExists(userId, Constant.Model.USER)) {
-            throw new Exception("User not found");
-        }
-        if (!database.modelExists(movieId, Constant.Model.FILM)) {
             throw new Exception("Movie not found");
         }
+        var film = database.getFilmById(movieId);
+
         commentMap.put(Comment.lastId.toString(), comment);
+        film.addCommentId(Comment.lastId.toString());
         return Comment.lastId.toString();
     }
 

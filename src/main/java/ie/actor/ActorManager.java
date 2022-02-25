@@ -24,7 +24,7 @@ public class ActorManager {
         actorMap = new HashMap<String, Actor>();
     }
     public String updateOrAddElement(String jsonData) throws Exception {
-        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID).asText(); // TODO: Check method call chain arise same type of error
+        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID_S).asText(); // TODO: Check method call chain arise same type of error
 
         if (isIdValid(actorId)) {
             updateElement(actorId, jsonData);
@@ -35,7 +35,7 @@ public class ActorManager {
         return actorId;
     }
     public String addElement(String jsonData) throws Exception {
-        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID).asText();
+        String actorId = mapper.readTree(jsonData).get(Constant.Actor.ID_S).asText();
         if (isIdValid(actorId)) {
             throw new Exception("actor already exists");
         }

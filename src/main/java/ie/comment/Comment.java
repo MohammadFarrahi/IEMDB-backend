@@ -49,14 +49,13 @@ public class Comment {
     }
 
     public void updateCommentVotes(String userId, Integer vote) throws Exception {
-        if (!(-1 <= vote && vote <= 1)) {
+        if (!(-1 <= vote && vote <= 1))
             throw new Exception("invalid vote value");
-        }
-        if (vote != 0) {
+        if (vote > 0)
             this.commentLikes += vote;
+        else
             this.commentDislikes -= vote;
-            userVoteMap.put(userId, vote.shortValue());
-        }
+        userVoteMap.put(userId, vote.shortValue());
     }
     @JsonGetter(Constant.Comment.ID)
     private Integer getId() {
@@ -79,8 +78,8 @@ public class Comment {
         return commentDislikes;
     }
     @JsonGetter(Constant.Comment.C_DATE)
-    private LocalDate getCreatedDate() {
-        return createdDate;
+    private String getCreatedDate() {
+        return createdDate.toString();
     }
     @JsonGetter(Constant.Comment.M_ID)
     private String getCommentFilm() {

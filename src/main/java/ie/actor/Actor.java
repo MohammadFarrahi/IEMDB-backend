@@ -16,7 +16,7 @@ public class Actor {
     private String nationality;
 
     // For jackson usage
-    @JsonProperty(value= Constant.Actor.ID, required = true)
+    @JsonProperty(value= Constant.Actor.ID_S, required = true)
     private void setId(String id) throws Exception {
         if(Integer.parseInt(id) < 1) {
             throw new Exception("invalid actor id");
@@ -35,7 +35,7 @@ public class Actor {
     private void setNationality(String nationality) {
         this.nationality = nationality;
     }
-    @JsonGetter(Constant.Actor.ID)
+    @JsonGetter(Constant.Actor.ID_G)
     private Integer getId() {
         return Integer.parseInt(id);
     }

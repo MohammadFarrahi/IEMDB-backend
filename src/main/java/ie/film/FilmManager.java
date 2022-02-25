@@ -31,7 +31,7 @@ public class FilmManager {
 
     public String updateOrAddElement(String jsonData) throws Exception {
         var jsonNode = mapper.readTree(jsonData);
-        var filmId = jsonNode.get(Constant.Movie.ID).asText();
+        var filmId = jsonNode.get(Constant.Movie.ID_S).asText();
         var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
 
         if (!database.modelListExists(cast, Constant.Model.ACTOR)) {
@@ -46,7 +46,7 @@ public class FilmManager {
     }
 
     public String addElement(String jsonData) throws Exception {
-        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID).asText();
+        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID_S).asText();
         if (isIdValid(filmId)) {
             throw new Exception("movie already exist");
         }
@@ -130,7 +130,7 @@ public class FilmManager {
 
             if (mode == Constant.SER_MODE.LONG) {
                 var castJsonNode = database.serializeElementList(film.getCast(), Constant.Model.ACTOR, Constant.SER_MODE.SHORT);
-                var commentJsonNode = database.serializeElementList(film.getCast(), Constant.Model.COMMENT, Constant.SER_MODE.LONG);
+                var commentJsonNode = database.serializeElementList(film.getComments(), Constant.Model.COMMENT, Constant.SER_MODE.SHORT);
 
                 filmJsonNode.replace(Constant.Movie.CAST, castJsonNode);
                 filmJsonNode.replace(Constant.Movie.COMMENTS, commentJsonNode);
