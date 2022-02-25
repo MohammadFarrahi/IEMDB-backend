@@ -137,6 +137,16 @@ public class Constant {
         USER,
         COMMENT
     }
+    public static class SuccessMessage {
+        public static final String ADD_USER = "user added successfully";
+        public static final String ADD_ACTOR = "actor added successfully";
+        public static final String ADD_MOVIE = "movie added successfully";
+//        public static final String ADD_COMMENT = "comment added successfully";
+        public static final String RATE_MOVIE = "movie rated successfully";
+        public static final String VOTE_COMMENT = "comment voted successfully";
+        public static final String ADD_TO_WATCH_LIST = "movie added to watchlist successfully";
+        public static final String REMOVE_FROM_WATCH_LIST = "movie removed from watchlist successfully";
+    }
     public static enum SER_MODE {
         SHORT,
         LONG

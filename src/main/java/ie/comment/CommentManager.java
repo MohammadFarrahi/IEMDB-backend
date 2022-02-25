@@ -35,7 +35,7 @@ public class CommentManager {
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
         if (!database.modelExists(userId, Constant.Model.USER)) {
-            throw new MovieNotFoundException();
+            throw new UserNotFoundException();
         }
         var film = database.getFilmById(movieId);
 
