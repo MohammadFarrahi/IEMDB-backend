@@ -55,6 +55,7 @@ public class UserManager {
 
     public JsonNode getWatchList (String data) throws JsonProcessingException, CustomException  {
         var jsonNode = mapper.readTree(data);
+
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
 
@@ -62,7 +63,11 @@ public class UserManager {
             throw new InvalidCommandException();
 
         var user = getElement(jsonNode.get(Constant.WatchList.U_ID).asText());
-        return database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
+        var watchList = database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
+
+        var node = mapper.createObjectNode();
+        node.set("WatchList", watchList);
+        return (JsonNode) node;
     }
 
     public boolean isIdValid(String email) {
