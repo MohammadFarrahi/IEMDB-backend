@@ -31,7 +31,11 @@ public class Iemdb {
     }
 
     public String getResponse() {
-        return this.response.toString();
+        try {
+            return this.response.stringify();
+        }catch (Exception e) {
+            return "error";
+        }
     }
 
     public void runTextCommand(String command, String data) {
@@ -94,7 +98,6 @@ public class Iemdb {
     private String getMovie(String data) throws Exception {
         var jsonNode = filmManager.getMovie(data);
 //        System.out.println(jsonNode.toPrettyString());
-        //TODO fix this shit
         return mapper.writeValueAsString(jsonNode);
     }
 
