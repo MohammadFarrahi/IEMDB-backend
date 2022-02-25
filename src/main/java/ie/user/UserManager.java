@@ -8,6 +8,8 @@ import ie.types.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class UserManager {
     private final HashMap<String, User> userMap;
@@ -71,7 +73,7 @@ public class UserManager {
 
     public void addToWatchList(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-
+        validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
         var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
@@ -83,13 +85,27 @@ public class UserManager {
 
     public void removeFromWatchList(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
-
+        validatedWListJson(jsonNode);
         var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
         var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
         var user = getElement(userId);
         user.removeFromWatchList(movieId);
     }
+
+    private void validatedWListJson(JsonNode WListJsonNode) throws Exception {
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        WListJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        var voteJsonFieldNames = Constant.WatchList.getSet();
+
+        boolean exceptionFlag = (jsonFiledNames.size() != voteJsonFieldNames.size());
+        exceptionFlag |= !(voteJsonFieldNames.equals(new HashSet<String>(jsonFiledNames)));
+        exceptionFlag |= !(WListJsonNode.get(Constant.WatchList.M_ID).isInt() && WListJsonNode.get(Constant.Vote.U_ID).isTextual());
+        if (exceptionFlag) {
+            throw new Exception("invalid input vote");
+        }
+    }
+
     public User getElement(String id) throws Exception {
         if(userMap.containsKey(id)){
             return userMap.get(id);

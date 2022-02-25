@@ -51,6 +51,13 @@ public class Constant {
     public static class WatchList {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
+
+        public static Set<String> getSet(){
+            return new HashSet<String>(){{
+                add(U_ID);
+                add(M_ID);
+            }};
+        }
     }
 
     public static class Rate {
