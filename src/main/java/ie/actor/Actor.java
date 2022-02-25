@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.types.Constant;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class Actor {
@@ -17,7 +16,7 @@ public class Actor {
     private String nationality;
 
     // For jackson usage
-    @JsonProperty(value= Constant.Actor.ID, required = true)
+    @JsonProperty(value= Constant.Actor.ID_S, required = true)
     private void setId(String id) throws Exception {
         if(Integer.parseInt(id) < 1) {
             throw new Exception("invalid actor id");
@@ -36,9 +35,9 @@ public class Actor {
     private void setNationality(String nationality) {
         this.nationality = nationality;
     }
-    @JsonGetter(Constant.Actor.ID)
-    private String getId() {
-        return id;
+    @JsonGetter(Constant.Actor.ID_G)
+    private Integer getId() {
+        return Integer.parseInt(id);
     }
     @JsonGetter(Constant.Actor.NAME)
     private String getName() {
@@ -54,19 +53,6 @@ public class Actor {
     }
     @JsonCreator
     private Actor(){}
-
-    public Actor (
-             String id,
-             String name,
-             String birthDate,
-             String nationality
-    ) throws Exception {
-        // TODO: handle validation on name and nationality
-        setId(id);
-        setName(name);
-        setBirthDate(birthDate);
-        setNationality(nationality);
-    }
 
     @Override
     public String toString() {

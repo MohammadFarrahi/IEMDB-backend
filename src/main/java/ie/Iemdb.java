@@ -51,8 +51,8 @@ public class Iemdb {
                 case Constant.Command.VOTE_COMMENT -> resData = voteComment(data);
                 case Constant.Command.ADD_TO_WATCH_LIST -> resData = addToWatchList(data);
                 case Constant.Command.REMOVE_FROM_WATCH_LIST -> resData = removeFromWatchList(data);
-                case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovie(data);
-                case Constant.Command.GET_MOVIE_LIST -> resData = getMoviesList();
+                case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovieByIdJson(data);
+                case Constant.Command.GET_MOVIE_LIST -> resData = getMoviesListJson();
                 case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenre(data);
                 case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
                 default -> throw new Exception("Invalid Command");
@@ -96,17 +96,14 @@ public class Iemdb {
         return "Movie removed from watch list";
     }
 
-    private String getMovie(String data) throws Exception {
-        var jsonNode = filmManager.getMovie(data);
+    private String getMovieByIdJson(String data) throws Exception {
+        var jsonNode = filmManager.getMovieByIdJson(data);
 //        System.out.println(jsonNode.toPrettyString());
         return mapper.writeValueAsString(jsonNode);
     }
 
-    private String getMoviesList() throws Exception {
-        var jsonNode = filmManager.getMoviesList();
-        return mapper.writeValueAsString(jsonNode);
-
-
+    private String getMoviesListJson() throws Exception {
+        return mapper.writeValueAsString(serializeElementList(null, Constant.Model.FILM, Constant.SER_MODE.SHORT));
     }
 
     private String getMoviesByGenre(String data) throws Exception {
@@ -166,27 +163,14 @@ public class Iemdb {
         return res;
     }
 
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) {
-        try {
-            switch (modelType) {
-                case ACTOR:
-                    return actorManager.serializeElementList(idList, mode);
-
-                case FILM:
-                    var filmList = filmManager.getElementList(idList);
-                    return filmManager.serializeElementList(filmList, mode);
-                default:
-                    return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public JsonNode serializeElement(String id, Constant.Model modelType, Constant.SER_MODE mode) {
+    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws Exception {
         switch (modelType) {
             case ACTOR:
-                return actorManager.serializeElement(id, mode);
+                return actorManager.serializeElementList(idList, mode);
+            case FILM:
+                return filmManager.serializeElementList(idList, mode);
+            case COMMENT:
+                return commentManager.serializeElementList(idList, mode);
             default:
                 return null;
         }

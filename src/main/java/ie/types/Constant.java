@@ -5,13 +5,19 @@ import java.util.Set;
 
 public class Constant {
     public  static class Actor {
-        public static final String ID = "id";
+        public static final String ID_S = "id";
+        public static final String ID_G = "actorId";
         public static final String NAME = "name";
         public static final String B_DATE = "birthDate";
         public static final String NATION = "nationality";
+        public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
+            add(B_DATE);
+            add(NATION);
+        }};
     }
     public static class Movie {
-        public static final String ID = "id";
+        public static final String ID_S = "id";
+        public static final String ID_G = "movieId";
         public static final String NAME = "name";
         public static final String SUMM = "summary";
         public static final String R_DATE = "releaseDate";
@@ -45,11 +51,19 @@ public class Constant {
         public static final String B_DATE = "birthDate";
     }
     public static class Comment {
-        public static final String ID = "id";
+        public static final String ID = "commentId";
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
         public static final String CONTENT = "text";
         public static final String C_DATE = "createdDate";
+        public static final String LIKES = "like";
+        public static final String DISLIKES = "dislike";
+
+
+        public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
+            add(M_ID);
+            add(C_DATE);
+        }};
 
         public static Set<String> getSet(){
             return new HashSet<String>(){{

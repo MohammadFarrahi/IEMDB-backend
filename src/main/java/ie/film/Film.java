@@ -36,7 +36,7 @@ public class Film {
         averageRating = null;
     }
 
-    @JsonProperty(value=Constant.Movie.ID, required = true)
+    @JsonProperty(value=Constant.Movie.ID_S, required = true)
     private void setId (String id){
         this.id = id;
     }
@@ -91,7 +91,7 @@ public class Film {
         this.imdbRate = imdbRate;
     }
 
-    @JsonGetter(Constant.Movie.ID)
+    @JsonGetter(Constant.Movie.ID_G)
     private Integer getId() {
         return Integer.parseInt(this.id);
     }
