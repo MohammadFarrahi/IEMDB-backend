@@ -73,14 +73,14 @@ public class FilmManager {
         filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
-    public JsonNode getMovie(String data) throws Exception {
+    public JsonNode getMovieByIdJson(String data) throws Exception {
         var jsonNode = mapper.readTree(data);
         var id = jsonNode.get("movieId").asText();
         var film = getElement(id);
         return serializeElement(film, Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMoviesList() throws Exception {
+    public JsonNode getMoviesListJson() throws Exception {
         ArrayList<String> idList = new ArrayList<>();
         idList.addAll(filmMap.keySet());
         var filmList = getElementList(idList);
