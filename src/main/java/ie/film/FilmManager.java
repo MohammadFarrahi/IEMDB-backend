@@ -115,6 +115,12 @@ public class FilmManager {
         return serializeElement(id, Constant.SER_MODE.LONG);
     }
 
+    public JsonNode getMovieList() {
+        ArrayList<String> idList = new ArrayList<>();
+        idList.addAll(filmMap.keySet());
+        return serializeElementList(idList, Constant.SER_MODE.LONG);
+    }
+
     public JsonNode serializeElement(String id, Constant.SER_MODE mode){
         try {
             var film = getElement(id);
