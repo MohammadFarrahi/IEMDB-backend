@@ -3,15 +3,15 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.actor.ActorManager;
-import ie.comment.CommentManager;
+import ie.model.actor.ActorManager;
+import ie.model.comment.CommentManager;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
-import ie.film.Film;
-import ie.film.FilmManager;
-import ie.types.Response;
-import ie.user.UserManager;
-import ie.types.Constant;
+import ie.model.film.Film;
+import ie.model.film.FilmManager;
+import ie.util.types.Response;
+import ie.model.user.UserManager;
+import ie.util.types.Constant;
 import java.util.ArrayList;
 
 public class Iemdb {

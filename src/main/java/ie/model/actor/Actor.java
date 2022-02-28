@@ -1,9 +1,9 @@
-package ie.actor;
+package ie.model.actor;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ie.types.Constant;
+import ie.util.types.Constant;
 
 import java.time.LocalDate;
 

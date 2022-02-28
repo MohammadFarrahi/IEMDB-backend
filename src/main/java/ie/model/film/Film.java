@@ -1,11 +1,11 @@
-package ie.film;
+package ie.model.film;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.exception.CustomException;
 import ie.exception.InvalidRateScoreException;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;

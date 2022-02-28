@@ -1,4 +1,4 @@
-package ie.user;
+package ie.model.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,7 +8,7 @@ import ie.exception.AgeLimitException;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
 import ie.exception.UserNotFoundException;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package ie.comment;
+package ie.model.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.exception.*;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

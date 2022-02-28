@@ -1,4 +1,4 @@
-package ie.user;
+package ie.model.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
@@ -6,11 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.comment.Comment;
 import ie.exception.CustomException;
 import ie.exception.MovieAlreadyExistsException;
-import ie.types.Constant;
-import ie.types.Email;
+import ie.util.types.Constant;
+import ie.util.types.Email;
 
 import java.time.LocalDate;
 import java.time.Period;

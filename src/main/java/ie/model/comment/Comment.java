@@ -1,11 +1,11 @@
-package ie.comment;
+package ie.model.comment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.exception.CustomException;
 import ie.exception.InvalidVoteValueException;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import java.time.LocalDate;
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package ie.types;
+package ie.util.types;
 
 import java.util.HashSet;
 import java.util.Set;

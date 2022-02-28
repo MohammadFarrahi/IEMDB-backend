@@ -1,4 +1,4 @@
-package ie.film;
+package ie.model.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -9,7 +9,7 @@ import ie.Iemdb;
 import java.util.ArrayList;
 
 import ie.exception.*;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import java.util.HashMap;
 import java.util.HashSet;
 

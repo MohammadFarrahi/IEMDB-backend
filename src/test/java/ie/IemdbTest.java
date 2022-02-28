@@ -1,7 +1,7 @@
 package ie;
 
 import ie.exception.*;
-import ie.types.Constant;
+import ie.util.types.Constant;
 import org.junit.Before;
 import org.junit.Test;
 

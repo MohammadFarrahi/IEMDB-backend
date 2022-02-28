@@ -1,4 +1,4 @@
-package ie.actor;
+package ie.model.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.exception.ActorNotFoundException;
 import ie.exception.CustomException;
-import ie.types.Constant;
+import ie.util.types.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
