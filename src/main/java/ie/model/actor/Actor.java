@@ -13,23 +13,7 @@ public class Actor {
     private LocalDate birthDate;
     private String nationality;
 
-    // For jackson usage
-    @JsonProperty(value= Constant.Actor.ID_S, required = true)
-    private void setId(String id) {
-        this.id = id;
-    }
-    @JsonProperty(value= Constant.Actor.NAME, required = true)
-    private void setName(String name) {
-        this.name = name;
-    }
-    @JsonProperty(value= Constant.Actor.B_DATE, required = true)
-    private void setBirthDate(String birthDate) {
-        this.birthDate = LocalDate.parse(birthDate);
-    }
-    @JsonProperty(value= Constant.Actor.NATION, required = true)
-    private void setNationality(String nationality) {
-        this.nationality = nationality;
-    }
+    // for jackson serialization
     @JsonGetter(Constant.Actor.ID_G)
     private Integer getId() {
         return Integer.parseInt(id);
@@ -46,7 +30,17 @@ public class Actor {
     private String getNationality() {
         return nationality;
     }
+
     @JsonCreator
-    private Actor(){}
+    private Actor (
+            @JsonProperty(value= Constant.Actor.ID_S, required = true) String id,
+            @JsonProperty(value= Constant.Actor.NAME, required = true) String name,
+            @JsonProperty(value= Constant.Actor.B_DATE, required = true) String birthDate,
+            @JsonProperty(value= Constant.Actor.NATION, required = true) String nationality) {
+        this.id = id;
+        this.name = name;
+        this.birthDate = LocalDate.parse(birthDate);
+        this.nationality = nationality;
+    }
 
 }

@@ -14,7 +14,7 @@ public abstract class Manager <T> {
 
     public T getElementById(String id) throws CustomException {
         if (!objectMap.containsKey(id)) {
-            throw new CustomException("ObjectNotFound");
+            throw new CustomException("ObjectNotFound"); // TODO: handle exception message properly
         }
         return objectMap.get(id);
     }
