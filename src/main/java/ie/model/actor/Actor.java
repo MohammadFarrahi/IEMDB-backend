@@ -15,7 +15,7 @@ public class Actor {
 
     // for jackson serialization
     @JsonGetter(Constant.Actor.ID_G)
-    private Integer getId() {
+    public Integer getId() {
         return Integer.parseInt(id);
     }
     @JsonGetter(Constant.Actor.NAME)

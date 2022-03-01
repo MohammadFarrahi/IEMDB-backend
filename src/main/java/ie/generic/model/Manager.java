@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Manager <T> {
-    private Map<String,T> objectMap;
+    protected Map<String,T> objectMap;
 
-    public abstract String addElement(T object);
-    public abstract String updateElement(String id, T newObject);
+    public abstract String addElement(T newObject) throws CustomException;
+    public abstract String updateElement(T newObject) throws CustomException;
 
     public T getElementById(String id) throws CustomException {
         if (!objectMap.containsKey(id)) {

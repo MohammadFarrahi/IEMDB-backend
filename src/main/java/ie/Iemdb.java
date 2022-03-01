@@ -117,7 +117,7 @@ public class Iemdb {
     }
 
     private String addActor(String data)throws CustomException, JsonProcessingException {
-        var x = actorManager.updateOrAddElement(data);
+        var x = actorManager.updateOrAddElementJson(data);
         return Constant.SuccessMessage.ADD_ACTOR;
     }
 
