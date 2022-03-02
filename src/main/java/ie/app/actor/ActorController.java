@@ -1,6 +1,6 @@
 package ie.app.actor;
 
-import ie.generic.controller.Controller.Controller;
+import ie.generic.controller.Controller;
 
 public class ActorController extends Controller {
 
