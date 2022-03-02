@@ -2,10 +2,16 @@ package ie.model.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.generic.model.JsonHandler;
+import ie.model.actor.ActorManager;
+import ie.model.comment.CommentManager;
+import ie.util.types.Constant;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,11 +29,31 @@ public class FilmJsonHandler implements JsonHandler<Film> {
 
     @Override
     public String serialize(Film object, Set<String> notIncludedFields) {
-        return null;
+        try {
+            var objectJsontNode = (ObjectNode) mapper.valueToTree(object);
+            if(notIncludedFields != null) {
+                objectJsontNode.remove(notIncludedFields);
+            } else {
+                var castJsonNode = mapper.readTree(ActorManager.getInstance().serializeElementList(object.getCast(), Constant.SER_MODE.SHORT));
+                var commentJsonNode = mapper.readTree(CommentManager.getInstance().serializeElementList(object.getComments(), Constant.SER_MODE.SHORT));
+                objectJsontNode.replace(Constant.Movie.CAST, castJsonNode);
+                objectJsontNode.replace(Constant.Movie.COMMENTS, commentJsonNode);
+            }
+            return mapper.writeValueAsString(objectJsontNode);
+        } catch (Exception e) {
+            return null;
+        }
     }
-
     @Override
     public String serialize(List<Film> objects, Set<String> notIncludedFields) {
-        return null;
+        var objectJsonList = new ArrayList<JsonNode>();
+        try {
+            for (var object : objects) {
+                objectJsonList.add(mapper.readTree(serialize(object, notIncludedFields)));
+            }
+            return mapper.writeValueAsString(mapper.valueToTree(objectJsonList));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

@@ -87,7 +87,7 @@ public class FilmManager extends Manager<Film> {
         return serializeElement(jsonNode.get(Constant.WatchList.M_ID).asText(), Constant.SER_MODE.LONG);
     }
 
-    public JsonNode getMoviesByGenre(String data) throws JsonProcessingException, CustomException {
+    public String getMoviesByGenre(String data) throws JsonProcessingException, CustomException {
         var jsonNode = mapper.readTree(data);
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
@@ -114,35 +114,24 @@ public class FilmManager extends Manager<Film> {
             return null;
         }
     }
-
-    public JsonNode serializeElement(String filmId, Constant.SER_MODE mode) throws CustomException {
+    public String serializeElement(String filmId, Constant.SER_MODE mode) throws CustomException {
         var film = getElementById(filmId);
-        try {
-            var filmJsonNode = (ObjectNode) mapper.valueToTree(film);
-
-            if (mode == Constant.SER_MODE.LONG) {
-                var castJsonNode = mapper.readTree(ActorManager.getInstance().serializeElementList(film.getCast(), Constant.SER_MODE.SHORT));
-                var commentJsonNode = CommentManager.getInstance().serializeElementList(film.getComments(), Constant.SER_MODE.SHORT);
-
-                filmJsonNode.replace(Constant.Movie.CAST, castJsonNode);
-                filmJsonNode.replace(Constant.Movie.COMMENTS, commentJsonNode);
-            }
-            else {
-                filmJsonNode.remove(Constant.Movie.REMOVABLE_SHORT_SER);
-            }
-            return filmJsonNode;
-        } catch (Exception e) {
-            return null;
+        if (mode == Constant.SER_MODE.SHORT) {
+            return jsonMapper.serialize(film, Constant.Movie.REMOVABLE_SHORT_SER);
+        }
+        else {
+            return jsonMapper.serialize(film, null);
         }
     }
-
-    public JsonNode serializeElementList(ArrayList<String> filmIds, Constant.SER_MODE mode) throws CustomException {
-        var filmJsonList = new ArrayList<JsonNode>();
-        for(var id : filmIds) {
-            filmJsonList.add(serializeElement(id, mode));
+    // TODO : remove this issue in iemdb
+    public String serializeElementList(ArrayList<String> filmIds, Constant.SER_MODE mode) throws CustomException {
+        var objects = getElementsById(filmIds);
+        if (mode == Constant.SER_MODE.SHORT) {
+            return jsonMapper.serialize(objects, Constant.Movie.REMOVABLE_SHORT_SER);
         }
-        var jsonNode = mapper.valueToTree(filmJsonList);
-        return jsonNode;
+        else {
+            return jsonMapper.serialize(objects, null);
+        }
     }
 
     public void rateMovie(String filmId, String userEmail, int rate) throws CustomException {
