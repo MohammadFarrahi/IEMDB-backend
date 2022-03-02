@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 public class FilmManager extends Manager<Film> {
     private static FilmManager instance = null;
+    // TODO : remove mapper
     private final ObjectMapper mapper;
     private final JsonHandler<Film> jsonMapper;
 

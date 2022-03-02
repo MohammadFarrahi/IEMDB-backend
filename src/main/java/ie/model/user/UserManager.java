@@ -3,7 +3,6 @@ package ie.model.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.Iemdb;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
@@ -14,6 +13,7 @@ import java.util.HashSet;
 
 public class UserManager extends Manager<User> {
     private static UserManager instance = null;
+    // TODO : remove mapper
     private final ObjectMapper mapper;
     private final JsonHandler<User> jsonMapper;
 
@@ -63,21 +63,8 @@ public class UserManager extends Manager<User> {
         return updateElement(deserializedObject);
     }
 
-    public JsonNode getWatchList (String data) throws JsonProcessingException, CustomException  {
-        var jsonNode = mapper.readTree(data);
-
-        ArrayList<String> jsonFiledNames = new ArrayList<>();
-        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
-
-        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.U_ID))
-            throw new InvalidCommandException();
-
-        var user = getElementById(jsonNode.get(Constant.WatchList.U_ID).asText());
-        var watchList = FilmManager.getInstance().serializeElementList(user.getWatchList(), Constant.SER_MODE.SHORT);
-
-        var node = mapper.createObjectNode();
-        node.set("WatchList", watchList);
-        return (JsonNode) node;
+    public ArrayList<String> getWatchList(String userId) throws CustomException {
+        return getElementById(userId).getWatchList();
     }
 
     public void addToWatchList(String userId, String movieId) throws CustomException {
@@ -114,6 +101,18 @@ public class UserManager extends Manager<User> {
         if (exceptionFlag) {
             throw new InvalidCommandException();
         }
+    }
+    public String getWatchListJson (String data) throws JsonProcessingException, CustomException  {
+        var jsonNode = mapper.readTree(data);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.U_ID))
+            throw new InvalidCommandException();
+
+        var watchListJson = FilmManager.getInstance().serializeElementList(getWatchList(jsonNode.get(Constant.WatchList.U_ID).asText()), Constant.SER_MODE.SHORT);
+        var node = mapper.createObjectNode();
+        node.set("WatchList", mapper.readTree(watchListJson));
+        return mapper.writeValueAsString((JsonNode) node);
     }
 //    public User getElementById(String id) throws CustomException {
 //        if(userMap.containsKey(id)){

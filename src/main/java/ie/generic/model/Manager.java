@@ -19,6 +19,9 @@ public abstract class Manager <T> {
         return objectMap.get(id);
     }
     public List<T> getElementsById(List<String> ids) throws CustomException {
+        if (ids == null) {
+            return new ArrayList<T>(objectMap.values());
+        }
         List<T> objects = new ArrayList<>();
         for (String id : ids) {
             objects.add(getElementById(id));

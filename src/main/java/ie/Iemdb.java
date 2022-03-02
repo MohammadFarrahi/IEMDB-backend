@@ -30,14 +30,6 @@ public class Iemdb {
         this.mapper = new ObjectMapper();
     }
 
-    public String getResponse() {
-        try {
-            return this.response.stringify();
-        }catch (Exception e) {
-            return "error";
-        }
-    }
-
     public void runTextCommand(String command, String data) {
         String resData;
         try {
@@ -53,7 +45,7 @@ public class Iemdb {
                 case Constant.Command.GET_MOVIE_BY_ID -> resData = getMovieByIdJson(data);
                 case Constant.Command.GET_MOVIE_LIST -> resData = getMoviesListJson();
                 case Constant.Command.GET_MOVIES_BY_GENRE -> resData = getMoviesByGenreJson(data);
-                case Constant.Command.GET_WATCH_LIST -> resData = getWatchList(data);
+                case Constant.Command.GET_WATCH_LIST -> resData = getWatchListJson(data);
                 default -> throw new InvalidCommandException();
             }
             setJsonResponse(true, resData);
@@ -64,14 +56,20 @@ public class Iemdb {
             setJsonResponse(false, InvalidCommandException.message);
         }
     }
+    public String getResponse() {
+        try {
+            return this.response.stringify();
+        }catch (Exception e) {
+            return "error";
+        }
+    }
+    private void setJsonResponse(boolean status, String message) {
+        this.response = new Response(status, message);
+    }
 
     private String voteComment(String data) throws CustomException, JsonProcessingException {
         commentManager.voteComment(data);
         return Constant.SuccessMessage.VOTE_COMMENT;
-    }
-
-    private void setJsonResponse(boolean status, String message) {
-        this.response = new Response(status, message);
     }
 
     private String addUser(String dataJson) throws CustomException, JsonProcessingException {
@@ -107,7 +105,7 @@ public class Iemdb {
     }
 
     private String getMoviesListJson() throws CustomException, JsonProcessingException {
-        return mapper.writeValueAsString(serializeElementList(null, Constant.Model.FILM, Constant.SER_MODE.SHORT));
+        return filmManager.serializeElementList(null, Constant.SER_MODE.SHORT);
     }
 
     private String getMoviesByGenreJson(String data) throws CustomException, JsonProcessingException {
@@ -119,14 +117,6 @@ public class Iemdb {
             throw new InvalidCommandException();
 
         return filmManager.serializeElementList(filmManager.filterElementsByGenre(jsonNode.get("genre").asText()), Constant.SER_MODE.SHORT);
-    }
-
-    public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
-        ArrayList<String> stringList = new ArrayList<>();
-        intList.forEach((n) -> {
-            stringList.add(String.valueOf(n));
-        });
-        return stringList;
     }
 
     private String addActor(String data)throws CustomException, JsonProcessingException {
@@ -144,24 +134,14 @@ public class Iemdb {
         return Constant.SuccessMessage.RATE_MOVIE;
     }
 
-    private String getWatchList(String data) throws CustomException, JsonProcessingException {
-        var jsonNode = userManager.getWatchList(data);
-        return mapper.writeValueAsString(jsonNode);
+    private String getWatchListJson(String data) throws CustomException, JsonProcessingException {
+        return userManager.getWatchListJson(data);
     }
-
-    public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws CustomException {
-        switch (modelType) {
-            case ACTOR:
-                return actorManager.serializeElementList(idList, mode);
-            case FILM:
-                return filmManager.serializeElementList(idList, mode);
-            case COMMENT:
-                return commentManager.serializeElementList(idList, mode);
-            default:
-                return null;
-        }
-    }
-     public Film getFilmById(String id) throws CustomException {
-        return filmManager.getElement(id);
-     }
+//    public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
+//        ArrayList<String> stringList = new ArrayList<>();
+//        intList.forEach((n) -> {
+//            stringList.add(String.valueOf(n));
+//        });
+//        return stringList;
+//    }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 public class CommentManager extends Manager<Comment> {
     private static CommentManager instance = null;
     private final JsonHandler<Comment> jsonMapper;
+    // TODO : remove mapper
     private final ObjectMapper mapper;
 
     public static CommentManager getInstance() {
