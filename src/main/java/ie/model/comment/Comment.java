@@ -25,10 +25,6 @@ public class Comment {
     private Integer getId() {
         return Integer.parseInt(id);
     }
-    @JsonGetter(Constant.Comment.U_ID)
-    private String getCommentOwner() {
-        return commentOwner;
-    }
     @JsonGetter(Constant.Comment.CONTENT)
     private String getText() {
         return text;
@@ -45,8 +41,12 @@ public class Comment {
     private String getCreatedDate() {
         return createdDate.toString();
     }
+
+
+    @JsonGetter(Constant.Comment.U_ID)
+    public String getCommentOwner() { return commentOwner; }
     @JsonGetter(Constant.Comment.M_ID)
-    private String getCommentFilm() {
+    public String getCommentFilm() {
         return commentFilm;
     }
 

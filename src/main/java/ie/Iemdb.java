@@ -135,7 +135,7 @@ public class Iemdb {
     }
 
     private String addComment(String data) throws CustomException, JsonProcessingException {
-        var commentId = commentManager.addElement(data);
+        var commentId = commentManager.addElementJson(data);
         return "comment with id " + commentId + " added successfully";
     }
 

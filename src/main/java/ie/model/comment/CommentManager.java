@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.exception.*;
+import ie.generic.model.JsonHandler;
+import ie.generic.model.Manager;
 import ie.model.film.FilmManager;
 import ie.model.user.UserManager;
 import ie.util.types.Constant;
@@ -15,11 +17,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class CommentManager {
+public class CommentManager extends Manager<Comment> {
     private static CommentManager instance = null;
-    ObjectMapper mapper;
-    private Integer lastCommentId;
-    private HashMap<String, Comment> commentMap;
+    private final JsonHandler<Comment> jsonMapper;
+    private final ObjectMapper mapper;
 
     public static CommentManager getInstance() {
         if (instance == null) {
@@ -27,40 +28,30 @@ public class CommentManager {
         }
         return instance;
     }
-
     private CommentManager() {
+        jsonMapper = new CommentJsonHandler();
         mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
-        this.commentMap = new HashMap<>();
-        lastCommentId = 0;
     }
-
-    public String addElement(String data) throws JsonProcessingException, CustomException {
-        var comment = mapper.readValue(data, Comment.class);
-        JsonNode jsonNode = mapper.readTree(data);
-
-        var userId = jsonNode.get(Constant.Comment.U_ID).asText();
-        var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
-        if (!UserManager.getInstance().isIdValid(userId)) {
+    @Override
+    public String addElement(Comment newObject) throws CustomException {
+        if (!UserManager.getInstance().isIdValid(newObject.getCommentOwner())) {
             throw new UserNotFoundException();
         }
-        var film = FilmManager.getInstance().getElementById(movieId);
+        var film = FilmManager.getInstance().getElementById(newObject.getCommentFilm());
 
-        commentMap.put(Comment.lastId.toString(), comment);
+        objectMap.put(Comment.lastId.toString(), newObject);
         film.addCommentId(Comment.lastId.toString());
         return Comment.lastId.toString();
     }
-
-    public boolean isIdValid(String id) {
-        return commentMap.containsKey(id);
+    @Override
+    public String updateElement(Comment newObject) throws CustomException {
+        return null;
     }
 
-    public boolean isIdListValid(ArrayList<String> ids) {
-        for (var id : ids){
-            if(!commentMap.containsKey(id))
-                return false;
-        }
-        return true;
+    public String addElementJson(String jsonData) throws JsonProcessingException, CustomException {
+        var comment = jsonMapper.deserialize(jsonData);
+        return addElement(comment);
     }
 
     public void voteComment(String jsonData) throws JsonProcessingException, CustomException {
@@ -68,7 +59,7 @@ public class CommentManager {
         var validatedVoteJson = ValidateVoteJson(voteJsonNode);
         ValidateVoteData(validatedVoteJson);
 
-        commentMap.get(validatedVoteJson.get(Constant.Vote.C_ID).asText())
+        objectMap.get(validatedVoteJson.get(Constant.Vote.C_ID).asText())
                 .updateCommentVotes(validatedVoteJson.get(Constant.Vote.U_ID).asText(), validatedVoteJson.get(Constant.Vote.VOTE).asInt());
     }
 
@@ -103,15 +94,8 @@ public class CommentManager {
         return validatedJson;
     }
 
-    public Comment getElement(String id) throws CustomException {
-        if (commentMap.containsKey(id)) {
-            return commentMap.get(id);
-        }
-        throw new CommentNotFoundException();
-    }
-
     public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
-        var comment = getElement(commentId);
+        var comment = getElementById(commentId);
         try {
             var commentJsonNode = (ObjectNode) mapper.valueToTree(comment);
             if (mode == Constant.SER_MODE.SHORT) {
