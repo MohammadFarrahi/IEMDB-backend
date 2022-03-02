@@ -95,8 +95,15 @@ public class Iemdb {
     }
 
     private String getMovieByIdJson(String data) throws CustomException, JsonProcessingException {
-        var jsonNode = filmManager.getMovieByIdJson(data);
-        return mapper.writeValueAsString(jsonNode);
+        // TODO : move validation part to another place (not in filmManager)
+        var jsonNode = mapper.readTree(data);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.M_ID)) {
+            throw new InvalidCommandException();
+        }
+
+        return filmManager.serializeElement(jsonNode.get(Constant.WatchList.M_ID).asText(), Constant.SER_MODE.LONG);
     }
 
     private String getMoviesListJson() throws CustomException, JsonProcessingException {
@@ -104,8 +111,14 @@ public class Iemdb {
     }
 
     private String getMoviesByGenreJson(String data) throws CustomException, JsonProcessingException {
-        var jsonNode = filmManager.getMoviesByGenre(data);
-        return mapper.writeValueAsString(jsonNode);
+        // TODO : move validation part to another place (not in filmManager)
+        var jsonNode = mapper.readTree(data);
+        ArrayList<String> jsonFiledNames = new ArrayList<>();
+        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
+        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals("genre"))
+            throw new InvalidCommandException();
+
+        return filmManager.serializeElementList(filmManager.filterElementsByGenre(jsonNode.get("genre").asText()), Constant.SER_MODE.SHORT);
     }
 
     public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {

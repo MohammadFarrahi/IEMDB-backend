@@ -75,34 +75,7 @@ public class FilmManager extends Manager<Film> {
             return addElementJson(jsonData);
         }
     }
-
-    public JsonNode getMovieByIdJson(String data) throws JsonProcessingException, CustomException  {
-        var jsonNode = mapper.readTree(data);
-        ArrayList<String> jsonFiledNames = new ArrayList<>();
-        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
-
-        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals(Constant.WatchList.M_ID)) {
-            throw new InvalidCommandException();
-        }
-        return serializeElement(jsonNode.get(Constant.WatchList.M_ID).asText(), Constant.SER_MODE.LONG);
-    }
-
-    public String getMoviesByGenre(String data) throws JsonProcessingException, CustomException {
-        var jsonNode = mapper.readTree(data);
-        ArrayList<String> jsonFiledNames = new ArrayList<>();
-        jsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
-
-        if(jsonFiledNames.size() != 1 || !jsonFiledNames.get(0).equals("genre"))
-            throw new InvalidCommandException();
-
-        var genre = jsonNode.get("genre").asText();
-        var filteredFilmsIds = filterElement(genre);
-        return serializeElementList(filteredFilmsIds, Constant.SER_MODE.SHORT);
-    }
-
-
-
-    public ArrayList<String> filterElement(String genre) {
+    public ArrayList<String> filterElementsByGenre(String genre) {
         try {
             ArrayList<String> filteredIdList = new ArrayList<>();
             for (var pair : objectMap.entrySet()) {
