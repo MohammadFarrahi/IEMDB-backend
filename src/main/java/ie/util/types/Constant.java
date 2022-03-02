@@ -127,15 +127,9 @@ public class Constant {
         public static final String ADD_TO_WATCH_LIST = "addToWatchList";
         public static final String REMOVE_FROM_WATCH_LIST = "removeFromWatchList";
         public static final String GET_MOVIE_BY_ID = "getMovieById";
-        public static final String GET_MOVIE_LIST = "getMovieList";
+        public static final String GET_MOVIE_LIST = "getMoviesList";
         public static final String GET_MOVIES_BY_GENRE = "getMoviesByGenre";
         public static final String GET_WATCH_LIST = "getWatchList";
-    }
-    public static enum Model {
-        ACTOR,
-        FILM,
-        USER,
-        COMMENT
     }
     public static class SuccessMessage {
         public static final String ADD_USER = "user added successfully";

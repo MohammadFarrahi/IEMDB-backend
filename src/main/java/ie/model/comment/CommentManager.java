@@ -56,7 +56,7 @@ public class CommentManager extends Manager<Comment> {
     public String serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
         var comment = getElementById(commentId);
         if (mode == Constant.SER_MODE.SHORT) {
-            return jsonMapper.serialize(comment, Constant.Actor.REMOVABLE_SHORT_SER);
+            return jsonMapper.serialize(comment, Constant.Comment.REMOVABLE_SHORT_SER);
         } else {
             return jsonMapper.serialize(comment, null);
         }
@@ -64,7 +64,7 @@ public class CommentManager extends Manager<Comment> {
     public String serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws CustomException {
         var objects = getElementsById(commentIds);
         if (mode == Constant.SER_MODE.SHORT) {
-            return jsonMapper.serialize(objects, Constant.Actor.REMOVABLE_SHORT_SER);
+            return jsonMapper.serialize(objects, Constant.Comment.REMOVABLE_SHORT_SER);
         } else {
             return jsonMapper.serialize(objects, null);
         }

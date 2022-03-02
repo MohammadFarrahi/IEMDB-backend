@@ -112,7 +112,7 @@ public class UserManager extends Manager<User> {
         var watchListJson = FilmManager.getInstance().serializeElementList(getWatchList(jsonNode.get(Constant.WatchList.U_ID).asText()), Constant.SER_MODE.SHORT);
         var node = mapper.createObjectNode();
         node.set("WatchList", mapper.readTree(watchListJson));
-        return mapper.writeValueAsString((JsonNode) node);
+        return mapper.writeValueAsString(node);
     }
 //    public User getElementById(String id) throws CustomException {
 //        if(userMap.containsKey(id)){

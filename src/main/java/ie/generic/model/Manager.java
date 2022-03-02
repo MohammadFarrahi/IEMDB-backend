@@ -3,11 +3,16 @@ package ie.generic.model;
 import ie.exception.CustomException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class Manager <T> {
     protected Map<String,T> objectMap;
+
+    public Manager () {
+        objectMap = new HashMap<>();
+    }
 
     public abstract String addElement(T newObject) throws CustomException;
     public abstract String updateElement(T newObject) throws CustomException;

@@ -1,13 +1,11 @@
 package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.model.actor.ActorManager;
 import ie.model.comment.CommentManager;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
-import ie.model.film.Film;
 import ie.model.film.FilmManager;
 import ie.util.types.Response;
 import ie.model.user.UserManager;
