@@ -75,7 +75,7 @@ public class Iemdb {
     }
 
     private String addUser(String dataJson) throws CustomException, JsonProcessingException {
-        userManager.updateOrAddElement(dataJson);
+        userManager.updateOrAddElementJson(dataJson);
         return Constant.SuccessMessage.ADD_USER;
     }
 

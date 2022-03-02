@@ -62,6 +62,8 @@ public class User {
         this.birthDate = LocalDate.parse(birthDate);
     }
 
+    public String getId() { return getEmail(); }
+
     @JsonIgnore()
     public ArrayList<String> getWatchList() {
         return this.watchList;
