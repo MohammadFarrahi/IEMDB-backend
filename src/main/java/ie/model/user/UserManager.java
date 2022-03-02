@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class UserManager extends Manager<User> {
+    // TODO : remove database and make manager singleton
     private final Iemdb database;
     private final ObjectMapper mapper;
     private final JsonHandler<User> jsonMapper;
@@ -73,27 +74,29 @@ public class UserManager extends Manager<User> {
         node.set("WatchList", watchList);
         return (JsonNode) node;
     }
-    public void addToWatchList(String data) throws JsonProcessingException, CustomException {
-        var jsonNode = mapper.readTree(data);
-        validatedWListJson(jsonNode);
-        var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
-        var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
 
-
+    public void addToWatchList(String userId, String movieId) throws CustomException {
         var user = getElementById(userId);
         if (!user.isOlderThan(database.getFilmById(movieId).getAgeLimit()))
             throw new AgeLimitException();
 
         user.addToWatchList(movieId);
     }
-    public void removeFromWatchList(String data) throws JsonProcessingException, CustomException {
-        var jsonNode = mapper.readTree(data);
-        validatedWListJson(jsonNode);
-        var userId = jsonNode.get(Constant.WatchList.U_ID).asText();
-        var movieId = jsonNode.get(Constant.WatchList.M_ID).asText();
-
+    public void removeFromWatchList(String userId, String movieId) throws CustomException {
         var user = getElementById(userId);
         user.removeFromWatchList(movieId);
+    }
+
+    // TODO : move these methods to another place and pass validated data to userManager. one option would be making a SchemaClass for watchList json
+    public void addToWatchList(String JsonData) throws JsonProcessingException, CustomException {
+        var jsonNode = mapper.readTree(JsonData);
+        validatedWListJson(jsonNode);
+        addToWatchList(jsonNode.get(Constant.WatchList.U_ID).asText(), jsonNode.get(Constant.WatchList.M_ID).asText());
+    }
+    public void removeFromWatchList(String JsonData) throws JsonProcessingException, CustomException {
+        var jsonNode = mapper.readTree(JsonData);
+        validatedWListJson(jsonNode);
+        removeFromWatchList(jsonNode.get(Constant.WatchList.U_ID).asText(), jsonNode.get(Constant.WatchList.M_ID).asText());
     }
     private void validatedWListJson(JsonNode WListJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
