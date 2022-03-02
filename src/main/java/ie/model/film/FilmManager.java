@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
+import ie.model.actor.ActorManager;
+import ie.model.comment.CommentManager;
+import ie.model.user.UserManager;
 import ie.util.types.Constant;
 import java.util.HashSet;
 
@@ -30,7 +33,7 @@ public class FilmManager extends Manager<Film> {
 
     @Override
     public String addElement(Film newObject) throws CustomException {
-        if (!database.modelListExists(newObject.getCast(), Constant.Model.ACTOR)) {
+        if (!ActorManager.getInstance().isIdListValid(newObject.getCast())) {
             throw new ActorNotFoundException();
         }
         var objectId = newObject.getId().toString();
@@ -43,7 +46,7 @@ public class FilmManager extends Manager<Film> {
 
     @Override
     public String updateElement(Film newObject) throws CustomException {
-        if (!database.modelListExists(newObject.getCast(), Constant.Model.ACTOR)) {
+        if (!ActorManager.getInstance().isIdListValid(newObject.getCast())) {
             throw new ActorNotFoundException();
         }
         var objectId = newObject.getId().toString();
@@ -118,8 +121,8 @@ public class FilmManager extends Manager<Film> {
             var filmJsonNode = (ObjectNode) mapper.valueToTree(film);
 
             if (mode == Constant.SER_MODE.LONG) {
-                var castJsonNode = database.serializeElementList(film.getCast(), Constant.Model.ACTOR, Constant.SER_MODE.SHORT);
-                var commentJsonNode = database.serializeElementList(film.getComments(), Constant.Model.COMMENT, Constant.SER_MODE.SHORT);
+                var castJsonNode = mapper.readTree(ActorManager.getInstance().serializeElementList(film.getCast(), Constant.SER_MODE.SHORT));
+                var commentJsonNode = CommentManager.getInstance().serializeElementList(film.getComments(), Constant.SER_MODE.SHORT);
 
                 filmJsonNode.replace(Constant.Movie.CAST, castJsonNode);
                 filmJsonNode.replace(Constant.Movie.COMMENTS, commentJsonNode);
@@ -143,7 +146,7 @@ public class FilmManager extends Manager<Film> {
     }
 
     public void rateMovie(String filmId, String userEmail, int rate) throws CustomException {
-        if (!database.modelExists(userEmail, Constant.Model.USER)) {
+        if (!UserManager.getInstance().isIdValid(userEmail)) {
             throw new UserNotFoundException();
         }
         getElementById(filmId).updateFilmRating(userEmail, rate);

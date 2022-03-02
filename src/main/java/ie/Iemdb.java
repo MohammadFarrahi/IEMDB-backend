@@ -136,30 +136,6 @@ public class Iemdb {
         return mapper.writeValueAsString(jsonNode);
     }
 
-    public Boolean modelListExists(ArrayList<String> idList, Constant.Model modelType) {
-        boolean res;
-        switch (modelType) {
-            case FILM -> res = filmManager.isIdListValid(idList);
-            case USER -> res = userManager.isIdListValid(idList);
-            case ACTOR -> res = actorManager.isIdListValid(idList);
-            case COMMENT -> res = commentManager.isIdListValid(idList);
-            default -> res = false;
-        }
-        return res;
-    }
-
-    public Boolean modelExists(String id, Constant.Model modelType) {
-        boolean res;
-        switch (modelType) {
-            case FILM -> res = filmManager.isIdValid(id);
-            case USER -> res = userManager.isIdValid(id);
-            case ACTOR -> res = actorManager.isIdValid(id);
-            case COMMENT -> res = commentManager.isIdValid(id);
-            default -> res = false;
-        }
-        return res;
-    }
-
     public JsonNode serializeElementList(ArrayList<String> idList, Constant.Model modelType, Constant.SER_MODE mode) throws CustomException {
         switch (modelType) {
             case ACTOR:

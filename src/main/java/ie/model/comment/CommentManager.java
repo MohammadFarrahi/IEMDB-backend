@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import ie.exception.*;
+import ie.model.film.FilmManager;
+import ie.model.user.UserManager;
 import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,10 +41,10 @@ public class CommentManager {
 
         var userId = jsonNode.get(Constant.Comment.U_ID).asText();
         var movieId = jsonNode.get(Constant.Comment.M_ID).asText();
-        if (!database.modelExists(userId, Constant.Model.USER)) {
+        if (!UserManager.getInstance().isIdValid(userId)) {
             throw new UserNotFoundException();
         }
-        var film = database.getFilmById(movieId);
+        var film = FilmManager.getInstance().getElementById(movieId);
 
         commentMap.put(Comment.lastId.toString(), comment);
         film.addCommentId(Comment.lastId.toString());
@@ -73,7 +75,7 @@ public class CommentManager {
     private void ValidateVoteData(Map<String, JsonNode> validatedJson)  throws CustomException  {
         var userEmail = validatedJson.get(Constant.Vote.U_ID).asText();
         var commentId = validatedJson.get(Constant.Vote.C_ID).asText();
-        if (!database.modelExists(userEmail, Constant.Model.USER)) {
+        if (!UserManager.getInstance().isIdValid(userEmail)) {
             throw new UserNotFoundException();
         }
         if (!isIdValid(commentId)) {

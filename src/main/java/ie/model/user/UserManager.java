@@ -7,6 +7,7 @@ import ie.Iemdb;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
+import ie.model.film.FilmManager;
 import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public class UserManager extends Manager<User> {
             throw new InvalidCommandException();
 
         var user = getElementById(jsonNode.get(Constant.WatchList.U_ID).asText());
-        var watchList = database.serializeElementList(user.getWatchList(), Constant.Model.FILM , Constant.SER_MODE.SHORT);
+        var watchList = FilmManager.getInstance().serializeElementList(user.getWatchList(), Constant.SER_MODE.SHORT);
 
         var node = mapper.createObjectNode();
         node.set("WatchList", watchList);
@@ -81,7 +82,7 @@ public class UserManager extends Manager<User> {
 
     public void addToWatchList(String userId, String movieId) throws CustomException {
         var user = getElementById(userId);
-        if (!user.isOlderThan(database.getFilmById(movieId).getAgeLimit()))
+        if (!user.isOlderThan(FilmManager.getInstance().getElementById(movieId).getAgeLimit()))
             throw new AgeLimitException();
 
         user.addToWatchList(movieId);
