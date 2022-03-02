@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.exception.CustomException;
 import ie.exception.MovieAlreadyExistsException;
+import ie.exception.MovieNotFoundException;
 import ie.util.types.Constant;
 import ie.util.types.Email;
 
@@ -77,7 +78,7 @@ public class User {
 
     public void removeFromWatchList(String id) throws CustomException {
         if(!watchList.contains(id))
-            throw new MovieAlreadyExistsException();
+            throw new CustomException("MovieNotFoundInWatchList");
         watchList.remove(id);
     }
 

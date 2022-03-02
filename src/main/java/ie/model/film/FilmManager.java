@@ -137,29 +137,21 @@ public class FilmManager extends Manager<Film> {
         return jsonNode;
     }
 
-
-
-    public void rateMovie(String jsonData) throws JsonProcessingException, CustomException {
-        JsonNode rateJsonNode = mapper.readTree(jsonData);
-        ValidateRateJson(rateJsonNode);
-        ValidateRateData(rateJsonNode);
-
-        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
-        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
-        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        objectMap.get(filmId).updateFilmRating(userEmail, rate);
-    }
-
-    private void ValidateRateData(JsonNode rateJsonNode) throws CustomException {
-        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
-        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
-        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
+    public void rateMovie(String filmId, String userEmail, int rate) throws CustomException {
         if (!database.modelExists(userEmail, Constant.Model.USER)) {
             throw new UserNotFoundException();
         }
-        if (!isIdValid(filmId)) {
-            throw new MovieNotFoundException();
-        }
+        getElementById(filmId).updateFilmRating(userEmail, rate);
+    }
+
+    // TODO : move these methods to another place and pass validated data to userManager. one option would be making a SchemaClass for watchList json
+    public void rateMovie(String jsonData) throws JsonProcessingException, CustomException {
+        JsonNode rateJsonNode = mapper.readTree(jsonData);
+        ValidateRateJson(rateJsonNode);
+
+        rateMovie(rateJsonNode.get(Constant.Rate.M_ID).asText(),
+                rateJsonNode.get(Constant.Rate.U_ID).asText(),
+                rateJsonNode.get(Constant.Rate.RATE).asInt());
     }
     private void ValidateRateJson(JsonNode rateJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
