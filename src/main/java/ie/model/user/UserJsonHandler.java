@@ -1,6 +1,7 @@
 package ie.model.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.generic.model.JsonHandler;
@@ -19,7 +20,10 @@ public class UserJsonHandler implements JsonHandler<User> {
     public User deserialize(String jsonData) throws JsonProcessingException {
         return mapper.readValue(jsonData, User.class);
     }
-
+    @Override
+    public List<User> deserializeList(String jsonData) throws JsonProcessingException {
+        return mapper.readValue(jsonData, new TypeReference<List<User>>(){});
+    }
     @Override
     public String serialize(User object, Set<String> notIncludedFields) {
         return null;

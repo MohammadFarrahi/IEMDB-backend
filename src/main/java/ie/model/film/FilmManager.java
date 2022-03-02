@@ -62,7 +62,13 @@ public class FilmManager extends Manager<Film> {
         var deserializedObject = jsonMapper.deserialize(jsonData);
         return addElement(deserializedObject);
     }
-
+    public ArrayList<String> addElementsJson(String jsonData) throws JsonProcessingException, CustomException {
+        var objectIds = new ArrayList<String>();
+        for (var deserializedObject : jsonMapper.deserializeList(jsonData)) {
+            objectIds.add(addElement(deserializedObject));
+        }
+        return objectIds;
+    }
     public String updateElementJson(String jsonData) throws JsonProcessingException, CustomException {
         var deserializedObject = jsonMapper.deserialize(jsonData);
         return updateElement(deserializedObject);

@@ -1,5 +1,7 @@
 package ie;
 
+import ie.exception.CustomException;
+
 import java.util.Scanner;
 
 public class Cli {

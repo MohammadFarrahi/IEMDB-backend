@@ -1,12 +1,12 @@
 package ie.model.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.generic.model.JsonHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +22,10 @@ public class CommentJsonHandler implements JsonHandler<Comment> {
     public Comment deserialize(String jsonData) throws JsonProcessingException {
         return mapper.readValue(jsonData, Comment.class);
     }
-
+    @Override
+    public List<Comment> deserializeList(String jsonData) throws JsonProcessingException {
+        return mapper.readValue(jsonData, new TypeReference<List<Comment>>(){});
+    }
     @Override
     public String serialize(Comment object, Set<String> notIncludedFields) {
         try {
