@@ -52,7 +52,13 @@ public class CommentManager extends Manager<Comment> {
         var comment = jsonMapper.deserialize(jsonData);
         return addElement(comment);
     }
-
+    public ArrayList<String> addElementsJson(String jsonData) throws JsonProcessingException, CustomException {
+        var objectIds = new ArrayList<String>();
+        for (var deserializedObject : jsonMapper.deserializeList(jsonData)) {
+            objectIds.add(addElement(deserializedObject));
+        }
+        return objectIds;
+    }
     public String serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
         var comment = getElementById(commentId);
         if (mode == Constant.SER_MODE.SHORT) {

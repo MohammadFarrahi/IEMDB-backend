@@ -1,6 +1,7 @@
 package ie.model.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,10 @@ public class FilmJsonHandler implements JsonHandler<Film> {
     public Film deserialize(String jsonData) throws JsonProcessingException {
         return mapper.readValue(jsonData, Film.class);
     }
-
+    @Override
+    public List<Film> deserializeList(String jsonData) throws JsonProcessingException {
+        return mapper.readValue(jsonData, new TypeReference<List<Film>>(){});
+    }
     @Override
     public String serialize(Film object, Set<String> notIncludedFields) {
         try {

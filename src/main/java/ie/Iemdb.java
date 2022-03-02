@@ -2,14 +2,17 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.model.actor.ActorManager;
-import ie.model.comment.CommentManager;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
+import ie.model.actor.ActorManager;
+import ie.model.comment.CommentManager;
 import ie.model.film.FilmManager;
-import ie.util.types.Response;
 import ie.model.user.UserManager;
 import ie.util.types.Constant;
+import ie.util.types.Response;
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Iemdb {
@@ -80,6 +83,16 @@ public class Iemdb {
         return Constant.SuccessMessage.ADD_MOVIE;
     }
 
+    private String addActor(String data)throws CustomException, JsonProcessingException {
+        var x = actorManager.updateOrAddElementJson(data);
+        return Constant.SuccessMessage.ADD_ACTOR;
+    }
+
+    private String addComment(String data) throws CustomException, JsonProcessingException {
+        var commentId = commentManager.addElementJson(data);
+        return "comment with id " + commentId + " added successfully";
+    }
+
     private String addToWatchList(String data) throws CustomException, JsonProcessingException {
         userManager.addToWatchList(data);
         return Constant.SuccessMessage.ADD_TO_WATCH_LIST;
@@ -115,16 +128,6 @@ public class Iemdb {
             throw new InvalidCommandException();
 
         return filmManager.serializeElementList(filmManager.filterElementsByGenre(jsonNode.get("genre").asText()), Constant.SER_MODE.SHORT);
-    }
-
-    private String addActor(String data)throws CustomException, JsonProcessingException {
-        var x = actorManager.updateOrAddElementJson(data);
-        return Constant.SuccessMessage.ADD_ACTOR;
-    }
-
-    private String addComment(String data) throws CustomException, JsonProcessingException {
-        var commentId = commentManager.addElementJson(data);
-        return "comment with id " + commentId + " added successfully";
     }
 
     private String rateMovie(String data) throws CustomException, JsonProcessingException {
