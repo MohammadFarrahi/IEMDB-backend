@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import ie.Iemdb;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
@@ -54,15 +52,39 @@ public class CommentManager extends Manager<Comment> {
         return addElement(comment);
     }
 
+    public String serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
+        var comment = getElementById(commentId);
+        if (mode == Constant.SER_MODE.SHORT) {
+            return jsonMapper.serialize(comment, Constant.Actor.REMOVABLE_SHORT_SER);
+        } else {
+            return jsonMapper.serialize(comment, null);
+        }
+    }
+    public String serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws CustomException {
+        var objects = getElementsById(commentIds);
+        if (mode == Constant.SER_MODE.SHORT) {
+            return jsonMapper.serialize(objects, Constant.Actor.REMOVABLE_SHORT_SER);
+        } else {
+            return jsonMapper.serialize(objects, null);
+        }
+    }
+    public void voteComment(String commentId, String userId, int vote) throws CustomException {
+        if (!UserManager.getInstance().isIdValid(userId)) {
+            throw new UserNotFoundException();
+        }
+        getElementById(commentId).updateCommentVotes(userId, vote);
+    }
+
+    // TODO : move these methods to another place and pass validated data to commentManger. one option would be moving them to CommentJsonHandler
     public void voteComment(String jsonData) throws JsonProcessingException, CustomException {
         JsonNode voteJsonNode = mapper.readTree(jsonData);
         var validatedVoteJson = ValidateVoteJson(voteJsonNode);
         ValidateVoteData(validatedVoteJson);
 
-        objectMap.get(validatedVoteJson.get(Constant.Vote.C_ID).asText())
-                .updateCommentVotes(validatedVoteJson.get(Constant.Vote.U_ID).asText(), validatedVoteJson.get(Constant.Vote.VOTE).asInt());
+        voteComment(validatedVoteJson.get(Constant.Vote.C_ID).asText(),
+                validatedVoteJson.get(Constant.Vote.U_ID).asText(),
+                validatedVoteJson.get(Constant.Vote.VOTE).asInt());
     }
-
     private void ValidateVoteData(Map<String, JsonNode> validatedJson)  throws CustomException  {
         var userEmail = validatedJson.get(Constant.Vote.U_ID).asText();
         var commentId = validatedJson.get(Constant.Vote.C_ID).asText();
@@ -73,7 +95,6 @@ public class CommentManager extends Manager<Comment> {
             throw new CommentNotFoundException();
         }
     }
-
     private Map<String, JsonNode> ValidateVoteJson(JsonNode voteJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         voteJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
@@ -93,26 +114,5 @@ public class CommentManager extends Manager<Comment> {
         }
         return validatedJson;
     }
-
-    public JsonNode serializeElement(String commentId, Constant.SER_MODE mode) throws CustomException {
-        var comment = getElementById(commentId);
-        try {
-            var commentJsonNode = (ObjectNode) mapper.valueToTree(comment);
-            if (mode == Constant.SER_MODE.SHORT) {
-                commentJsonNode.remove(Constant.Comment.REMOVABLE_SHORT_SER);
-            }
-            return commentJsonNode;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    public JsonNode serializeElementList(ArrayList<String> commentIds, Constant.SER_MODE mode) throws CustomException {
-        var commentJsonList = new ArrayList<JsonNode>();
-        for (var id : commentIds) {
-            commentJsonList.add(serializeElement(id, mode));
-        }
-        return mapper.valueToTree(commentJsonList);
-    }
-
 }
 
