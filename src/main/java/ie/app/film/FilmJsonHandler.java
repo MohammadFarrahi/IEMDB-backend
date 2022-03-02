@@ -1,4 +1,4 @@
-package ie.model.film;
+package ie.app.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import ie.app.actor.ActorManager;
+import ie.app.comment.CommentManager;
 import ie.generic.model.JsonHandler;
-import ie.model.actor.ActorManager;
-import ie.model.comment.CommentManager;
 import ie.util.types.Constant;
 
 

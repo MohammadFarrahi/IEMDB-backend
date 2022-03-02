@@ -1,4 +1,4 @@
-package ie.model.actor;
+package ie.app.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

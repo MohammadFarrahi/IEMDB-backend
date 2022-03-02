@@ -1,4 +1,4 @@
-package ie.model.user;
+package ie.app.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;

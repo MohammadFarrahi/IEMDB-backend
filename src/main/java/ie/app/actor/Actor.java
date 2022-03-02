@@ -1,4 +1,4 @@
-package ie.model.actor;
+package ie.app.actor;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;

@@ -1,17 +1,16 @@
-package ie.model.film;
+package ie.app.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import ie.Iemdb;
+
 import java.util.ArrayList;
+
+import ie.app.actor.ActorManager;
+import ie.app.user.UserManager;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
-import ie.model.actor.ActorManager;
-import ie.model.comment.CommentManager;
-import ie.model.user.UserManager;
 import ie.util.types.Constant;
 import java.util.HashSet;
 

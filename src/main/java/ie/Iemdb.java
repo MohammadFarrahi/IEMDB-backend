@@ -4,15 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
-import ie.model.actor.ActorManager;
-import ie.model.comment.CommentManager;
-import ie.model.film.FilmManager;
-import ie.model.user.UserManager;
+import ie.app.actor.ActorManager;
+import ie.app.comment.CommentManager;
+import ie.app.film.FilmManager;
+import ie.app.user.UserManager;
 import ie.util.types.Constant;
 import ie.util.types.Response;
 import org.jsoup.Jsoup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Iemdb {

@@ -1,14 +1,14 @@
-package ie.model.comment;
+package ie.app.comment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.app.film.FilmManager;
+import ie.app.user.UserManager;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
-import ie.model.film.FilmManager;
-import ie.model.user.UserManager;
 import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashMap;

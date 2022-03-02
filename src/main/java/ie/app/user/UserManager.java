@@ -1,4 +1,4 @@
-package ie.model.user;
+package ie.app.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
-import ie.model.film.FilmManager;
+import ie.app.film.FilmManager;
 import ie.util.types.Constant;
 import java.util.ArrayList;
 import java.util.HashSet;

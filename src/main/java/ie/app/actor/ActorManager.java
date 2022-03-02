@@ -1,7 +1,6 @@
-package ie.model.actor;
+package ie.app.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ie.Iemdb;
 import ie.exception.ActorNotFoundException;
 import ie.exception.CustomException;
 import ie.generic.model.JsonHandler;
