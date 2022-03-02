@@ -1,73 +1,71 @@
 package ie.model.film;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.Iemdb;
 import java.util.ArrayList;
-
 import ie.exception.*;
+import ie.generic.model.JsonHandler;
+import ie.generic.model.Manager;
 import ie.util.types.Constant;
-import java.util.HashMap;
 import java.util.HashSet;
 
-public class FilmManager {
-    private final HashMap<String, Film> filmMap;
+public class FilmManager extends Manager<Film> {
     private final ObjectMapper mapper;
     private final Iemdb database;
+    private final JsonHandler<Film> jsonMapper;
 
     public FilmManager(Iemdb database) {
         this.database = database;
-
+        jsonMapper = new FilmJsonHandler();
         mapper = new ObjectMapper();
-        mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
-        filmMap = new HashMap<>();
+    }
+
+    @Override
+    public String addElement(Film newObject) throws CustomException {
+        if (!database.modelListExists(newObject.getCast(), Constant.Model.ACTOR)) {
+            throw new ActorNotFoundException();
+        }
+        var objectId = newObject.getId().toString();
+        if (isIdValid(objectId)) {
+            throw new MovieAlreadyExistsException();
+        }
+        this.objectMap.put(objectId, newObject);
+        return objectId;
+    }
+
+    @Override
+    public String updateElement(Film newObject) throws CustomException {
+        if (!database.modelListExists(newObject.getCast(), Constant.Model.ACTOR)) {
+            throw new ActorNotFoundException();
+        }
+        var objectId = newObject.getId().toString();
+        if (!isIdValid(objectId)) {
+            throw new MovieNotFoundException();
+        }
+        objectMap.put(objectId, newObject);
+        return objectId;
+    }
+
+    public String addElementJson(String jsonData) throws JsonProcessingException, CustomException {
+        var deserializedObject = jsonMapper.deserialize(jsonData);
+        return addElement(deserializedObject);
+    }
+
+    public String updateElementJson(String jsonData) throws JsonProcessingException, CustomException {
+        var deserializedObject = jsonMapper.deserialize(jsonData);
+        return updateElement(deserializedObject);
     }
 
     public String updateOrAddElement(String jsonData) throws JsonProcessingException, CustomException {
-        var jsonNode = mapper.readTree(jsonData);
-        var filmId = jsonNode.get(Constant.Movie.ID_S).asText();
-        var cast = Iemdb.convertListToString(mapper.convertValue(mapper.readTree(jsonData).get(Constant.Movie.CAST), ArrayList.class));
-
-        if (!database.modelListExists(cast, Constant.Model.ACTOR)) {
-            throw new ActorNotFoundException();
+        try {
+            return updateElementJson(jsonData);
         }
-        if (isIdValid(filmId)) {
-            updateElement(filmId, jsonData);
-        } else {
-            addElement(jsonData);
+        catch (Exception e) {
+            return addElementJson(jsonData);
         }
-        return filmId;
-    }
-
-    public String addElement(String jsonData) throws JsonProcessingException, CustomException {
-        String filmId = mapper.readTree(jsonData).get(Constant.Movie.ID_S).asText();
-        if (isIdValid(filmId)) {
-            throw new MovieAlreadyExistsException();
-        }
-        var newFilm = mapper.readValue(jsonData, Film.class);
-        filmMap.put(filmId, newFilm);
-        return filmId;
-    }
-
-    public void updateElement(String id, String jsonData) throws JsonProcessingException, CustomException {
-        if (!isIdValid(id)) {
-            throw new MovieNotFoundException();
-        }
-        mapper.readerForUpdating(filmMap.get(id)).readValue(jsonData);
-    }
-
-    public void rateMovie(String jsonData) throws JsonProcessingException, CustomException {
-        JsonNode rateJsonNode = mapper.readTree(jsonData);
-        ValidateRateJson(rateJsonNode);
-        ValidateRateData(rateJsonNode);
-
-        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
-        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
-        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
-        filmMap.get(filmId).updateFilmRating(userEmail, rate);
     }
 
     public JsonNode getMovieByIdJson(String data) throws JsonProcessingException, CustomException  {
@@ -94,17 +92,12 @@ public class FilmManager {
         return serializeElementList(filteredFilmsIds, Constant.SER_MODE.SHORT);
     }
 
-    public Film getElement(String id) throws CustomException {
-        if (filmMap.containsKey(id)) {
-            return filmMap.get(id);
-        }
-        throw new MovieNotFoundException();
-    }
+
 
     public ArrayList<String> filterElement(String genre) {
         try {
             ArrayList<String> filteredIdList = new ArrayList<>();
-            for (var pair : filmMap.entrySet()) {
+            for (var pair : objectMap.entrySet()) {
                 if (pair.getValue().includeGenre(genre))
                     filteredIdList.add(pair.getKey());
             }
@@ -115,7 +108,7 @@ public class FilmManager {
     }
 
     public JsonNode serializeElement(String filmId, Constant.SER_MODE mode) throws CustomException {
-        var film = getElement(filmId);
+        var film = getElementById(filmId);
         try {
             var filmJsonNode = (ObjectNode) mapper.valueToTree(film);
 
@@ -144,6 +137,19 @@ public class FilmManager {
         return jsonNode;
     }
 
+
+
+    public void rateMovie(String jsonData) throws JsonProcessingException, CustomException {
+        JsonNode rateJsonNode = mapper.readTree(jsonData);
+        ValidateRateJson(rateJsonNode);
+        ValidateRateData(rateJsonNode);
+
+        var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
+        var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
+        var rate = rateJsonNode.get(Constant.Rate.RATE).asInt();
+        objectMap.get(filmId).updateFilmRating(userEmail, rate);
+    }
+
     private void ValidateRateData(JsonNode rateJsonNode) throws CustomException {
         var userEmail = rateJsonNode.get(Constant.Rate.U_ID).asText();
         var filmId = rateJsonNode.get(Constant.Rate.M_ID).asText();
@@ -155,7 +161,6 @@ public class FilmManager {
             throw new MovieNotFoundException();
         }
     }
-
     private void ValidateRateJson(JsonNode rateJsonNode) throws CustomException {
         ArrayList<String> jsonFiledNames = new ArrayList<>();
         rateJsonNode.fieldNames().forEachRemaining(jsonFiledNames::add);
@@ -170,17 +175,11 @@ public class FilmManager {
             throw new InvalidCommandException();
         }
     }
-
-    public boolean isIdValid(String id) {
-        return filmMap.containsKey(id);
-    }
-
-    public boolean isIdListValid(ArrayList<String> ids) {
-        for (var id : ids) {
-            if (!filmMap.containsKey(id))
-                return false;
-        }
-        return true;
-    }
+//    public Film getElementById(String id) throws CustomException {
+//        if (filmMap.containsKey(id)) {
+//            return filmMap.get(id);
+//        }
+//        throw new MovieNotFoundException();
+//    }
 
 }

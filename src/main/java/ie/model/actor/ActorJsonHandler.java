@@ -1,6 +1,7 @@
 package ie.model.actor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,6 +16,7 @@ public class ActorJsonHandler implements JsonHandler<Actor> {
 
     public ActorJsonHandler() {
         mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
     }
     @Override
     public Actor deserialize(String jsonData) throws JsonProcessingException {

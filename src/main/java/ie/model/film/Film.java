@@ -28,10 +28,6 @@ public class Film {
     private HashMap<String, Integer> userRateMap;
 
     // for jackson serialization
-    @JsonGetter(Constant.Movie.ID_G)
-    private Integer getId() {
-        return Integer.parseInt(this.id);
-    }
     @JsonGetter(Constant.Movie.NAME)
     private String getName() {
         return this.name;
@@ -65,6 +61,10 @@ public class Film {
         return this.duration;
     }
 
+    @JsonGetter(Constant.Movie.ID_G)
+    public Integer getId() {
+        return Integer.parseInt(this.id);
+    }
     @JsonGetter(Constant.Movie.AGE_L)
     public Integer getAgeLimit() {
         return this.ageLimit;
