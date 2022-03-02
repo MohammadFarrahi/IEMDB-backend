@@ -59,7 +59,6 @@ public class Constant {
         public static final String LIKES = "like";
         public static final String DISLIKES = "dislike";
 
-
         public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
             add(M_ID);
             add(C_DATE);
@@ -144,5 +143,12 @@ public class Constant {
     public static enum SER_MODE {
         SHORT,
         LONG
+    }
+    public static class FetchApiUrl {
+        public static final String BASE = "http://138.197.181.131:5000/api/";
+        public static final String ACTOR = "actors";
+        public static final String USER = "users";
+        public static final String MOVIE = "movies";
+        public static final String COMMENT = "comments";
     }
 }

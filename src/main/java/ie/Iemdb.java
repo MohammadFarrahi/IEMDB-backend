@@ -31,6 +31,18 @@ public class Iemdb {
         this.mapper = new ObjectMapper();
     }
 
+    public void fetchData() throws CustomException {
+        String json = null;
+        try {
+            var s1 = actorManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.ACTOR).ignoreContentType(true).execute().body());
+            var s2 = userManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.USER).ignoreContentType(true).execute().body());
+            var s3 = filmManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.MOVIE).ignoreContentType(true).execute().body());
+            var s4 = commentManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.COMMENT).ignoreContentType(true).execute().body());
+        } catch (Exception e) {
+            throw new CustomException("DataFetchingFailed");
+        }
+    }
+
     public void runTextCommand(String command, String data) {
         String resData;
         try {
