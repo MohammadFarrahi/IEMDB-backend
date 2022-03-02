@@ -13,12 +13,17 @@ import ie.util.types.Constant;
 import java.util.HashSet;
 
 public class FilmManager extends Manager<Film> {
+    private static FilmManager instance = null;
     private final ObjectMapper mapper;
-    private final Iemdb database;
     private final JsonHandler<Film> jsonMapper;
 
-    public FilmManager(Iemdb database) {
-        this.database = database;
+    public static FilmManager getInstance() {
+        if (instance == null) {
+            instance = new FilmManager();
+        }
+        return instance;
+    }
+    private FilmManager() {
         jsonMapper = new FilmJsonHandler();
         mapper = new ObjectMapper();
     }

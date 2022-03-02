@@ -14,14 +14,19 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class CommentManager {
+    private static CommentManager instance = null;
     ObjectMapper mapper;
     private Integer lastCommentId;
     private HashMap<String, Comment> commentMap;
-    private final Iemdb database;
 
-    public CommentManager(Iemdb database) {
-        this.database = database;
+    public static CommentManager getInstance() {
+        if (instance == null) {
+            instance = new CommentManager();
+        }
+        return instance;
+    }
 
+    private CommentManager() {
         mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
         this.commentMap = new HashMap<>();

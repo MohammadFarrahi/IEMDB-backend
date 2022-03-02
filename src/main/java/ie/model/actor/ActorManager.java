@@ -11,10 +11,17 @@ import ie.util.types.Constant;
 import java.util.ArrayList;
 
 public class ActorManager extends Manager<Actor> {
+    private static ActorManager instance = null;
     private final JsonHandler<Actor> jsonMapper;
 
-    // TODO : remove database from constructor and make manager singleton
-    public ActorManager(Iemdb database) {
+    public static ActorManager getInstance() {
+        if (instance == null) {
+            instance = new ActorManager();
+        }
+        return instance;
+    }
+
+    private ActorManager() {
         jsonMapper = new ActorJsonHandler();
     }
 

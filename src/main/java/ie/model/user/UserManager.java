@@ -12,15 +12,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class UserManager extends Manager<User> {
-    // TODO : remove database and make manager singleton
-    private final Iemdb database;
+    private static UserManager instance = null;
     private final ObjectMapper mapper;
     private final JsonHandler<User> jsonMapper;
 
-    public UserManager (Iemdb database) {
+    public static UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
+    }
+    private UserManager () {
         jsonMapper = new UserJsonHandler();
         mapper = new ObjectMapper();
-        this.database = database;
     }
 
     @Override

@@ -23,10 +23,10 @@ public class Iemdb {
     private final ObjectMapper mapper;
 
     public Iemdb() {
-        this.userManager = new UserManager(this);
-        this.filmManager = new FilmManager(this);
-        this.actorManager = new ActorManager(this);
-        this.commentManager = new CommentManager(this);
+        this.userManager = UserManager.getInstance();
+        this.filmManager = FilmManager.getInstance();
+        this.actorManager = ActorManager.getInstance();
+        this.commentManager = CommentManager.getInstance();
         this.mapper = new ObjectMapper();
     }
 
