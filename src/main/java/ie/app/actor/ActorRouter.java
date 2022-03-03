@@ -12,13 +12,15 @@ public class ActorRouter extends Router {
     @Override
     public void addRoutes(Javalin javalin) {
         javalin.routes(() -> {
-            path(UrlsPath.ACTORS + UrlsPath.A_ID, () -> {
-                get(controller::actorHandler);
+            path(UrlsPath.ACTORS, () -> {
+                path(UrlsPath.A_ID, () -> {
+                    get(controller::actorHandler);
+                });
             });
         });
     }
     public static class UrlsPath {
         public static final String ACTORS = "/actors";
-        public static final String A_ID = "/{actor_id}";
+        public static final String A_ID = "{actor_id}";
     }
 }
