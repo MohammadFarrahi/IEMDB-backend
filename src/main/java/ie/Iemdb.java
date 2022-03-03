@@ -2,19 +2,26 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.app.film.FilmController;
+import ie.app.film.FilmRouter;
+import ie.app.film.FilmView;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
 import ie.app.actor.ActorManager;
 import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
+import ie.generic.router.Router;
+import ie.network.Server;
 import ie.util.types.Constant;
 import ie.util.types.Response;
 import org.jsoup.Jsoup;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Iemdb {
+    private Server server;
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;
@@ -23,6 +30,8 @@ public class Iemdb {
     private final ObjectMapper mapper;
 
     public Iemdb() {
+        Router[] routers = {new FilmRouter()};
+        this.server = new Server(routers);
         this.userManager = UserManager.getInstance();
         this.filmManager = FilmManager.getInstance();
         this.actorManager = ActorManager.getInstance();
@@ -41,6 +50,10 @@ public class Iemdb {
             throw new CustomException("DataFetchingFailed");
         }
     }
+    public void startServer() {
+        server.runServer();
+    }
+
 
     public void runTextCommand(String command, String data) {
         String resData;

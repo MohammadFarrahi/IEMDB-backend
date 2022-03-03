@@ -60,6 +60,8 @@ public class Film {
     private Integer getDuration() {
         return this.duration;
     }
+    @JsonGetter(Constant.Movie.IMDB)
+    public Double getImdbRate() { return imdbRate; }
 
     @JsonGetter(Constant.Movie.ID_G)
     public Integer getId() {
