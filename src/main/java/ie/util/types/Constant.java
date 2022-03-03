@@ -157,9 +157,9 @@ public class Constant {
         public static final String HOST = "localhost";
         public static final int PORT = 8080;
         public static final String MOVIES = "/movies";
-
     }
     public static class Template {
         public static final String MOVIES = "src/main/resources/movies.html";
+        public static final String ACTOR = "src/main/resources/actor.html";
     }
 }

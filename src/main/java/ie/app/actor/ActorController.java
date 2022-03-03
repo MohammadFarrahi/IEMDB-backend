@@ -1,8 +1,11 @@
 package ie.app.actor;
 
+import ie.app.film.FilmManager;
 import ie.exception.CustomException;
 import ie.generic.controller.Controller;
 import io.javalin.http.Context;
+
+import java.io.IOException;
 
 public class ActorController extends Controller {
     private ActorView viewHandler;
@@ -10,9 +13,10 @@ public class ActorController extends Controller {
         this.viewHandler = new ActorView();
     }
 
-    public void actorHandler(Context ctx) throws CustomException {
+    public void actorHandler(Context ctx) throws CustomException, IOException {
         var actorId = ctx.pathParamAsClass(ActorRouter.UrlsPath.A_ID, Integer.class).get();
         var actor = ActorManager.getInstance().getElementById(actorId.toString());
-        ctx.html(viewHandler.getActorHtmlResponse(actor));
+        var performedMovies = FilmManager.getInstance().getElementsById(actor.getPerformedMovies());
+        ctx.html(viewHandler.getActorHtmlResponse(actor, performedMovies));
     }
 }
