@@ -145,10 +145,19 @@ public class Constant {
         LONG
     }
     public static class FetchApiUrl {
-        public static final String BASE = "http://138.197.181.131:5000/api/";
-        public static final String ACTOR = "actors";
-        public static final String USER = "users";
-        public static final String MOVIE = "movies";
-        public static final String COMMENT = "comments";
+        public static final String BASE = "http://138.197.181.131:5000/api";
+        public static final String ACTOR = "/actors";
+        public static final String USER = "/users";
+        public static final String MOVIE = "/movies";
+        public static final String COMMENT = "/comments";
+    }
+    public static class Server {
+        public static final String HOST = "localhost";
+        public static final int PORT = 8080;
+        public static final String MOVIES = "/movies";
+
+    }
+    public static class Template {
+        public static final String MOVIES = "src/main/resources/movies.html";
     }
 }

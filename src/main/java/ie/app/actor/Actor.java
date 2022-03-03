@@ -19,7 +19,7 @@ public class Actor {
         return Integer.parseInt(id);
     }
     @JsonGetter(Constant.Actor.NAME)
-    private String getName() {
+    public String getName() {
         return name;
     }
     @JsonGetter(Constant.Actor.B_DATE)
