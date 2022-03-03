@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import ie.app.actor.ActorManager;
@@ -12,6 +13,8 @@ import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
 import ie.util.types.Constant;
+import jdk.jshell.execution.LoaderDelegate;
+
 import java.util.HashSet;
 
 public class FilmManager extends Manager<Film> {
@@ -93,6 +96,15 @@ public class FilmManager extends Manager<Film> {
             return null;
         }
     }
+    public ArrayList<String> filterElementsByYear(String from, String to) {
+        var ids = new ArrayList<String>();
+        for(var film : objectMap.entrySet()) {
+            if(!film.getValue().isCreatedBefore(from) && !film.getValue().isCreatedAfter(to)) {
+                ids.add(film.getKey());
+            }
+        }
+        return ids;
+    }
     public String serializeElement(String filmId, Constant.SER_MODE mode) throws CustomException {
         var film = getElementById(filmId);
         if (mode == Constant.SER_MODE.SHORT) {
@@ -102,7 +114,6 @@ public class FilmManager extends Manager<Film> {
             return jsonMapper.serialize(film, null);
         }
     }
-    // TODO : remove this issue in iemdb
     public String serializeElementList(ArrayList<String> filmIds, Constant.SER_MODE mode) throws CustomException {
         var objects = getElementsById(filmIds);
         if (mode == Constant.SER_MODE.SHORT) {

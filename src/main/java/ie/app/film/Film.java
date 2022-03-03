@@ -126,4 +126,13 @@ public class Film {
         averageRating = (sumOfRates + rate) / userRateMap.size();
         averageRating = Math.floor(averageRating * 10) / 10;
     }
+
+    public boolean isCreatedBefore(String stringDate) {
+        var date = LocalDate.parse(stringDate);
+        return releaseDate.isBefore(date);
+    }
+    public boolean isCreatedAfter(String stringDate) {
+        var date = LocalDate.parse(stringDate);
+        return releaseDate.isAfter(date);
+    }
 }
