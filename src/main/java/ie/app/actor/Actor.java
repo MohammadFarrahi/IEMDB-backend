@@ -6,12 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.util.types.Constant;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Actor {
     private String id;
     private String name;
     private LocalDate birthDate;
     private String nationality;
+    private ArrayList<String> performedMovies;
 
     // for jackson serialization
     @JsonGetter(Constant.Actor.ID_G)
@@ -30,6 +33,10 @@ public class Actor {
     private String getNationality() {
         return nationality;
     }
+    @JsonGetter(Constant.Actor.MOVIES)
+    public List<String> getPerformedMovies() {
+        return performedMovies;
+    }
 
     @JsonCreator
     private Actor (
@@ -41,6 +48,10 @@ public class Actor {
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate);
         this.nationality = nationality;
+        this.performedMovies = new ArrayList<>();
     }
 
+    public void addToPerformedMovies(String id) {
+        performedMovies.add(id);
+    }
 }

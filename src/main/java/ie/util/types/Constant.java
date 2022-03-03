@@ -10,9 +10,11 @@ public class Constant {
         public static final String NAME = "name";
         public static final String B_DATE = "birthDate";
         public static final String NATION = "nationality";
+        public static final String MOVIES = "performedMovies";
         public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
             add(B_DATE);
             add(NATION);
+            add(MOVIES);
         }};
     }
     public static class Movie {
