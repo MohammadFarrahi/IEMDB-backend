@@ -1,8 +1,16 @@
 package ie;
 
+import ie.exception.CustomException;
+
 public class App {
     public static void main(String[] args) {
-        Cli cli = new Cli();
-        cli.run();
+        Iemdb iemdbApp = new Iemdb();
+        try {
+            iemdbApp.fetchData();
+            iemdbApp.startServer();
+        } catch (CustomException e) {
+            e.printStackTrace();
+        }
+
     }
 }
