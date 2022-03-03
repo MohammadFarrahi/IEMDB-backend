@@ -3,6 +3,7 @@ package ie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.app.film.FilmController;
+import ie.app.film.FilmRouter;
 import ie.app.film.FilmView;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
@@ -10,6 +11,7 @@ import ie.app.actor.ActorManager;
 import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
+import ie.generic.router.Router;
 import ie.network.Server;
 import ie.util.types.Constant;
 import ie.util.types.Response;
@@ -28,7 +30,8 @@ public class Iemdb {
     private final ObjectMapper mapper;
 
     public Iemdb() {
-        this.server = new Server(new FilmController(new FilmView()));
+        Router[] routers = {new FilmRouter()};
+        this.server = new Server(routers);
         this.userManager = UserManager.getInstance();
         this.filmManager = FilmManager.getInstance();
         this.actorManager = ActorManager.getInstance();

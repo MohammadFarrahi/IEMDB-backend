@@ -1,6 +1,7 @@
 package ie.network;
 
 import ie.app.film.FilmController;
+import ie.generic.router.Router;
 import ie.util.types.Constant;
 import io.javalin.Javalin;
 
@@ -9,13 +10,11 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 
 public class Server {
     private final Javalin javalinServer;
-    public Server(FilmController filmController) {
+    public Server(Router[] routers) {
         javalinServer = Javalin.create();
-        javalinServer.routes(() -> {
-            path(Constant.Server.MOVIES, () -> {
-                get(filmController::moviesHandler);
-            });
-        });
+        for(var router : routers) {
+            router.addRoutes(javalinServer);
+        }
     }
     public void runServer() {
         javalinServer.start(Constant.Server.HOST, Constant.Server.PORT);

@@ -13,8 +13,8 @@ import java.util.List;
 
 public class FilmController extends Controller {
     FilmView viewHandler;
-    public FilmController(FilmView viewHandler) {
-        this.viewHandler = viewHandler;
+    public FilmController() {
+        this.viewHandler = new FilmView();
     }
     public void moviesHandler (Context ctx) throws CustomException, IOException {
         var films = FilmManager.getInstance().getElementsById(null);
