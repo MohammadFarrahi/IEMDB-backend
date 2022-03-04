@@ -1,13 +1,13 @@
 package ie.app.film;
 
 import ie.generic.router.Router;
-import ie.util.types.Constant;
 import io.javalin.Javalin;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class FilmRouter extends Router {
     private FilmController controller;
+
     public FilmRouter() {
         this.controller = new FilmController();
     }
@@ -22,13 +22,17 @@ public class FilmRouter extends Router {
                     path("/add-to-wlist", () -> {
                         post(controller::addToWatchlist);
                     });
-                    path("/rate-movie", () -> {
-                        post(controller::rateMovie);
+                    path("/rateMovie", () -> {
+                        post(controller::rateMovieFormHandler);
                     });
                     path("/vote-comment", () -> {
                         post(controller::voteComment);
                     });
                 });
+            });
+            //TODO: handler this mess of urls. is there any better way?
+            path("rateMovie/{user_id}/{movie_id}/{rate}", () -> {
+                get(controller::rateMovieUrlHandler);
             });
         });
     }
@@ -37,7 +41,7 @@ public class FilmRouter extends Router {
         public static final String MOVIES = "/movies";
         public static final String MOVIES_ID = "{movie_id}";
         public static final String ADD_TO_W_LIST = "add-to-wlist";
-        public static final String RATE_MOVIE = "rate-movie";
+        public static final String RATE_MOVIE = "rateMovie";
         public static final String VOTE_COMMENT = "vote-comment";
     }
 }

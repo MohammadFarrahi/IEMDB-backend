@@ -46,10 +46,20 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 
-    public void rateMovie(Context ctx) throws CustomException, IOException {
+    public void rateMovieFormHandler(Context ctx) throws CustomException, IOException {
         var movieId = ctx.pathParam("movie_id");
         var userId = ctx.formParam("user_id");
         var rate = ctx.formParam("quantity");
+
+        FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
+
+    public void rateMovieUrlHandler(Context ctx) throws CustomException, IOException {
+        System.out.println(ctx.pathParamMap());
+        var movieId = ctx.pathParam("movie_id");
+        var userId = ctx.pathParam("user_id");
+        var rate = ctx.pathParam("rate");
 
         FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
         ctx.html(viewHandler.getSuccessHtmlResponse());
