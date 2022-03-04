@@ -24,4 +24,12 @@ public class FilmController extends Controller {
         }
         ctx.html(viewHandler.getMoviesHtmlResponse(films, filmCasts));
     }
+
+    public void movieHandler (Context ctx) throws CustomException, IOException {
+        var movie_id = ctx.pathParam("movie_id");
+        Film film = FilmManager.getInstance().getElementById(movie_id);
+        List<Actor> cast = ActorManager.getInstance().getElementsById(film.getCast());
+
+        ctx.html(viewHandler.getMovieHtml(film, cast));
+    }
 }

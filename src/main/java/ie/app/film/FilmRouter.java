@@ -16,10 +16,10 @@ public class FilmRouter extends Router {
     @Override
     public void addRoutes(Javalin javalin) {
         javalin.routes(() -> {
-            path(Constant.Server.MOVIES, () -> {
+            path(UrlPath.MOVIES, () -> {
                 get(controller::moviesHandler);
                 path(UrlPath.MOVIES_ID, () -> {
-
+get(controller::movieHandler);
                 });
             });
         });
