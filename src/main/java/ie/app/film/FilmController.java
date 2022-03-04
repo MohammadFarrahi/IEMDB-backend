@@ -45,6 +45,7 @@ public class FilmController extends Controller {
         if(ctx.pathParamMap().size() == 2) {
             var startYear = ctx.pathParam("start_year");
             var endYear = ctx.pathParam("end_year");
+            //TODO: the filter element by year method should work with year not the whole date
             filteredFilmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
         }
         else {
