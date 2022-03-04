@@ -8,7 +8,7 @@ import static io.javalin.apibuilder.ApiBuilder.path;
 import static io.javalin.apibuilder.ApiBuilder.get;
 
 public class FilmRouter extends Router {
-    FilmController controller;
+    private FilmController controller;
     public FilmRouter() {
         this.controller = new FilmController();
     }

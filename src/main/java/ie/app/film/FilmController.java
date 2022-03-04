@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class FilmController extends Controller {
-    FilmView viewHandler;
+    private FilmView viewHandler;
     public FilmController() {
         this.viewHandler = new FilmView();
     }

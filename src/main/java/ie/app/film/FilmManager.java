@@ -44,6 +44,7 @@ public class FilmManager extends Manager<Film> {
             throw new MovieAlreadyExistsException();
         }
         this.objectMap.put(objectId, newObject);
+        ActorManager.getInstance().getElementsById(newObject.getCast()).forEach(actor -> actor.addToPerformedMovies(newObject.getId().toString()));
         return objectId;
     }
 
