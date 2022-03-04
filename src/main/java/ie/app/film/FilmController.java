@@ -88,15 +88,3 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 
-    public void voteCommentHandler(Context ctx) throws CustomException, IOException {
-        var userId = ctx.formParam("user_id");
-        var commentId = ctx.formParam("comment_id");
-        var vote = ctx.formParam("like");
-        if (vote == null) {
-            ctx.html(viewHandler.getSuccessHtmlResponse());
-            return;
-        }
-        CommentManager.getInstance().voteComment(commentId, userId, Integer.parseInt(vote));
-        ctx.html(viewHandler.getSuccessHtmlResponse());
-    }
-}
