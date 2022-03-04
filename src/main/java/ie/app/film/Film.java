@@ -129,12 +129,16 @@ public class Film {
         averageRating = Math.floor(averageRating * 10) / 10;
     }
 
-    public boolean isCreatedBefore(String stringDate) {
-        var date = LocalDate.parse(stringDate);
-        return releaseDate.isBefore(date);
+    public boolean isCreatedBefore(int year) throws CustomException {
+        if(!(0 <= year && year <= 9999)) {
+            throw new CustomException("InvalidYear");
+        }
+        return releaseDate.getYear() < year;
     }
-    public boolean isCreatedAfter(String stringDate) {
-        var date = LocalDate.parse(stringDate);
-        return releaseDate.isAfter(date);
+    public boolean isCreatedAfter(int year) throws CustomException {
+        if(!(0 <= year && year <= 9999)) {
+            throw new CustomException("InvalidYear");
+        }
+        return releaseDate.getYear() > year;
     }
 }

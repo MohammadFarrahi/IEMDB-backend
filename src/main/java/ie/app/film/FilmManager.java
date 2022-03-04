@@ -97,7 +97,7 @@ public class FilmManager extends Manager<Film> {
             return null;
         }
     }
-    public ArrayList<String> filterElementsByYear(String from, String to) {
+    public ArrayList<String> filterElementsByYear(int from, int to) throws CustomException {
         var ids = new ArrayList<String>();
         for(var film : objectMap.entrySet()) {
             if(!film.getValue().isCreatedBefore(from) && !film.getValue().isCreatedAfter(to)) {
