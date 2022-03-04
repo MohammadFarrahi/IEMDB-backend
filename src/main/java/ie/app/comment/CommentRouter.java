@@ -14,7 +14,7 @@ public class CommentRouter extends Router {
         javalin.routes(() -> {
             path(UrlsPath.VCOMMENT, () -> {
                 path(UrlsPath.C_ID, () -> {
-//                    post(controller::voteCommentHandler);
+                    post(controller::voteCommentHandler);
                 });
                 path(UrlsPath.U_ID + '/' + UrlsPath.C_ID + '/' + UrlsPath.VOTE, () -> {
                     get(controller::voteCommentHandler);
