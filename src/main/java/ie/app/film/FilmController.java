@@ -16,19 +16,21 @@ import java.util.List;
 
 public class FilmController extends Controller {
     private FilmView viewHandler;
+
     public FilmController() {
         this.viewHandler = new FilmView();
     }
-    public void moviesHandler (Context ctx) throws CustomException, IOException {
+
+    public void moviesHandler(Context ctx) throws CustomException, IOException {
         var films = FilmManager.getInstance().getElementsById(null);
         List<List<Actor>> filmCasts = new ArrayList<>();
-        for(var film : films) {
+        for (var film : films) {
             filmCasts.add(ActorManager.getInstance().getElementsById(film.getCast()));
         }
         ctx.html(viewHandler.getMoviesHtmlResponse(films, filmCasts));
     }
 
-    public void movieHandler (Context ctx) throws CustomException, IOException {
+    public void movieHandler(Context ctx) throws CustomException, IOException {
         var movieId = ctx.pathParam("movie_id");
         Film film = FilmManager.getInstance().getElementById(movieId);
         List<Actor> cast = ActorManager.getInstance().getElementsById(film.getCast());
@@ -50,6 +52,18 @@ public class FilmController extends Controller {
         var rate = ctx.formParam("quantity");
 
         FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
+
+    public void voteComment(Context ctx) throws CustomException, IOException {
+        var userId = ctx.formParam("user_id");
+        var commentId = ctx.formParam("comment_id");
+        var vote = ctx.formParam("like");
+        if (vote == null) {
+            ctx.html(viewHandler.getSuccessHtmlResponse());
+            return;
+        }
+        CommentManager.getInstance().voteComment(commentId, userId, Integer.parseInt(vote));
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 }

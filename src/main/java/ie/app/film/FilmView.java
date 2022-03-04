@@ -108,7 +108,7 @@ public class FilmView extends View {
         commentHtml.append(makeTableColumn(commentNode.get(Constant.Comment.CONTENT).asText()));
         commentHtml.append(makeTableColumn(commentNode.get(Constant.Comment.LIKES).asText()));
         commentHtml.append(makeTableColumn(commentNode.get(Constant.Comment.DISLIKES).asText()));
-        commentHtml.append(makeTableColumn(makeVoteCommentForm(actionUrl)));
+        commentHtml.append(makeTableColumn(makeVoteCommentForm(actionUrl, commentNode.get(Constant.Comment.ID).asText())));
 
         return commentHtml.html();
     }
@@ -117,11 +117,12 @@ public class FilmView extends View {
         return "<td>" + value + "</td>";
     }
 
-    private String makeVoteCommentForm(String actionUrl) throws IOException {
+    private String makeVoteCommentForm(String actionUrl, String commentId) throws IOException {
         var template = Jsoup.parse(new File(Constant.Template.VOTE_C_FORM), "UTF-8");
-        System.out.println("SHIT SHIT");
         var commentForm = template.select("form").get(0);
         commentForm.attr("action", actionUrl);
+        var commentIdInput = commentForm.getElementById("comment_id");
+        commentIdInput.attr("value", commentId);
         return template.html();
     }
 

@@ -25,6 +25,9 @@ public class FilmRouter extends Router {
                     path("/rate-movie", () -> {
                         post(controller::rateMovie);
                     });
+                    path("/vote-comment", () -> {
+                        post(controller::voteComment);
+                    });
                 });
             });
         });
