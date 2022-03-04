@@ -8,9 +8,11 @@ import ie.app.user.UserManager;
 import ie.exception.CustomException;
 import ie.generic.controller.Controller;
 import io.javalin.http.Context;
+import org.eclipse.jetty.util.IO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -38,7 +40,28 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getMovieHtml(film, cast, comments));
     }
 
-    public void addToWatchlist(Context ctx) throws CustomException, IOException {
+    public void filterMoviesHandler(Context ctx) throws CustomException, IOException {
+        ArrayList<String> filteredFilmIds;
+        if(ctx.pathParamMap().size() == 2) {
+            var startYear = ctx.pathParam("start_year");
+            var endYear = ctx.pathParam("end_year");
+            //TODO: the filter element by year method should work with year not the whole date
+            filteredFilmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
+        }
+        else {
+            var genre = ctx.pathParam("genre");
+            filteredFilmIds = FilmManager.getInstance().filterElementsByGenre(genre);
+        }
+
+        var films = FilmManager.getInstance().getElementsById(filteredFilmIds);
+        List<List<Actor>> filmCasts = new ArrayList<>();
+        for (var film : films) {
+            filmCasts.add(ActorManager.getInstance().getElementsById(film.getCast()));
+        }
+        ctx.html(viewHandler.getMoviesHtmlResponse(films, filmCasts));
+    }
+
+    public void addToWatchlistHandler(Context ctx) throws CustomException, IOException {
         var movieId = ctx.pathParam("movie_id");
         var userId = ctx.formParam("user_id");
 
@@ -46,7 +69,7 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 
-    public void rateMovie(Context ctx) throws CustomException, IOException {
+    public void rateMovieFormHandler(Context ctx) throws CustomException, IOException {
         var movieId = ctx.pathParam("movie_id");
         var userId = ctx.formParam("user_id");
         var rate = ctx.formParam("quantity");
@@ -55,7 +78,17 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 
-    public void voteComment(Context ctx) throws CustomException, IOException {
+    public void rateMovieUrlHandler(Context ctx) throws CustomException, IOException {
+        System.out.println(ctx.pathParamMap());
+        var movieId = ctx.pathParam("movie_id");
+        var userId = ctx.pathParam("user_id");
+        var rate = ctx.pathParam("rate");
+
+        FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
+
+    public void voteCommentHandler(Context ctx) throws CustomException, IOException {
         var userId = ctx.formParam("user_id");
         var commentId = ctx.formParam("comment_id");
         var vote = ctx.formParam("like");
