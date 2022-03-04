@@ -22,7 +22,7 @@ public class UserView  extends View {
         listItems.get(1).append(userJson.get(Constant.User.NICKNAME).asText());
 
         var table = template.select("table").first();
-        var removeForm = Jsoup.parse(new File(Constant.Template.W_LIST_R_F), "UTF-8").select("form").first();
+        var removeForm = Jsoup.parse(new File(Constant.Template.W_LIST_R_F), "UTF-8");
         for(var film : userWatchList) {
             var filmJson = JsonHandler.getNodeOfObject(film);
             var filmHtml = new Element("tr");

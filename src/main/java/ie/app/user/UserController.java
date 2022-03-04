@@ -29,4 +29,12 @@ public class UserController extends Controller {
             ctx.html(viewHandler.getSuccessHtmlResponse());
         }
     }
+    public void deleteWatchListHandler(Context ctx) throws IOException, CustomException {
+        // TODO : check userId with valid email format (?is it necessary?)
+        var userId = ctx.pathParam(UserRouter.UrlsPath.U_ID);
+        // TODO : get "{movie_id}" route from FilmRouter
+        var movieId = ctx.formParamAsClass("movie_id", Integer.class).get().toString();
+        UserManager.getInstance().removeFromWatchList(userId, movieId);
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
 }

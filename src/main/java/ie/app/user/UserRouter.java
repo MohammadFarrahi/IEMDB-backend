@@ -15,6 +15,7 @@ public class UserRouter extends Router {
 //                post(controller::addWatchListItemHandler);
                 path(UrlsPath.U_ID, () -> {
                     get(controller::getWatchListHandler);
+                    post(controller::deleteWatchListHandler);
                     // TODO : get "{movie_id}" route from FilmRouter
                     path("{movie_id}", ()-> {
                         get(controller::addWatchListHandler);
