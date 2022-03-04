@@ -42,13 +42,12 @@ public class FilmController extends Controller {
 
     public void filterMoviesHandler(Context ctx) throws CustomException, IOException {
         ArrayList<String> filteredFilmIds;
-        if(ctx.pathParamMap().size() == 2) {
+        if (ctx.pathParamMap().size() == 2) {
             var startYear = ctx.pathParam("start_year");
             var endYear = ctx.pathParam("end_year");
             //TODO: the filter element by year method should work with year not the whole date
             filteredFilmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
-        }
-        else {
+        } else {
             var genre = ctx.pathParam("genre");
             filteredFilmIds = FilmManager.getInstance().filterElementsByGenre(genre);
         }
@@ -87,4 +86,4 @@ public class FilmController extends Controller {
         FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
-
+}
