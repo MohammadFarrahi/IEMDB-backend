@@ -159,11 +159,15 @@ public class Constant {
     }
     public static class Template {
         public static final String MOVIES = "src/main/resources/movies.html";
+        public static final String MOVIE = "src/main/resources/movie.html";
+
         public static final String ACTOR = "src/main/resources/actor.html";
+
+        public static final String W_LIST = "src/main/resources/watchlist.html";
+        public static final String W_LIST_R_F = "src/main/resources/removeWListForm.html";
+
         public static final String _404_ = "src/main/resources/404.html";
         public static final String _403_ = "src/main/resources/403.html";
         public static final String SUCCESS_200 = "src/main/resources/200.html";
-        public static final String W_LIST = "src/main/resources/watchlist.html";
-        public static final String W_LIST_R_F = "src/main/resources/removeWListForm.html";
     }
 }
