@@ -30,8 +30,6 @@ public class Server {
     }
     // TODO : Maybe this is not the best place. (even ServerExceptionController)
     private void commonExceptionHandler(Exception e, Context ctx) {
-        System.out.println(e.getMessage()); // TODO : remove this later
-        e.printStackTrace();
         if(e instanceof ObjectNotFoundException) {
             Controller.Exception404Handler(e, ctx);
         } else {
