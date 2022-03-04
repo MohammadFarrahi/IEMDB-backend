@@ -18,7 +18,15 @@ public class FilmRouter extends Router {
         javalin.routes(() -> {
             path(Constant.Server.MOVIES, () -> {
                 get(controller::moviesHandler);
+                path(UrlPath.MOVIES_ID, () -> {
+
+                });
             });
         });
+    }
+
+    public static class UrlPath {
+        public static final String MOVIES = "/movies";
+        public static final String MOVIES_ID = "{movie_id}";
     }
 }

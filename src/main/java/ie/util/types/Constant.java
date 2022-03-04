@@ -156,7 +156,6 @@ public class Constant {
     public static class Server {
         public static final String HOST = "localhost";
         public static final int PORT = 8080;
-        public static final String MOVIES = "/movies";
     }
     public static class Template {
         public static final String MOVIES = "src/main/resources/movies.html";
