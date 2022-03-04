@@ -20,6 +20,7 @@ public class CommentManager extends Manager<Comment> {
     private final JsonHandler<Comment> jsonMapper;
     // TODO : remove mapper
     private final ObjectMapper mapper;
+    public static Integer lastCommentId = 0;
 
     public static CommentManager getInstance() {
         if (instance == null) {
@@ -39,9 +40,13 @@ public class CommentManager extends Manager<Comment> {
         }
         var film = FilmManager.getInstance().getElementById(newObject.getCommentFilm());
 
-        objectMap.put(Comment.lastId.toString(), newObject);
-        film.addCommentId(Comment.lastId.toString());
-        return Comment.lastId.toString();
+        if(newObject.setId(lastCommentId+1)) {
+            objectMap.put((++lastCommentId).toString(), newObject);
+            film.addCommentId(lastCommentId.toString());
+            return lastCommentId.toString();
+        } else {
+            throw new CustomException("InvalidComment");
+        }
     }
     @Override
     public String updateElement(Comment newObject) throws CustomException {
