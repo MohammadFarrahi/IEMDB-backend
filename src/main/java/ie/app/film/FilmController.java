@@ -41,4 +41,13 @@ public class FilmController extends Controller {
         UserManager.getInstance().addToWatchList(userId, movieId);
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
+
+    public void rateMovie(Context ctx) throws CustomException, IOException {
+        var movieId = ctx.pathParam("movie_id");
+        var userId = ctx.formParam("user_id");
+        var rate = ctx.formParam("quantity");
+
+        FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
 }

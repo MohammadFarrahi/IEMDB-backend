@@ -22,6 +22,9 @@ public class FilmRouter extends Router {
                     path("/add-to-wlist", () -> {
                         post(controller::addToWatchlist);
                     });
+                    path("/rate-movie", () -> {
+                        post(controller::rateMovie);
+                    });
                 });
             });
         });
@@ -31,5 +34,6 @@ public class FilmRouter extends Router {
         public static final String MOVIES = "/movies";
         public static final String MOVIES_ID = "{movie_id}";
         public static final String ADD_TO_W_LIST = "add-to-wlist";
+        public static final String RATE_MOVIE = "rate-movie";
     }
 }

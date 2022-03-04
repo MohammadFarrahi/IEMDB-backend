@@ -72,6 +72,9 @@ public class FilmView extends View {
         var watchListForm = template.select("form").get(0);
         watchListForm.attr("action", FilmRouter.UrlPath.MOVIES + "/" + movie.getId() + "/" + FilmRouter.UrlPath.ADD_TO_W_LIST );
 
+        var rateForm = template.select("form").get(1);
+        rateForm.attr("action", FilmRouter.UrlPath.MOVIES + "/" + movie.getId() + "/" + FilmRouter.UrlPath.RATE_MOVIE );
+
         return template.html();
     }
 
