@@ -35,5 +35,6 @@ public class FilmRouter extends Router {
         public static final String MOVIES_ID = "{movie_id}";
         public static final String ADD_TO_W_LIST = "add-to-wlist";
         public static final String RATE_MOVIE = "rate-movie";
+        public static final String VOTE_COMMENT = "vote-comment";
     }
 }

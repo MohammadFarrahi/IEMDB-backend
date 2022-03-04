@@ -11,39 +11,51 @@
             width: 40%;
             text-align: center;
         }
+
     </style>
 </head>
 <body>
-    <ul>
-        <li id="name">name: </li>
-        <li id="summary">
-            summary:
-        </li>
-        <li id="releaseDate">releaseDate: </li>
-        <li id="director">director: </li>
-        <li id="writers">writers: </li>
-        <li id="genres">genres: </li>
-        <li id="cast">cast: </li>
-        <li id="imdbRate">imdb Rate: </li>
-        <li id="rating">rating: </li>
-        <li id="duration">duration: </li>
-        <li id="ageLimit">ageLimit: </li>
-    </ul>
-    <br>
-    <form action="" method="POST">
-        <label>Your ID:</label>
-        <input type="text" name="user_id" value="" />
-        <button type="submit">Add to watchlist</button>
-    </form>
-    <br>
+<ul>
+    <li id="name">name:</li>
+    <li id="summary">
+        summary:
+    </li>
+    <li id="releaseDate">releaseDate:</li>
+    <li id="director">director:</li>
+    <li id="writers">writers:</li>
+    <li id="genres">genres:</li>
+    <li id="cast">cast:</li>
+    <li id="imdbRate">imdb Rate:</li>
+    <li id="rating">rating:</li>
+    <li id="duration">duration:</li>
+    <li id="ageLimit">ageLimit:</li>
+</ul>
+<br>
+<form action="" method="POST">
+    <label>Your ID:</label>
+    <input type="text" name="user_id" value=""/>
+    <button type="submit">Add to watchlist</button>
+</form>
+<br>
 
-    <br><br>
-    <form action="" method="POST">
-        <label>Your ID:</label>
-        <input type="text" name="user_id" value="" />
-        <label>Rate(between 1 and 10):</label>
-        <input type="number" id="quantity" name="quantity" min="1" max="10">
-        <button type="submit">rate</button>
-    </form>
+<br><br>
+<form action="" method="POST">
+    <label>Your ID:</label>
+    <input type="text" name="user_id" value=""/>
+    <label>Rate(between 1 and 10):</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="10">
+    <button type="submit">rate</button>
+</form>
+
+<br><br>
+<table>
+    <tr>
+        <th>nickname</th>
+        <th>comment</th>
+        <th>likes</th>
+        <th>dislikes</th>
+        <th>vote</th>
+    </tr>
+</table>
 </body>
 </html>

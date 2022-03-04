@@ -2,6 +2,8 @@ package ie.app.film;
 
 import ie.app.actor.Actor;
 import ie.app.actor.ActorManager;
+import ie.app.comment.Comment;
+import ie.app.comment.CommentManager;
 import ie.app.user.UserManager;
 import ie.exception.CustomException;
 import ie.generic.controller.Controller;
@@ -30,8 +32,8 @@ public class FilmController extends Controller {
         var movieId = ctx.pathParam("movie_id");
         Film film = FilmManager.getInstance().getElementById(movieId);
         List<Actor> cast = ActorManager.getInstance().getElementsById(film.getCast());
-
-        ctx.html(viewHandler.getMovieHtml(film, cast));
+        List<Comment> comments = CommentManager.getInstance().getElementsById(film.getComments());
+        ctx.html(viewHandler.getMovieHtml(film, cast, comments));
     }
 
     public void addToWatchlist(Context ctx) throws CustomException, IOException {

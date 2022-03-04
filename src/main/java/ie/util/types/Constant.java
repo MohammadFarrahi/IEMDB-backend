@@ -160,6 +160,7 @@ public class Constant {
     public static class Template {
         public static final String MOVIES = "src/main/resources/movies.html";
         public static final String MOVIE = "src/main/resources/movie.html";
+        public static final String VOTE_C_FORM = "src/main/resources/voteCommentForm.html";
 
         public static final String ACTOR = "src/main/resources/actor.html";
 
