@@ -18,7 +18,6 @@ public class Comment {
     private LocalDate createdDate;
     private String commentFilm;
     private HashMap<String, Short> userVoteMap;
-    public static Integer lastId = 0;
 
     // for jackson serialization
     @JsonGetter(Constant.Comment.ID)
@@ -56,7 +55,7 @@ public class Comment {
             @JsonProperty(value = Constant.Comment.U_ID, required = true) String commentOwnerId,
             @JsonProperty(value = Constant.Comment.CONTENT, required = true) String text) {
         this.createdDate = LocalDate.now();
-        this.id = String.valueOf(++lastId);
+        this.id = null;
         this.userVoteMap = new HashMap<>();
         this.commentLikes = 0;
         this.commentDislikes = 0;
@@ -69,6 +68,13 @@ public class Comment {
     public void updateCommentVotes(String userId, Integer vote) throws CustomException {
         if (!(-1 <= vote && vote <= 1))
             throw new InvalidVoteValueException();
+        if(userVoteMap.containsKey(userId)) {
+            var prevVote = userVoteMap.get(userId);
+            if (prevVote > 0)
+                this.commentLikes -= prevVote;
+            else
+                this.commentDislikes += prevVote;
+        }
         if (vote > 0)
             this.commentLikes += vote;
         else
@@ -76,4 +82,12 @@ public class Comment {
         userVoteMap.put(userId, vote.shortValue());
     }
 
+
+    public boolean setId(Integer id) {
+        if (this.id == null) {
+            this.id = id.toString();
+            return true;
+        }
+        return false;
+    }
 }

@@ -42,13 +42,12 @@ public class FilmController extends Controller {
 
     public void filterMoviesHandler(Context ctx) throws CustomException, IOException {
         ArrayList<String> filteredFilmIds;
-        if(ctx.pathParamMap().size() == 2) {
+        if (ctx.pathParamMap().size() == 2) {
             var startYear = ctx.pathParam("start_year");
             var endYear = ctx.pathParam("end_year");
             //TODO: the filter element by year method should work with year not the whole date
             filteredFilmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
-        }
-        else {
+        } else {
             var genre = ctx.pathParam("genre");
             filteredFilmIds = FilmManager.getInstance().filterElementsByGenre(genre);
         }
@@ -85,18 +84,6 @@ public class FilmController extends Controller {
         var rate = ctx.pathParam("rate");
 
         FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
-        ctx.html(viewHandler.getSuccessHtmlResponse());
-    }
-
-    public void voteCommentHandler(Context ctx) throws CustomException, IOException {
-        var userId = ctx.formParam("user_id");
-        var commentId = ctx.formParam("comment_id");
-        var vote = ctx.formParam("like");
-        if (vote == null) {
-            ctx.html(viewHandler.getSuccessHtmlResponse());
-            return;
-        }
-        CommentManager.getInstance().voteComment(commentId, userId, Integer.parseInt(vote));
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 }

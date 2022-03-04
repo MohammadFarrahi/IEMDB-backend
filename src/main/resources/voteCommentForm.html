@@ -1,21 +1,24 @@
 <div>
     <form action="" method="POST">
         <input
+                required
                 type="radio"
                 id="like"
-                name="like"
+                name="vote"
                 value="1"
         >
         <label for="like">Like</label>
 
         <input
+                required
                 type="radio"
                 id="dislike"
-                name="like"
+                name="vote"
                 value="-1"
         >
         <label for="dislike">Dislike</label>
         <input
+                required
                 name="comment_id"
                 id="comment_id"
                 type="hidden"
@@ -23,7 +26,7 @@
         >
         <br>
         <label>Your ID:</label>
-        <input type="text" name="user_id" value=""/>
+        <input required type="text" name="user_id" value=""/>
         <button type="submit">Vote</button>
     </form>
     <br>

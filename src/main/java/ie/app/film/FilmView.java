@@ -3,6 +3,7 @@ package ie.app.film;
 import com.fasterxml.jackson.databind.JsonNode;
 import ie.app.actor.Actor;
 import ie.app.comment.Comment;
+import ie.app.comment.CommentRouter;
 import ie.app.user.UserRouter;
 import ie.generic.model.JsonHandler;
 import ie.generic.view.View;
@@ -71,6 +72,7 @@ public class FilmView extends View {
 
         String baseUrl = FilmRouter.UrlPath.MOVIES + "/" + movie.getId() + "/";
 
+        // TODO : make action of form to be /watchList/{movie_id} or /watchList (it will be post request that must be handled in UserRouter)
         // Making the add to watch list form
         var watchListForm = template.select("form").get(0);
         watchListForm.attr("action", baseUrl + FilmRouter.UrlPath.ADD_TO_W_LIST);
@@ -83,7 +85,7 @@ public class FilmView extends View {
         var commentTable = template.select("table").first();
         for (var comment : comments) {
             var commentNode = JsonHandler.getNodeOfObject(comment);
-            commentTable.append(makeCommentRow(commentNode, baseUrl + FilmRouter.UrlPath.VOTE_COMMENT));
+            commentTable.append(makeCommentRow(commentNode, CommentRouter.UrlsPath.VCOMMENT));
         }
         return template.html();
     }
