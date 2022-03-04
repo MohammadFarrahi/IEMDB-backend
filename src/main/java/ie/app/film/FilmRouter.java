@@ -33,9 +33,6 @@ public class FilmRouter extends Router {
                     path("/rateMovie", () -> {
                         post(controller::rateMovieFormHandler);
                     });
-                    path("/vote-comment", () -> {
-                        post(controller::voteCommentHandler);
-                    });
                 });
             });
             //TODO: handler this mess of urls. is there any better way?
@@ -50,7 +47,6 @@ public class FilmRouter extends Router {
         public static final String MOVIES_ID = "{movie_id}";
         public static final String ADD_TO_W_LIST = "add-to-wlist";
         public static final String RATE_MOVIE = "rateMovie";
-        public static final String VOTE_COMMENT = "vote-comment";
         public static final String SEARCH = "search";
     }
 }

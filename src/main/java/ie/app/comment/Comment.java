@@ -68,12 +68,20 @@ public class Comment {
     public void updateCommentVotes(String userId, Integer vote) throws CustomException {
         if (!(-1 <= vote && vote <= 1))
             throw new InvalidVoteValueException();
+        if(userVoteMap.containsKey(userId)) {
+            var prevVote = userVoteMap.get(userId);
+            if (prevVote > 0)
+                this.commentLikes -= prevVote;
+            else
+                this.commentDislikes += prevVote;
+        }
         if (vote > 0)
             this.commentLikes += vote;
         else
             this.commentDislikes -= vote;
         userVoteMap.put(userId, vote.shortValue());
     }
+
 
     public boolean setId(Integer id) {
         if (this.id == null) {
