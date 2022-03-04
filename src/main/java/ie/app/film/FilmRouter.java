@@ -17,16 +17,24 @@ public class FilmRouter extends Router {
         javalin.routes(() -> {
             path(UrlPath.MOVIES, () -> {
                 get(controller::moviesHandler);
+                path(UrlPath.SEARCH, () -> {
+                    path("{start_year}/{end_year}", () -> {
+                        get(controller::filterMoviesHandler);
+                    });
+                    path ("{genre}", () -> {
+                        get(controller::filterMoviesHandler);
+                    });
+                });
                 path(UrlPath.MOVIES_ID, () -> {
                     get(controller::movieHandler);
                     path("/add-to-wlist", () -> {
-                        post(controller::addToWatchlist);
+                        post(controller::addToWatchlistHandler);
                     });
                     path("/rateMovie", () -> {
                         post(controller::rateMovieFormHandler);
                     });
                     path("/vote-comment", () -> {
-                        post(controller::voteComment);
+                        post(controller::voteCommentHandler);
                     });
                 });
             });
@@ -43,5 +51,6 @@ public class FilmRouter extends Router {
         public static final String ADD_TO_W_LIST = "add-to-wlist";
         public static final String RATE_MOVIE = "rateMovie";
         public static final String VOTE_COMMENT = "vote-comment";
+        public static final String SEARCH = "search";
     }
 }
