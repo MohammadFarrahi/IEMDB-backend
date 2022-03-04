@@ -18,4 +18,15 @@ public class UserController extends Controller {
         var userWatchList = FilmManager.getInstance().getElementsById(user.getWatchList());
         ctx.html(viewHandler.getWatchListHtmlResponse(user, userWatchList));
     }
+
+    public void addWatchListHandler(Context ctx) throws CustomException, IOException {
+        if (ctx.method() == "GET") {
+            // TODO : check userId with valid email format (?is it necessary?)
+            var userId = ctx.pathParam(UserRouter.UrlsPath.U_ID);
+            // TODO : get "{movie_id}" route from FilmRouter
+            var movieId = ctx.pathParamAsClass("{movie_id}", Integer.class).get();
+            UserManager.getInstance().addToWatchList(userId, movieId.toString());
+            ctx.html(viewHandler.getSuccessHtmlResponse());
+        }
+    }
 }

@@ -12,9 +12,13 @@ public class UserRouter extends Router {
     public void addRoutes(Javalin javalin) {
         javalin.routes(() -> {
             path(UrlsPath.W_LIST, () -> {
-//                post(controller::postWatchListItemHandler);
+//                post(controller::addWatchListItemHandler);
                 path(UrlsPath.U_ID, () -> {
                     get(controller::getWatchListHandler);
+                    // TODO : get "{movie_id}" route from FilmRouter
+                    path("{movie_id}", ()-> {
+                        get(controller::addWatchListHandler);
+                    });
                 });
             });
         });
