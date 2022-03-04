@@ -1,6 +1,7 @@
 package ie.generic.model;
 
 import ie.exception.CustomException;
+import ie.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public abstract class Manager <T> {
 
     public T getElementById(String id) throws CustomException {
         if (!objectMap.containsKey(id)) {
-            throw new CustomException("ObjectNotFound"); // TODO: handle exception message properly
+            throw new ObjectNotFoundException(); // TODO: handle exception message properly
         }
         return objectMap.get(id);
     }
