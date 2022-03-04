@@ -16,7 +16,7 @@ public class CommentRouter extends Router {
                 path(UrlsPath.C_ID, () -> {
 //                    post(controller::voteCommentHandler);
                 });
-                path(UrlsPath.U_ID + UrlsPath.C_ID + UrlsPath.VOTE, () -> {
+                path(UrlsPath.U_ID + '/' + UrlsPath.C_ID + '/' + UrlsPath.VOTE, () -> {
                     get(controller::voteCommentHandler);
                 });
             });
@@ -24,8 +24,8 @@ public class CommentRouter extends Router {
     }
     public static class UrlsPath {
         public static final String VCOMMENT = "/voteComment";
-        public static final String U_ID = "/{actor_id}";
-        public static final String C_ID = "/{comment_id}";
-        public static final String VOTE = "/{vote}";
+        public static final String U_ID = "{user_id}";
+        public static final String C_ID = "{comment_id}";
+        public static final String VOTE = "{vote}";
     }
 }
