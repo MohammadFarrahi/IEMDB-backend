@@ -2,9 +2,11 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.app.actor.ActorRouter;
 import ie.app.film.FilmController;
 import ie.app.film.FilmRouter;
 import ie.app.film.FilmView;
+import ie.app.user.UserRouter;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
 import ie.app.actor.ActorManager;
@@ -30,7 +32,7 @@ public class Iemdb {
     private final ObjectMapper mapper;
 
     public Iemdb() {
-        Router[] routers = {new FilmRouter()};
+        Router[] routers = {new FilmRouter(), new ActorRouter(), new UserRouter()};
         this.server = new Server(routers);
         this.userManager = UserManager.getInstance();
         this.filmManager = FilmManager.getInstance();
