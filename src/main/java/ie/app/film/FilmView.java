@@ -2,6 +2,7 @@ package ie.app.film;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import ie.app.actor.Actor;
+import ie.app.user.UserRouter;
 import ie.generic.model.JsonHandler;
 import ie.generic.view.View;
 import ie.util.types.Constant;
@@ -49,8 +50,9 @@ public class FilmView extends View {
     public String getMovieHtml(Film movie, List<Actor> cast) throws IOException {
         var template = Jsoup.parse(new File(Constant.Template.MOVIE), "UTF-8");
         var movieJson = JsonHandler.getNodeOfObject(movie);
-        var listItems = template.select("li");
 
+        //Making the first part which is a list for movie's information
+        var listItems = template.select("li");
         List <String> values = Arrays.asList(
                 getSingleValue(movieJson, Constant.Movie.NAME),
                 getSingleValue(movieJson, Constant.Movie.SUMM),
@@ -64,8 +66,12 @@ public class FilmView extends View {
                 getSingleValue(movieJson, Constant.Movie.DURATION),
                 getSingleValue(movieJson, Constant.Movie.AGE_L)
         );
-
         loadListElement(listItems, values);
+
+        // Making the add to watch list part
+        var watchListForm = template.select("form").get(0);
+        watchListForm.attr("action", FilmRouter.UrlPath.MOVIES + "/" + movie.getId() + "/" + FilmRouter.UrlPath.ADD_TO_W_LIST );
+
         return template.html();
     }
 
