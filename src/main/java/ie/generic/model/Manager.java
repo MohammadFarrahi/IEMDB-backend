@@ -40,4 +40,9 @@ public abstract class Manager <T> {
     public boolean isIdListValid(List<String> ids) {
         return objectMap.keySet().containsAll(ids);
     }
+    public void removeElements(List<String> ids) {
+        if (ids == null) {
+            objectMap.clear();
+        }
+    }
 }

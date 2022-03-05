@@ -77,7 +77,6 @@ public class FilmController extends Controller {
     }
 
     public void rateMovieUrlHandler(Context ctx) throws CustomException, IOException {
-        System.out.println(ctx.pathParamMap());
         var movieId = ctx.pathParam("movie_id");
         var userId = ctx.pathParam("user_id");
         var rate = ctx.pathParam("rate");

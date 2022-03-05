@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 
 public abstract class Controller {
     public static void Exception404Handler(Exception e, Context ctx) {
-        System.out.println(e.getMessage()); // TODO : remove this later
-        e.printStackTrace();
         try {
             ctx.html(new String(Files.readAllBytes(Paths.get(Constant.Template._404_)))).status(404);
         } catch (IOException ex) {
@@ -18,8 +16,6 @@ public abstract class Controller {
         }
     }
     public static void Exception403Handler(Exception e, Context ctx) {
-        System.out.println(e.getMessage()); // TODO : remove this later
-        e.printStackTrace();
         try {
             ctx.html(new String(Files.readAllBytes(Paths.get(Constant.Template._403_)))).status(403);
         } catch (IOException ex) {

@@ -3,127 +3,75 @@ package ie;
 import ie.exception.*;
 import ie.util.types.Constant;
 import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
+import org.jsoup.Jsoup;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 public class IemdbTest {
-    Iemdb iemdb;
-    Connection.Response response;
+    Iemdb iemdb = null;
+    Connection.Response response = null;
 
     @Before
     public void setup() throws CustomException {
-        response = null;
         iemdb = new Iemdb();
         iemdb.fetchData();
         iemdb.startServer();
     }
 
-    public void assert404Response() {
-        assertEquals(404, response.statusCode());
+    @After
+    public void tearDown() {
+        iemdb.removeDatabase();
+        iemdb.stopServer();
+        iemdb = null;
+        response = null;
     }
-    public void assert403Response() {
-        assertEquals(403, response.statusCode());
-    }
-    public void assert200Response() {
-        assertEquals(200, response.statusCode());
-    }
-//    public void assertHtmlValue(String htmlElementId, String expectedText) {
-//
-//    }
 
+    public void assert404Response(int code) {
+        assertEquals(404, code);
+    }
+    public void assert403Response(int code) {
+        assertEquals(403, code);
+    }
+    public void assertHtmlValue(String htmlElementId, String expectedText) throws IOException {
+        assertEquals(expectedText, response.parse().getElementById(htmlElementId).text());
+    }
+
+    @Test
+    public void testRateMovieSuccess() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(0) + '/' + films.get(1) + "/8").execute();
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.get(1) + "/7").execute();
+        response = Jsoup.connect(Constant.Server.BASE + "/movies/" + films.get(1)).execute();
+        assertHtmlValue("rating", "rating:7.5");
+
+        // updating rate
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.get(1) + "/9").execute();
+        response = Jsoup.connect(Constant.Server.BASE + "/movies/" + films.get(1)).execute();
+        assertHtmlValue("rating", "rating:8.5");
+    }
+    public void testRateMovieInvalidRate() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        response = Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(0) + '/' + films.get(1) + "/12").execute();
+
+    }
+    public void testRateMovieInvalidId() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.size() + 1 + "/7").execute();
+    }
+    @Test
+    public void testRateMovieFail() {
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testRateMovieInvalidRate);
+        assert403Response(e.getStatusCode());
+        e = assertThrows(HttpStatusException.class, this::testRateMovieInvalidId);
+        assert404Response(e.getStatusCode());
+    }
 }
-//    // Testing rate movie
-//
-//    @Test
-//    public void testSimpleRate() {
-//        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 8}");
-//        assertSuccessResponse(Constant.SuccessMessage.RATE_MOVIE);
-//    }
-//
-//    @Test
-//    public void testOutOfRangeScore() {
-//        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-//        assertExceptionResponse(InvalidRateScoreException.message);
-//    }
-//
-//    @Test
-//    public void testRateMovieNotFound() {
-//        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 15, \"score\": 18}");
-//        assertExceptionResponse(MovieNotFoundException.message);
-//    }
-//
-//    @Test
-//    public void testRateUserNotFound() {
-//        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjaasdd@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-//        assertExceptionResponse(UserNotFoundException.message);
-//    }
-//
-//    // Testing vote comment
-//
-//    @Test
-//    public void testSimpleVote() {
-//        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-//        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
-//        assertSuccessResponse(Constant.SuccessMessage.VOTE_COMMENT);
-//    }
-//
-//    @Test
-//    public void testVoteUserNotFound() {
-//        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-//        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjdssdad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
-//
-//        assertExceptionResponse(UserNotFoundException.message);
-//    }
-//
-//    @Test
-//    public void testVoteCommentNotFound() {
-//        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-//        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 21, \"vote\": 1}");
-//
-//        assertExceptionResponse(CommentNotFoundException.message);
-//
-//    }
-//    //Testing get movie by genre
-//
-//
-//    @Test
-//    public void testSimpleGetMovie() {
-//        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Crime\"}");
-//        assertResponse("{\"success\":true,\"data\":[{\"movieId\":1,\"name\":\"The Godfather\",\"director\":\"Francis Ford Coppola\",\"genres\":[\"Crime\",\"Drama\"],\"rating\":null}]}");
-//    }
-//
-//    @Test
-//    public void testEmptyGetMovie() {
-//        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Mystery\"}");
-//        assertResponse("{\"success\":true,\"data\":[]}");
-//    }
-//
-//
-//    // Testing addToWatchList
-//
-//
-//    @Test
-//    public void testSimpleAdd() {
-//        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 2}");
-//        assertSuccessResponse(Constant.SuccessMessage.ADD_TO_WATCH_LIST);
-//
-//        iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\"}");
-//        assertResponse("{\"success\":true,\"data\":{\"WatchList\":[{\"movieId\":2,\"name\":\"The Pianist\",\"director\":\"Roman Polanski\",\"genres\":[\"Biography\",\"Drama\",\"Music\"],\"rating\":null}]}}");
-//    }
-//
-//    @Test
-//    public void testMovieNotFound() {
-//        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 3}");
-//        assertExceptionResponse(MovieNotFoundException.message);
-//    }
-//
-//    @Test
-//    public void testAgeLimit() {
-//        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"saman@ut.ac.ir\", \"movieId\": 2}");
-//        assertExceptionResponse(AgeLimitException.message);
-//
-//        iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"saman@ut.ac.ir\"}");
-//        assertResponse("{\"success\":true,\"data\":{\"WatchList\":[]}}");
-//    }
