@@ -1,5 +1,6 @@
 package ie;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
 import ie.exception.*;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -103,6 +105,26 @@ public class IemdbTest {
     @Test
     public void testWatchListFail(){
         HttpStatusException e = assertThrows(HttpStatusException.class, this::testWatchListAgeLimit);
+        assert403Response(e.getStatusCode());
+    }
+    @Test
+    public void testSearchMovieByYearSuccess() throws CustomException, IOException {
+        int startYear = 2000; int endYear = 2022;
+        var filmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
+        var films = FilmManager.getInstance().getElementsById(filmIds);
+        for(var film : films) {
+            var releaseDate = LocalDate.parse(JsonHandler.getNodeOfObject(film).get(Constant.Movie.R_DATE).asText());
+            assertTrue(startYear <= releaseDate.getYear() && releaseDate.getYear() <= endYear);
+        }
+        assertTrue(200 == Jsoup.connect(Constant.Server.BASE + "/movies/search/" + startYear + '/' + endYear).execute().statusCode());
+    }
+    public void testSearchMovieByYearBadFormat() throws IOException {
+        String startYear = "hello"; String endYear = "goodBye";
+        Jsoup.connect(Constant.Server.BASE + "/movies/search/" + startYear + '/' + endYear).execute();
+    }
+    @Test
+    public void testSearchMovieByYearFail(){
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testSearchMovieByYearBadFormat);
         assert403Response(e.getStatusCode());
     }
 }
