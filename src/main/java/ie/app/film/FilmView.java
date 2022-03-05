@@ -75,7 +75,9 @@ public class FilmView extends View {
         // TODO : make action of form to be /watchList/{movie_id} or /watchList (it will be post request that must be handled in UserRouter)
         // Making the add to watch list form
         var watchListForm = template.select("form").get(0);
-        watchListForm.attr("action", baseUrl + FilmRouter.UrlPath.ADD_TO_W_LIST);
+        watchListForm.attr("action", UserRouter.UrlsPath.W_LIST);
+        var movieInput = watchListForm.getElementById("movie_id");
+        movieInput.attr("value", movieJson.get(Constant.Movie.ID_G).asText());
 
         //Making rate movie form
         var rateForm = template.select("form").get(1);

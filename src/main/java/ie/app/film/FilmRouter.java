@@ -27,9 +27,6 @@ public class FilmRouter extends Router {
                 });
                 path(UrlPath.MOVIES_ID, () -> {
                     get(controller::movieHandler);
-                    path("/add-to-wlist", () -> {
-                        post(controller::addToWatchlistHandler);
-                    });
                     path("/rateMovie", () -> {
                         post(controller::rateMovieFormHandler);
                     });

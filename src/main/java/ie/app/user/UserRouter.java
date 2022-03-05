@@ -12,7 +12,7 @@ public class UserRouter extends Router {
     public void addRoutes(Javalin javalin) {
         javalin.routes(() -> {
             path(UrlsPath.W_LIST, () -> {
-//                post(controller::addWatchListItemHandler);
+                post(controller::addToWatchlistHandler);
                 path(UrlsPath.U_ID, () -> {
                     get(controller::getWatchListHandler);
                     post(controller::deleteWatchListHandler);
