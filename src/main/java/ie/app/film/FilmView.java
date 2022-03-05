@@ -72,7 +72,6 @@ public class FilmView extends View {
 
         String baseUrl = FilmRouter.UrlPath.MOVIES + "/" + movie.getId() + "/";
 
-        // TODO : make action of form to be /watchList/{movie_id} or /watchList (it will be post request that must be handled in UserRouter)
         // Making the add to watch list form
         var watchListForm = template.select("form").get(0);
         watchListForm.attr("action", UserRouter.UrlsPath.W_LIST);
