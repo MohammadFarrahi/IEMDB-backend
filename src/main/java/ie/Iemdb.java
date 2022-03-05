@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.app.actor.ActorRouter;
 import ie.app.comment.CommentRouter;
-import ie.app.film.FilmController;
 import ie.app.film.FilmRouter;
-import ie.app.film.FilmView;
 import ie.app.user.UserRouter;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
@@ -20,7 +18,6 @@ import ie.util.types.Constant;
 import ie.util.types.Response;
 import org.jsoup.Jsoup;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Iemdb {
@@ -31,6 +28,12 @@ public class Iemdb {
     private final ActorManager actorManager;
     private final CommentManager commentManager;
     private final ObjectMapper mapper;
+
+    // for test purposes
+    public static ArrayList<String> userIds;
+    public static ArrayList<String> filmIds;
+    public static ArrayList<String> actorIds;
+    public static ArrayList<String> commentIds;
 
     public Iemdb() {
         Router[] routers = {new FilmRouter(), new ActorRouter(), new UserRouter(), new CommentRouter()};
@@ -43,20 +46,25 @@ public class Iemdb {
     }
 
     public void fetchData() throws CustomException {
-        String json = null;
         try {
-            var s1 = actorManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.ACTOR).ignoreContentType(true).execute().body());
-            var s2 = userManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.USER).ignoreContentType(true).execute().body());
-            var s3 = filmManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.MOVIE).ignoreContentType(true).execute().body());
-            var s4 = commentManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.COMMENT).ignoreContentType(true).execute().body());
+            actorIds = actorManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.ACTOR).ignoreContentType(true).execute().body());
+            userIds = userManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.USER).ignoreContentType(true).execute().body());
+            filmIds = filmManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.MOVIE).ignoreContentType(true).execute().body());
+            commentIds = commentManager.addElementsJson(Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.COMMENT).ignoreContentType(true).execute().body());
         } catch (Exception e) {
             throw new CustomException("DataFetchingFailed");
         }
     }
+    public void removeDatabase() {
+        filmManager.removeElements(null);
+        actorManager.removeElements(null);
+        userManager.removeElements(null);
+        commentManager.removeElements(null);
+    }
     public void startServer() {
         server.runServer();
     }
-
+    public void stopServer() { server.stopServer(); }
 
     public void runTextCommand(String command, String data) {
         String resData;

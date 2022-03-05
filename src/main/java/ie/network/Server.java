@@ -28,6 +28,7 @@ public class Server {
     public void runServer() {
         javalinServer.start(Constant.Server.HOST, Constant.Server.PORT);
     }
+    public void stopServer() { javalinServer.stop(); }
     // TODO : Maybe this is not the best place. (even ServerExceptionController)
     private void commonExceptionHandler(Exception e, Context ctx) {
         if(e instanceof ObjectNotFoundException) {

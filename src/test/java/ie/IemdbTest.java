@@ -1,141 +1,130 @@
 package ie;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import ie.app.film.FilmManager;
+import ie.app.user.UserManager;
 import ie.exception.*;
+import ie.generic.model.JsonHandler;
 import ie.util.types.Constant;
+import org.jsoup.HttpStatusException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+import java.time.LocalDate;
+
+import static org.junit.Assert.*;
 
 public class IemdbTest {
-    Iemdb iemdb;
-
-    public void assertResponse(String message) {
-        assertEquals(message, iemdb.getResponse());
-    }
-
-    public void assertExceptionResponse(String exceptionMessage) {
-        String response = "{\"success\":false,\"data\":\"" + exceptionMessage + "\"}";
-        assertResponse(response);
-    }
-
-    public void assertSuccessResponse(String successMessage) {
-        String response = "{\"success\":true,\"data\":\"" + successMessage + "\"}";
-        assertResponse(response);
-    }
+    Iemdb iemdb = null;
+    Document responseBody = null;
 
     @Before
-    public void setup() {
+    public void setup() throws CustomException {
         iemdb = new Iemdb();
-        iemdb.runTextCommand("addUser", "{\"email\": \"sara@ut.ac.ir\", \"password\": \"sara1234\", \"name\": \"Sara\", \"nickname\": \"sara\", \"birthDate\": \"1998-03-11\"}");
-        iemdb.runTextCommand("addUser", "{\"email\": \"sajjad@ut.ac.ir\", \"password\": \"sajjad1234\", \"name\": \"Sajjad\", \"nickname\": \"sajjad\", \"birthDate\": \"2000-06-14\"}");
-        iemdb.runTextCommand("addUser", "{\"email\": \"saman@ut.ac.ir\", \"password\": \"saman1234\", \"name\": \"Saman\", \"nickname\": \"saman\", \"birthDate\": \"2014-01-01\"}");
-
-        iemdb.runTextCommand("addActor", "{\"id\": 1, \"name\": \"Marlon Brando\", \"birthDate\": \"1924-04-03\", \"nationality\": \"American\"}");
-        iemdb.runTextCommand("addActor", "{\"id\": 2, \"name\": \"Al Pacino\", \"birthDate\": \"1940-04-25\", \"nationality\": \"American\"}");
-        iemdb.runTextCommand("addActor", "{\"id\": 3, \"name\": \"James Caan\", \"birthDate\": \"1940-03-26\", \"nationality\": \"American\"}");
-        iemdb.runTextCommand("addActor", "{\"id\": 4, \"name\": \"Adrien Brody\", \"birthDate\": \"1973-04-14\", \"nationality\": \"American\"}");
-        iemdb.runTextCommand("addActor", "{\"id\": 5, \"name\": \"Thomas Kretschmann\", \"birthDate\": \"1962-09-08\", \"nationality\": \"German\"}");
-        iemdb.runTextCommand("addActor", "{\"id\": 6, \"name\": \"Frank Finlay\", \"birthDate\": \"1926-08-06\", \"nationality\": \"British\"}");
-
-        iemdb.runTextCommand("addMovie", "{\"id\": 1, \"name\": \"The Godfather\", \"summary\": \"The aging patriarch of an organized crime dynasty in postwar New York City transfers control of his clandestine empire to his reluctant youngest son.\", \"releaseDate\": \"1972-03-14\", \"director\": \"Francis Ford Coppola\", \"writers\": [\"Mario Puzo\", \"Francis Ford Coppola\"], \"genres\": [\"Crime\", \"Drama\"], \"cast\": [1, 2, 3], \"imdbRate\": 9.2, \"duration\": 175, \"ageLimit\": 14}");
-        iemdb.runTextCommand("addMovie", "{\"id\": 2, \"name\": \"The Pianist\", \"summary\": \"A Polish Jewish musician struggles to survive the destruction of the Warsaw ghetto of World War II.\", \"releaseDate\": \"2002-05-24\", \"director\": \"Roman Polanski\", \"writers\": [\"Ronald Harwood\", \"Wladyslaw Szpilman\"], \"genres\": [\"Biography\", \"Drama\", \"Music\"], \"cast\": [4, 5, 6], \"imdbRate\": 8.5, \"duration\": 150, \"ageLimit\": 12}");
+        iemdb.fetchData();
+        iemdb.startServer();
     }
 
-    // Testing rate movie
-
-    @Test
-    public void testSimpleRate() {
-        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 8}");
-        assertSuccessResponse(Constant.SuccessMessage.RATE_MOVIE);
+    @After
+    public void tearDown() {
+        iemdb.removeDatabase();
+        iemdb.stopServer();
+        iemdb = null;
+        responseBody = null;
     }
 
-    @Test
-    public void testOutOfRangeScore() {
-        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-        assertExceptionResponse(InvalidRateScoreException.message);
+    public void assert404Response(int code) {
+        assertEquals(404, code);
     }
-
-//    @Test
-//    public void testRateMovieNotFound() {
-//        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 15, \"score\": 18}");
-//        assertExceptionResponse(MovieNotFoundException.message);
-//    }
-
-    @Test
-    public void testRateUserNotFound() {
-        iemdb.runTextCommand("rateMovie", "{\"userEmail\": \"sajjaasdd@ut.ac.ir\", \"movieId\": 1, \"score\": 18}");
-        assertExceptionResponse(UserNotFoundException.message);
+    public void assert403Response(int code) {
+        assertEquals(403, code);
     }
-
-    // Testing vote comment
-
-    @Test
-    public void testSimpleVote() {
-        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
-        assertSuccessResponse(Constant.SuccessMessage.VOTE_COMMENT);
+    public void assertHtmlValue(String htmlElementId, String expectedText) throws IOException {
+        assertEquals(expectedText, responseBody.getElementById(htmlElementId).text());
+    }
+    public void assertHtmlValue(String htmlElementName, int elementIndex, String expectedText) throws IOException {
+        assertEquals(expectedText, responseBody.select(htmlElementName).get(elementIndex).text());
     }
 
     @Test
-    public void testVoteUserNotFound() {
-        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjdssdad@ut.ac.ir\", \"commentId\": 1, \"vote\": 1}");
+    public void testRateMovieSuccess() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(0) + '/' + films.get(1) + "/8").execute();
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.get(1) + "/7").execute();
+        responseBody = Jsoup.connect(Constant.Server.BASE + "/movies/" + films.get(1)).execute().parse();
+        assertHtmlValue("rating", "rating:7.5");
 
-        assertExceptionResponse(UserNotFoundException.message);
+        // updating rate
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.get(1) + "/9").execute();
+        responseBody = Jsoup.connect(Constant.Server.BASE + "/movies/" + films.get(1)).execute().parse();
+        assertHtmlValue("rating", "rating:8.5");
     }
+    public void testRateMovieInvalidRate() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        responseBody = Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(0) + '/' + films.get(1) + "/12").execute().parse();
 
+    }
+    public void testRateMovieInvalidId() throws IOException {
+        var users = Iemdb.userIds;
+        var films = Iemdb.filmIds;
+        Jsoup.connect(Constant.Server.BASE + "/rateMovie/" + users.get(1) + '/' + films.size() + 1 + "/7").execute();
+    }
     @Test
-    public void testVoteCommentNotFound() {
-        iemdb.runTextCommand("addComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 1, \"text\": \"I love this movie.\"}");
-        iemdb.runTextCommand("voteComment", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"commentId\": 21, \"vote\": 1}");
-
-        assertExceptionResponse(CommentNotFoundException.message);
-
+    public void testRateMovieFail() {
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testRateMovieInvalidRate);
+        assert403Response(e.getStatusCode());
+        e = assertThrows(HttpStatusException.class, this::testRateMovieInvalidId);
+        assert404Response(e.getStatusCode());
     }
-    //Testing get movie by genre
-
-    // TODO : make json fields in order, rightnow movieId is last field.
-
-//    @Test
-//    public void testSimpleGetMovie() {
-//        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Crime\"}");
-//        assertResponse("{\"success\":true,\"data\":[{\"movieId\":1,\"name\":\"The Godfather\",\"director\":\"Francis Ford Coppola\",\"genres\":[\"Crime\",\"Drama\"],\"rating\":null}]}");
-//    }
-
     @Test
-    public void testEmptyGetMovie() {
-        iemdb.runTextCommand("getMoviesByGenre", "{\"genre\": \"Mystery\"}");
-        assertResponse("{\"success\":true,\"data\":[]}");
+    public void testWatchListSuccess() throws IOException, CustomException {
+        var userJson = JsonHandler.getNodeOfObject(UserManager.getInstance().getElementById(iemdb.userIds.get(0)));
+        var filmJson = JsonHandler.getNodeOfObject(FilmManager.getInstance().getElementById(iemdb.filmIds.get(0)));
+
+        var userId = userJson.get(Constant.User.E_ID).asText();
+        var userNickname = userJson.get(Constant.User.NICKNAME).asText();
+        var filmId = filmJson.get(Constant.Movie.ID_G).asText();
+        var filmName = filmJson.get(Constant.Movie.NAME).asText();
+
+        Jsoup.connect(Constant.Server.BASE + "/watchList/" + userId + '/' + filmId).execute();
+        responseBody = Jsoup.connect(Constant.Server.BASE + "/watchList/" + userId).execute().parse();
+        assertHtmlValue("nickname", "nickname: @" + userNickname);
+        assertHtmlValue("td", 0, filmName);
     }
-
-
-    // Testing addToWatchList
-
-    // TODO : make json fields in order, rightnow movieId is last field.
-
-//    @Test
-//    public void testSimpleAdd() {
-//        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 2}");
-//        assertSuccessResponse(Constant.SuccessMessage.ADD_TO_WATCH_LIST);
-//
-//        iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\"}");
-//        assertResponse("{\"success\":true,\"data\":{\"WatchList\":[{\"movieId\":2,\"name\":\"The Pianist\",\"director\":\"Roman Polanski\",\"genres\":[\"Biography\",\"Drama\",\"Music\"],\"rating\":null}]}}");
-//    }
-//
-//    @Test
-//    public void testMovieNotFound() {
-//        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"sajjad@ut.ac.ir\", \"movieId\": 3}");
-//        assertExceptionResponse(MovieNotFoundException.message);
-//    }
-
+    public void testWatchListAgeLimit() throws IOException {
+        var userId = Iemdb.userIds.get(2);
+        var filmId = Iemdb.filmIds.get(0);
+        Jsoup.connect(Constant.Server.BASE + "/watchList/" + userId + '/' + filmId).execute();
+    }
     @Test
-    public void testAgeLimit() {
-        iemdb.runTextCommand("addToWatchList", "{\"userEmail\": \"saman@ut.ac.ir\", \"movieId\": 2}");
-        assertExceptionResponse(AgeLimitException.message);
-
-        iemdb.runTextCommand("getWatchList", "{\"userEmail\": \"saman@ut.ac.ir\"}");
-        assertResponse("{\"success\":true,\"data\":{\"WatchList\":[]}}");
+    public void testWatchListFail(){
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testWatchListAgeLimit);
+        assert403Response(e.getStatusCode());
     }
-
+    @Test
+    public void testSearchMovieByYearSuccess() throws CustomException, IOException {
+        int startYear = 2000; int endYear = 2022;
+        var filmIds = FilmManager.getInstance().filterElementsByYear(startYear, endYear);
+        var films = FilmManager.getInstance().getElementsById(filmIds);
+        for(var film : films) {
+            var releaseDate = LocalDate.parse(JsonHandler.getNodeOfObject(film).get(Constant.Movie.R_DATE).asText());
+            assertTrue(startYear <= releaseDate.getYear() && releaseDate.getYear() <= endYear);
+        }
+        assertTrue(200 == Jsoup.connect(Constant.Server.BASE + "/movies/search/" + startYear + '/' + endYear).execute().statusCode());
+    }
+    public void testSearchMovieByYearBadFormat() throws IOException {
+        String startYear = "hello"; String endYear = "goodBye";
+        Jsoup.connect(Constant.Server.BASE + "/movies/search/" + startYear + '/' + endYear).execute();
+    }
+    @Test
+    public void testSearchMovieByYearFail(){
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testSearchMovieByYearBadFormat);
+        assert403Response(e.getStatusCode());
+    }
 }
