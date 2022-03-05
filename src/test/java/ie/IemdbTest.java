@@ -95,4 +95,14 @@ public class IemdbTest {
         assertHtmlValue("nickname", "nickname: @" + userNickname);
         assertHtmlValue("td", 0, filmName);
     }
+    public void testWatchListAgeLimit() throws IOException {
+        var userId = Iemdb.userIds.get(2);
+        var filmId = Iemdb.filmIds.get(0);
+        Jsoup.connect(Constant.Server.BASE + "/watchList/" + userId + '/' + filmId).execute();
+    }
+    @Test
+    public void testWatchListFail(){
+        HttpStatusException e = assertThrows(HttpStatusException.class, this::testWatchListAgeLimit);
+        assert403Response(e.getStatusCode());
+    }
 }
