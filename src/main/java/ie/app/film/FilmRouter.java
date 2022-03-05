@@ -27,16 +27,12 @@ public class FilmRouter extends Router {
                 });
                 path(UrlPath.MOVIES_ID, () -> {
                     get(controller::movieHandler);
-                    path("/add-to-wlist", () -> {
-                        post(controller::addToWatchlistHandler);
-                    });
-                    path("/rateMovie", () -> {
+                    path(UrlPath.RATE_MOVIE, () -> {
                         post(controller::rateMovieFormHandler);
                     });
                 });
             });
-            //TODO: handler this mess of urls. is there any better way?
-            path("rateMovie/{user_id}/{movie_id}/{rate}", () -> {
+            path(UrlPath.RATE_MOVIE + "/{user_id}/{movie_id}/{rate}", () -> {
                 get(controller::rateMovieUrlHandler);
             });
         });
@@ -45,7 +41,6 @@ public class FilmRouter extends Router {
     public static class UrlPath {
         public static final String MOVIES = "/movies";
         public static final String MOVIES_ID = "{movie_id}";
-        public static final String ADD_TO_W_LIST = "add-to-wlist";
         public static final String RATE_MOVIE = "rateMovie";
         public static final String SEARCH = "search";
     }

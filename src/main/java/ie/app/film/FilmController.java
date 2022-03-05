@@ -33,7 +33,8 @@ public class FilmController extends Controller {
     }
 
     public void movieHandler(Context ctx) throws CustomException, IOException {
-        var movieId = ctx.pathParam("movie_id");
+        var movieId = ctx.pathParamAsClass("movie_id", Integer.class).get().toString();
+
         Film film = FilmManager.getInstance().getElementById(movieId);
         List<Actor> cast = ActorManager.getInstance().getElementsById(film.getCast());
         List<Comment> comments = CommentManager.getInstance().getElementsById(film.getComments());
@@ -59,29 +60,22 @@ public class FilmController extends Controller {
         ctx.html(viewHandler.getMoviesHtmlResponse(films, filmCasts));
     }
 
-    public void addToWatchlistHandler(Context ctx) throws CustomException, IOException {
-        var movieId = ctx.pathParam("movie_id");
-        var userId = ctx.formParam("user_id");
-
-        UserManager.getInstance().addToWatchList(userId, movieId);
-        ctx.html(viewHandler.getSuccessHtmlResponse());
-    }
-
     public void rateMovieFormHandler(Context ctx) throws CustomException, IOException {
-        var movieId = ctx.pathParam("movie_id");
-        var userId = ctx.formParam("user_id");
-        var rate = ctx.formParam("quantity");
 
-        FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        var movieId = ctx.pathParamAsClass("movie_id", Integer.class).get().toString();
+
+        var userId = ctx.formParam("user_id");
+        var rate = ctx.formParamAsClass("quantity", Integer.class).get();
+
+        FilmManager.getInstance().rateMovie(movieId, userId, rate);
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 
     public void rateMovieUrlHandler(Context ctx) throws CustomException, IOException {
-        var movieId = ctx.pathParam("movie_id");
+        var movieId = ctx.pathParamAsClass("movie_id", Integer.class).get().toString();
         var userId = ctx.pathParam("user_id");
-        var rate = ctx.pathParam("rate");
-
-        FilmManager.getInstance().rateMovie(movieId, userId, Integer.parseInt(rate));
+        var rate = ctx.pathParamAsClass("rate", Integer.class).get();
+        FilmManager.getInstance().rateMovie(movieId, userId, rate);
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
 }

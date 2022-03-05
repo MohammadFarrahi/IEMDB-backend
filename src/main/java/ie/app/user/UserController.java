@@ -37,4 +37,11 @@ public class UserController extends Controller {
         UserManager.getInstance().removeFromWatchList(userId, movieId);
         ctx.html(viewHandler.getSuccessHtmlResponse());
     }
+
+    public void addToWatchlistHandler(Context ctx) throws CustomException, IOException {
+        var movieId = ctx.formParamAsClass("movie_id", Integer.class).get().toString();
+        var userId = ctx.formParam("user_id");
+        UserManager.getInstance().addToWatchList(userId, movieId);
+        ctx.html(viewHandler.getSuccessHtmlResponse());
+    }
 }
