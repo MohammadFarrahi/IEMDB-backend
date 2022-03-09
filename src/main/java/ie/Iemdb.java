@@ -13,7 +13,6 @@ import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
 import ie.generic.router.Router;
-import ie.network.Server;
 import ie.util.types.Constant;
 import ie.util.types.Response;
 import org.jsoup.Jsoup;
@@ -21,7 +20,6 @@ import org.jsoup.Jsoup;
 import java.util.ArrayList;
 
 public class Iemdb {
-    private Server server;
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;
@@ -37,7 +35,6 @@ public class Iemdb {
 
     public Iemdb() {
         Router[] routers = {new FilmRouter(), new ActorRouter(), new UserRouter(), new CommentRouter()};
-        this.server = new Server(routers);
         this.userManager = UserManager.getInstance();
         this.filmManager = FilmManager.getInstance();
         this.actorManager = ActorManager.getInstance();
@@ -61,10 +58,6 @@ public class Iemdb {
         userManager.removeElements(null);
         commentManager.removeElements(null);
     }
-    public void startServer() {
-        server.runServer();
-    }
-    public void stopServer() { server.stopServer(); }
 
     public void runTextCommand(String command, String data) {
         String resData;
@@ -173,11 +166,4 @@ public class Iemdb {
     private String getWatchListJson(String data) throws CustomException, JsonProcessingException {
         return userManager.getWatchListJson(data);
     }
-//    public static ArrayList<String> convertListToString(ArrayList<Integer> intList) {
-//        ArrayList<String> stringList = new ArrayList<>();
-//        intList.forEach((n) -> {
-//            stringList.add(String.valueOf(n));
-//        });
-//        return stringList;
-//    }
 }
