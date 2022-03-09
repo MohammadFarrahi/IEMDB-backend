@@ -17,6 +17,9 @@ public class Email {
             throw new CustomException("Invalid email");
         }
     }
+    public static boolean isValid(String input) {
+        return Pattern.compile("^(.+)@(\\S+)$").matcher(input).matches();
+    }
     @Override
     public String toString() {
         return this.addr;

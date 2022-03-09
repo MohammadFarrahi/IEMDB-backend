@@ -8,7 +8,7 @@
 <body>
     <form action="<%=Constant.URLS.LOGIN_USER%>" method="POST">
         <label>Email:</label>
-        <input type="text" name="email" value="">
+        <input required type="emil" name="<%=Constant.FormInputNames.USER_ID%>" value="">
         <button type="submit">Login</button>
     </form>
 </body>

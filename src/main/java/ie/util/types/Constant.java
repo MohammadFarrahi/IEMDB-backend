@@ -163,6 +163,10 @@ public class Constant {
 
     //-------------------- phase3-------------------
     public static class URLS {
+        public static final String ROOT = "/";
         public static final String LOGIN_USER = "/authUser";
+    }
+    public static class FormInputNames {
+        public static final String USER_ID = "email";
     }
 }

@@ -20,7 +20,7 @@ import org.jsoup.Jsoup;
 import java.util.ArrayList;
 
 public class Iemdb {
-    private String loggedInUser;
+    public static String loggedInUser;
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;

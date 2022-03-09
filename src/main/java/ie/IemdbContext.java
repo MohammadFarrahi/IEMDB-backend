@@ -13,7 +13,7 @@ public class IemdbContext implements ServletContextListener {
         try {
             iemdb.fetchData();
         } catch (CustomException e) {
-            // TODO : what to do here ??
+            // TODO : handle exception
             e.printStackTrace();
         }
         // TODO : is it really necessary ?

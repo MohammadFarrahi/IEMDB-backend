@@ -1,3 +1,4 @@
+<%@page import="ie.Iemdb"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,7 @@
 </head>
 <body>
     <ul>
-        <li id="email">email: ali@gmail.com</li>
+        <li id="email">email: <%=Iemdb.loggedInUser%></li>
         <li>
             <a href="/movies">Movies</a>
         </li>
