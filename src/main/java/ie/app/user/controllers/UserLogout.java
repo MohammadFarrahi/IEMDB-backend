@@ -11,9 +11,11 @@ import java.io.IOException;
 
 @WebServlet(Constant.URLS.LOGOUT)
 public class UserLogout extends HttpServlet {
+    // TODO : how to make it a post request ?
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         Iemdb.loggedInUser = null;
         response.sendRedirect(Constant.URLS.LOGIN);
     }
+    // TODO : how to handle different(useless) http methods properly with proper code-page-message
 }

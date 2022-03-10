@@ -6,9 +6,11 @@
     <title>Login</title>
 </head>
 <body>
+    <%= request.getAttribute("errors") != null ? request.getAttribute("errors") : "" %>
+    <br/>
     <form action="" method="POST">
         <label>Email:</label>
-        <input required type="emil" name="<%=Constant.FormInputNames.USER_ID%>" value="">
+        <input required type="emil" name="<%=Constant.FormInputNames.USER_EMAIL%>" value="">
         <button type="submit">Login</button>
     </form>
 </body>

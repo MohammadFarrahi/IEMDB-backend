@@ -171,6 +171,6 @@ public class Constant {
         public static final String LOGIN = "/auth-views/login.jsp";
     }
     public static class FormInputNames {
-        public static final String USER_ID = "email";
+        public static final String USER_EMAIL = "email";
     }
 }
