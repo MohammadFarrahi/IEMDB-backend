@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Constant {
+    //-------------------- phase1-------------------
     public  static class Actor {
         public static final String ID_S = "id";
         public static final String ID_G = "actorId";
@@ -32,7 +33,6 @@ public class Constant {
         public static final String IMDB = "imdbRate";
         public static final String RATING = "rating";
         public static final String COMMENTS = "comments";
-
         public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
             add(SUMM);
             add(R_DATE);
@@ -43,7 +43,6 @@ public class Constant {
             add(IMDB);
             add(COMMENTS);
         }};
-
     }
     public static class User {
         public static final String E_ID = "email";
@@ -60,12 +59,10 @@ public class Constant {
         public static final String C_DATE = "createdDate";
         public static final String LIKES = "like";
         public static final String DISLIKES = "dislike";
-
         public static final Set<String> REMOVABLE_SHORT_SER = new HashSet<String>(){{
             add(M_ID);
             add(C_DATE);
         }};
-
         public static Set<String> getSet(){
             return new HashSet<String>(){{
                 add(U_ID);
@@ -74,11 +71,9 @@ public class Constant {
             }};
         }
     }
-
     public static class WatchList {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
-
         public static Set<String> getSet(){
             return new HashSet<String>(){{
                 add(U_ID);
@@ -86,7 +81,6 @@ public class Constant {
             }};
         }
     }
-
     public static class Rate {
         public static final String U_ID = "userEmail";
         public static final String M_ID = "movieId";
@@ -100,7 +94,6 @@ public class Constant {
             }};
         }
     }
-
     public static class Response {
         public static final String STATUS = "success";
         public static final String DATA = "data";
@@ -109,7 +102,6 @@ public class Constant {
         public static final String U_ID = "userEmail";
         public static final String C_ID = "commentId";
         public static final String VOTE = "vote";
-
         public static Set<String> getSet(){
             return new HashSet<String>(){{
                 add(U_ID);
@@ -136,7 +128,6 @@ public class Constant {
         public static final String ADD_USER = "user added successfully";
         public static final String ADD_ACTOR = "actor added successfully";
         public static final String ADD_MOVIE = "movie added successfully";
-//        public static final String ADD_COMMENT = "comment added successfully";
         public static final String RATE_MOVIE = "movie rated successfully";
         public static final String VOTE_COMMENT = "comment voted successfully";
         public static final String ADD_TO_WATCH_LIST = "movie added to watchlist successfully";
@@ -146,17 +137,14 @@ public class Constant {
         SHORT,
         LONG
     }
+
+    //-------------------- phase2-------------------
     public static class FetchApiUrl {
         public static final String BASE = "http://138.197.181.131:5000/api";
         public static final String ACTOR = "/actors";
         public static final String USER = "/users";
         public static final String MOVIE = "/movies";
         public static final String COMMENT = "/comments";
-    }
-    public static class Server {
-        public static final String HOST = "localhost";
-        public static final int PORT = 8080;
-        public static final String BASE = "http://" + HOST + ':' + String.valueOf(PORT);
     }
     public static class Template {
         public static final String MOVIES = "src/main/resources/movies.html";
@@ -171,5 +159,18 @@ public class Constant {
         public static final String _404_ = "src/main/resources/404.html";
         public static final String _403_ = "src/main/resources/403.html";
         public static final String SUCCESS_200 = "src/main/resources/200.html";
+    }
+
+    //-------------------- phase3-------------------
+    public static class URLS {
+        public static final String ROOT = "/";
+        public static final String LOGIN = "/login";
+        public static final String LOGOUT = "/logout";
+    }
+    public static class JSP {
+        public static final String LOGIN = "/auth-views/login.jsp";
+    }
+    public static class FormInputNames {
+        public static final String USER_EMAIL = "email";
     }
 }

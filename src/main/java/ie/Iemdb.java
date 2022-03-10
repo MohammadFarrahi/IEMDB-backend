@@ -20,6 +20,7 @@ import org.jsoup.Jsoup;
 import java.util.ArrayList;
 
 public class Iemdb {
+    public static String loggedInUser;
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;
@@ -34,7 +35,8 @@ public class Iemdb {
     public static ArrayList<String> commentIds;
 
     public Iemdb() {
-        Router[] routers = {new FilmRouter(), new ActorRouter(), new UserRouter(), new CommentRouter()};
+        loggedInUser = null;
+//        Router[] routers = {new FilmRouter(), new ActorRouter(), new UserRouter(), new CommentRouter()};
         this.userManager = UserManager.getInstance();
         this.filmManager = FilmManager.getInstance();
         this.actorManager = ActorManager.getInstance();
@@ -52,7 +54,7 @@ public class Iemdb {
             throw new CustomException("DataFetchingFailed");
         }
     }
-    public void removeDatabase() {
+    public void clearDatabase() {
         filmManager.removeElements(null);
         actorManager.removeElements(null);
         userManager.removeElements(null);
