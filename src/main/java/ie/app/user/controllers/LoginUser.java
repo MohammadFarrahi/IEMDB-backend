@@ -12,17 +12,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(Constant.URLS.LOGIN_USER)
+@WebServlet(Constant.URLS.ServLet.LOGIN_USER)
 public class LoginUser extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         var userEmail = request.getParameter(Constant.FormInputNames.USER_ID);
         if(!Email.isValid(userEmail)) {
             // TODO : handler properly. i.e. send back to "/login"
         }
         if(UserManager.getInstance().isIdValid(userEmail)) {
             Iemdb.loggedInUser = userEmail;
-            response.sendRedirect(Constant.URLS.ROOT);
+            response.sendRedirect(Constant.URLS.JSP.ROOT);
         }
         else {
             // TODO : handle exception
