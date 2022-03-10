@@ -163,17 +163,12 @@ public class Constant {
 
     //-------------------- phase3-------------------
     public static class URLS {
-        public static class JSP {
-            public static final String ROOT = "/";
-            public static final String LOGIN = "/login";
-        }
-        public static class ServLet {
-            public static final String LOGIN_USER = "/loginUser";
-            public static final String LOGOUT_USER =  "/logout";
-        }
-
-
-
+        public static final String ROOT = "/";
+        public static final String LOGIN = "/login";
+        public static final String LOGOUT = "/logout";
+    }
+    public static class JSP {
+        public static final String LOGIN = "/auth-views/login.jsp";
     }
     public static class FormInputNames {
         public static final String USER_ID = "email";

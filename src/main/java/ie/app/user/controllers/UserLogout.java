@@ -9,11 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(Constant.URLS.ServLet.LOGOUT_USER)
-public class LogoutUser extends HttpServlet {
+@WebServlet(Constant.URLS.LOGOUT)
+public class UserLogout extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         Iemdb.loggedInUser = null;
-        response.sendRedirect(Constant.URLS.JSP.LOGIN);
+        response.sendRedirect(Constant.URLS.LOGIN);
     }
 }

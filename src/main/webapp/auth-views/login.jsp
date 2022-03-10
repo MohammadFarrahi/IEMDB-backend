@@ -6,7 +6,7 @@
     <title>Login</title>
 </head>
 <body>
-    <form action="<%=Constant.URLS.ServLet.LOGIN_USER%>" method="POST">
+    <form action="" method="POST">
         <label>Email:</label>
         <input required type="emil" name="<%=Constant.FormInputNames.USER_ID%>" value="">
         <button type="submit">Login</button>
