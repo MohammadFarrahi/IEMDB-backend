@@ -6,7 +6,6 @@
     <title>Login</title>
 </head>
 <body>
-    <%= request.getAttribute("errors") != null ? request.getAttribute("errors") : "" %>
     <br/>
     <form action="" method="POST">
         <label>Email:</label>

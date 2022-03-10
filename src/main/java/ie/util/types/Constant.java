@@ -156,7 +156,7 @@ public class Constant {
         public static final String W_LIST = "src/main/resources/watchlist.html";
         public static final String W_LIST_R_F = "src/main/resources/removeWListForm.html";
 
-        public static final String _404_ = "src/main/resources/404.html";
+        public static final String _404_ = "src/main/resources/404.jsp";
         public static final String _403_ = "src/main/resources/403.html";
         public static final String SUCCESS_200 = "src/main/resources/200.html";
     }
@@ -170,6 +170,8 @@ public class Constant {
     }
     public static class JSP {
         public static final String LOGIN = "/auth-views/login.jsp";
+        public static final String ERROR = "/error-views/error.jsp";
+        public static final String _404_ = "/error-views/404.jsp";
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";

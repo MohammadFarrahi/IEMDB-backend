@@ -33,6 +33,11 @@ public class UserLogin extends HttpServlet {
 
         // validation logic
         var errorMessages = validateForm(Map.ofEntries(entry(Constant.FormInputNames.USER_EMAIL, userEmail)));
+        if(!errorMessages.isEmpty()) {
+            request.setAttribute("errors", getHtmlList(errorMessages));
+            response.setStatus(400);
+            request.getRequestDispatcher(Constant.JSP.ERROR).forward(request, response);
+        }
         // business logic
         try {
             Iemdb.loginUser(userEmail);
@@ -43,10 +48,7 @@ public class UserLogin extends HttpServlet {
         if(!errorMessages.isEmpty()) {
             request.setAttribute("errors", getHtmlList(errorMessages));
             response.setStatus(404);
-            /* TODO : if browser reload after fist submission request, it's still post request.
-                        so your error messages will not be  flash messages.
-                        redirection might be a better idea to solve this issue*/
-            request.getRequestDispatcher(Constant.JSP.LOGIN).forward(request, response);
+            request.getRequestDispatcher(Constant.JSP._404_).forward(request, response);
         } else {
             response.sendRedirect(Constant.URLS.ROOT);
         }
