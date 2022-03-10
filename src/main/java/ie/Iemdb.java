@@ -12,6 +12,7 @@ import ie.app.actor.ActorManager;
 import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
+import ie.exception.UserNotFoundException;
 import ie.generic.router.Router;
 import ie.util.types.Constant;
 import ie.util.types.Response;
@@ -42,6 +43,18 @@ public class Iemdb {
         this.actorManager = ActorManager.getInstance();
         this.commentManager = CommentManager.getInstance();
         this.mapper = new ObjectMapper();
+    }
+
+    public static boolean isLoggedIn(String userEmail) {
+        return loggedInUser != null;
+    }
+    public static void loginUser(String userEmail) throws UserNotFoundException {
+        if(!UserManager.getInstance().isIdValid(userEmail))
+            throw new UserNotFoundException();
+        loggedInUser = userEmail;
+    }
+    public static void logoutUser(String userEmail) {
+        loggedInUser = null;
     }
 
     public void fetchData() throws CustomException {

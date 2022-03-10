@@ -14,7 +14,7 @@ public class UserLogout extends HttpServlet {
     // TODO : how to make it a post request ?
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        Iemdb.loggedInUser = null;
+        Iemdb.logoutUser(null);
         response.sendRedirect(Constant.URLS.LOGIN);
     }
     // TODO : how to handle different(useless) http methods properly with proper code-page-message
