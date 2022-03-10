@@ -2,6 +2,8 @@ package ie.app.user.controllers;
 
 import ie.Iemdb;
 import ie.app.user.UserManager;
+import ie.exception.ObjectNotFoundException;
+import ie.exception.UserNotFoundException;
 import ie.util.types.Constant;
 import ie.util.types.Email;
 import jakarta.servlet.ServletException;
@@ -20,7 +22,10 @@ import static java.util.Map.entry;
 public class UserLogin extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        request.getRequestDispatcher(Constant.JSP.LOGIN).forward(request, response);
+        if (Iemdb.isLoggedIn(null))
+            response.sendRedirect(Constant.URLS.ROOT);
+        else
+            request.getRequestDispatcher(Constant.JSP.LOGIN).forward(request, response);
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -29,7 +34,9 @@ public class UserLogin extends HttpServlet {
         // validation logic
         var errorMessages = validateForm(Map.ofEntries(entry(Constant.FormInputNames.USER_EMAIL, userEmail)));
         // business logic
-        if (!loginUser(userEmail)) {
+        try {
+            Iemdb.loginUser(userEmail);
+        } catch (ObjectNotFoundException e) {
             errorMessages.put("InvalidUser", "user does not exist!");
         }
         // results
@@ -58,13 +65,6 @@ public class UserLogin extends HttpServlet {
             }
         }
         return errorMessages;
-    }
-    public boolean loginUser(String userEmail) {
-        if (UserManager.getInstance().isIdValid(userEmail)) {
-            Iemdb.loggedInUser = userEmail;
-            return true;
-        }
-        return false;
     }
     // TODO : generalize this shit
     public String getHtmlList(Map<String, String> dataMap) {
