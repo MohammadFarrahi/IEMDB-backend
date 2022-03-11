@@ -20,4 +20,7 @@ public interface JsonHandler <T> {
     public static JsonNode geNodeOfJson(String jsonData) throws JsonProcessingException {
         return new ObjectMapper().convertValue(jsonData, JsonNode.class);
     }
+    private String getFieldValue(JsonNode node, String key) {
+        return node.get(key).asText();
+    }
 }

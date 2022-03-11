@@ -26,11 +26,11 @@ public class Actor {
         return name;
     }
     @JsonGetter(Constant.Actor.B_DATE)
-    private String getBirthDate() {
+    public String getBirthDate() {
         return birthDate.toString();
     }
     @JsonGetter(Constant.Actor.NATION)
-    private String getNationality() {
+    public String getNationality() {
         return nationality;
     }
     @JsonGetter(Constant.Actor.MOVIES)
