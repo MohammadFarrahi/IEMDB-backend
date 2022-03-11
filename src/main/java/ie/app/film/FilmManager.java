@@ -3,9 +3,7 @@ package ie.app.film;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 import ie.app.actor.ActorManager;
 import ie.app.user.UserManager;
@@ -15,9 +13,6 @@ import ie.generic.model.Manager;
 import ie.util.types.Constant;
 import jdk.jshell.execution.LoaderDelegate;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class FilmManager extends Manager<Film> {
@@ -58,7 +53,7 @@ public class FilmManager extends Manager<Film> {
     public List<Film> filterElementsByName(List<Film> films, String name) {
         if(name==null)
             return films;
-        return films.stream().filter(film -> film.getName().toLowerCase().contains(name)).collect(Collectors.toList());
+        return films.stream().filter(film -> film.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
     }
     public List<Film> sortElements(List<Film> films, String type){
         switch (type) {

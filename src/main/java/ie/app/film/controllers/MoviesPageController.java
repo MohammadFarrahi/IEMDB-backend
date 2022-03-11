@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
-@WebServlet(Constant.URLS.MOVIES)
+@WebServlet(Constant.URLS.MOVIES + "/*")
 public class MoviesPageController extends Controller {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -27,7 +27,7 @@ public class MoviesPageController extends Controller {
 
         if(pathParts == null) {
             try {
-                sendMoviesPage(request, response, FilmManager.getInstance().getElementsById(null));
+                sendMoviesPage(request, response, FilmManager.getInstance().fetchFilmsForUser());
             } catch (CustomException e) {
                 send404Response(request, response, null);
             }
@@ -43,12 +43,20 @@ public class MoviesPageController extends Controller {
         }
         switch (action) {
             case Constant.MovieActionType.SEARCH :
+                FilmManager.getInstance().setNameFilter(request.getParameter(Constant.FormInputNames.MOVIE_NAME));
+                response.sendRedirect(Constant.URLS.MOVIES);
                 break;
             case Constant.MovieActionType.CLEAR :
+                FilmManager.getInstance().setNameFilter(null);
+                response.sendRedirect(Constant.URLS.MOVIES);
                 break;
             case Constant.MovieActionType.SORT_DATE :
+                FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_DATE);
+                response.sendRedirect(Constant.URLS.MOVIES);
                 break;
             case Constant.MovieActionType.SORT_IMDB :
+                FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_IMDB);
+                response.sendRedirect(Constant.URLS.MOVIES);
                 break;
             default:
                 sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));

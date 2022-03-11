@@ -21,8 +21,7 @@
     </style>
 </head>
 <body>
-    <a href="<%=Constant.URLS.ROOT%>">Home</a>
-    <p id="email">email: <%= Iemdb.loggedInUser%></p>
+    <jsp:include page="/header.jsp" />
     <br><br>
     <form action="" method="POST">
         <label>Search:</label>
