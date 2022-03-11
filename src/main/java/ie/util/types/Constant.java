@@ -169,6 +169,7 @@ public class Constant {
         public static final String ACTOR = "/actors/*";
         public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
         public static final String MOVIES = "/movies/*";
+        public static final String WATCH_LIST = "/watchlist";
     }
     public static class JSP {
         public static final String LOGIN = "/auth-views/login.jsp";
@@ -176,6 +177,7 @@ public class Constant {
         public static final String _404_ = "/error-views/404.jsp";
         public static final String ACTOR = "/actor-views/actor.jsp";
         public static final String MOVIES = "/movie-views/movies.jsp";
+        public static final String W_LIST  = "/user-views/watchList.jsp";
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";

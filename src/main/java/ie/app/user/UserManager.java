@@ -3,13 +3,15 @@ package ie.app.user;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.app.film.Film;
 import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
 import ie.app.film.FilmManager;
 import ie.util.types.Constant;
-import java.util.ArrayList;
-import java.util.HashSet;
+import kotlin.Pair;
+
+import java.util.*;
 
 public class UserManager extends Manager<User> {
     private static UserManager instance = null;
@@ -86,6 +88,48 @@ public class UserManager extends Manager<User> {
         var user = getElementById(userId);
         user.removeFromWatchList(movieId);
     }
+
+    public ArrayList<String> getRecommendedWatchlist(User user){
+        ArrayList <Pair <String, Double>> scoreFilmList = new ArrayList<>();
+
+        try {
+            var films = FilmManager.getInstance().getElementsById(null);
+            var watchListFilms = FilmManager.getInstance().getElementsById(user.getWatchList());
+            for(var film : films) {
+                scoreFilmList.add(new Pair<>(film.getId().toString(), calFilmScore(film, watchListFilms)));
+            }
+        } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // sorting by score and returning best 3
+        Collections.sort(scoreFilmList, new Comparator<Pair<String, Double>>() {
+            @Override
+            public int compare(final Pair<String, Double> o1, final Pair<String, Double> o2) {
+                return o2.getSecond().compareTo(o1.getSecond());
+            }
+        });
+        ArrayList<String> result = new ArrayList<>();
+        for(int i = 0; i < scoreFilmList.size(); i++){
+            if(i > 2)
+                break;
+            result.add(scoreFilmList.get(i).getFirst());
+        }
+
+        return result;
+    }
+
+    public Double calFilmScore(Film film, List<Film> films){
+        double score = 0;
+        score += film.getBaseScoreForWatchList();
+        double similarity = 0;
+        for(var wFilm : films){
+            score += film.getSameGenre(wFilm);
+        }
+        score += 3 * similarity;
+        return score;
+    }
+
 
     // TODO : move these methods to another place and pass validated data to userManager. one option would be making a SchemaClass for watchList json
     public void addToWatchList(String JsonData) throws JsonProcessingException, CustomException {
