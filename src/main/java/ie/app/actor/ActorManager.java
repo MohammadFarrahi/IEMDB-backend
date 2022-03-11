@@ -22,6 +22,7 @@ public class ActorManager extends Manager<Actor> {
 
     private ActorManager() {
         jsonMapper = new ActorJsonHandler();
+        this.notFoundException = new ActorNotFoundException();
     }
 
     @Override

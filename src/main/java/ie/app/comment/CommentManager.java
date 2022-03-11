@@ -32,6 +32,7 @@ public class CommentManager extends Manager<Comment> {
         jsonMapper = new CommentJsonHandler();
         mapper = new ObjectMapper();
         mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+        this.notFoundException = new CommentNotFoundException();
     }
     @Override
     public String addElement(Comment newObject) throws CustomException {
