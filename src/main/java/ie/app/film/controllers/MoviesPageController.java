@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 @WebServlet(Constant.URLS.MOVIES)
 public class MoviesPageController extends Controller {
@@ -28,6 +31,28 @@ public class MoviesPageController extends Controller {
             } catch (CustomException e) {
                 send404Response(request, response, null);
             }
+        }
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        var action = request.getParameter(Constant.FormInputNames.MOVIE_ACTION);
+        var pathParts = splitPathParams(request.getPathInfo());
+
+        if(pathParts != null) {
+            // TODO : special movie
+        }
+        switch (action) {
+            case Constant.MovieActionType.SEARCH :
+                break;
+            case Constant.MovieActionType.CLEAR :
+                break;
+            case Constant.MovieActionType.SORT_DATE :
+                break;
+            case Constant.MovieActionType.SORT_IMDB :
+                break;
+            default:
+                sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
+                break;
         }
     }
     private void sendMoviesPage(HttpServletRequest request, HttpServletResponse response, List<Film> films)
