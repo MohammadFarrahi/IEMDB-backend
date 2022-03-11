@@ -168,7 +168,7 @@ public class Constant {
         public static final String LOGOUT = "/logout";
         public static final String ACTOR = "/actors/*";
         public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
-        public static final String MOVIES = "/movies/*";
+        public static final String MOVIES = "/movies";
     }
     public static class JSP {
         public static final String LOGIN = "/auth-views/login.jsp";
@@ -179,8 +179,16 @@ public class Constant {
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";
+        public static final String MOVIE_ACTION = "action";
+        public static final String MOVIE_NAME = "search";
     }
     public static enum PathType {
         ID
+    }
+    public static class MovieActionType {
+        public static final String SEARCH = "search";
+        public static final String CLEAR = "clear";
+        public static final String SORT_IMDB = "sort_by_imdb";
+        public static final String SORT_DATE = "sort_by_date";
     }
 }
