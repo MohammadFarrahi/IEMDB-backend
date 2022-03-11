@@ -16,12 +16,30 @@ import ie.util.types.Constant;
 import jdk.jshell.execution.LoaderDelegate;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class FilmManager extends Manager<Film> {
     private static FilmManager instance = null;
     // TODO : remove mapper
     private final ObjectMapper mapper;
     private final JsonHandler<Film> jsonMapper;
+
+    private String nameFilter;
+    private String sortType;
+    public void setNameFilter(String nameFilter) {
+        this.nameFilter = nameFilter;
+    }
+    public void setSortType(String sortType) {
+        // TODO : validation of sortType is missing
+        this.sortType = sortType;
+    }
+//    public List<Film> fetchFilmsForUser() {
+//        var films
+//    }
+//
+//    public List<Film> filterFilms(List<Film> films, String type) {
+//
+//    }
 
     public static FilmManager getInstance() {
         if (instance == null) {
@@ -32,6 +50,8 @@ public class FilmManager extends Manager<Film> {
     private FilmManager() {
         jsonMapper = new FilmJsonHandler();
         mapper = new ObjectMapper();
+        nameFilter = null;
+        sortType = null;
         this.notFoundException = new MovieNotFoundException();
     }
 
@@ -86,6 +106,7 @@ public class FilmManager extends Manager<Film> {
             return addElementJson(jsonData);
         }
     }
+
     public ArrayList<String> filterElementsByGenre(String genre) {
         try {
             ArrayList<String> filteredIdList = new ArrayList<>();
