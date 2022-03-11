@@ -1,5 +1,6 @@
 package ie.generic.view;
 
+import java.util.List;
 import java.util.Map;
 
 public class HtmlUtility {
@@ -13,5 +14,9 @@ public class HtmlUtility {
         }
         html +="</ul><div>";
         return html;
+    }
+    public static String getCSVFromList(List<String> list) {
+        var strList = list.toString();
+        return strList.substring(1, strList.length()-1).trim();
     }
 }
