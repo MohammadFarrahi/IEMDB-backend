@@ -2,12 +2,14 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ie.app.user.User;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
 import ie.app.actor.ActorManager;
 import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
+import ie.exception.ObjectNotFoundException;
 import ie.exception.UserNotFoundException;
 import ie.util.types.Constant;
 import ie.util.types.Response;
@@ -16,7 +18,7 @@ import org.jsoup.Jsoup;
 import java.util.ArrayList;
 
 public class Iemdb {
-    public static String loggedInUser;
+    public static User loggedInUser;
     private Response response;
     private final UserManager userManager;
     private final FilmManager filmManager;
@@ -43,10 +45,9 @@ public class Iemdb {
     public static boolean isLoggedIn(String userEmail) {
         return loggedInUser != null;
     }
-    public static void loginUser(String userEmail) throws UserNotFoundException {
-        if(!UserManager.getInstance().isIdValid(userEmail))
-            throw new UserNotFoundException();
-        loggedInUser = userEmail;
+    public static void loginUser(String userEmail) throws ObjectNotFoundException {
+        loggedInUser = UserManager.getInstance().getElementById(userEmail);
+
     }
     public static void logoutUser(String userEmail) {
         loggedInUser = null;
