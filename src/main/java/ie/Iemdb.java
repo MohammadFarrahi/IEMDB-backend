@@ -2,10 +2,6 @@ package ie;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.app.actor.ActorRouter;
-import ie.app.comment.CommentRouter;
-import ie.app.film.FilmRouter;
-import ie.app.user.UserRouter;
 import ie.exception.CustomException;
 import ie.exception.InvalidCommandException;
 import ie.app.actor.ActorManager;
@@ -13,7 +9,6 @@ import ie.app.comment.CommentManager;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
 import ie.exception.UserNotFoundException;
-import ie.generic.router.Router;
 import ie.util.types.Constant;
 import ie.util.types.Response;
 import org.jsoup.Jsoup;

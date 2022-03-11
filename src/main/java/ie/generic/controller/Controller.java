@@ -1,25 +1,70 @@
 package ie.generic.controller;
 
+import ie.generic.view.HtmlUtility;
 import ie.util.types.Constant;
-import io.javalin.http.Context;
+import ie.util.types.Email;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class Controller {
-    public static void Exception404Handler(Exception e, Context ctx) {
-        try {
-            ctx.html(new String(Files.readAllBytes(Paths.get(Constant.Template._404_)))).status(404);
-        } catch (IOException ex) {
-            ctx.html("<h1>404 Page not found</h1>").status(404);
+public abstract class Controller extends HttpServlet {
+    public Map<String, String> validateForm(Map<String, String> formData) {
+        Map<String, String> errorMessages = new HashMap<>();
+        for(var formItem : formData.entrySet()) {
+            switch (formItem.getKey()) {
+                case Constant.FormInputNames.USER_EMAIL :
+                    if (!Email.isValid(formItem.getValue()))
+                        errorMessages.put(Constant.FormInputNames.USER_EMAIL, "Input must be in format of email!");
+                    break;
+                default:
+                    break;
+            }
         }
+        return errorMessages;
     }
-    public static void Exception403Handler(Exception e, Context ctx) {
-        try {
-            ctx.html(new String(Files.readAllBytes(Paths.get(Constant.Template._403_)))).status(403);
-        } catch (IOException ex) {
-            ctx.html("<h1>404 Page not found</h1>").status(403);
+    public String[] splitPathParams(String pathInfo) {
+        if (pathInfo == null || pathInfo.equals("/"))
+            return null;
+        return pathInfo.substring(1).split("/");
+    }
+    // if pathParts is not in form of pathType, it will return null
+    public Map<String, String> validatePath(String[] pathParts, Constant.PathType pathType) {
+        Map<String, String> errorMessages = new HashMap<>();
+
+        if (pathParts == null)
+            return null;
+        switch (pathType) {
+            case ID:
+                if (pathParts.length != 1)
+                    return null;
+                try {
+                    Integer.parseInt(pathParts[0]);
+                    return errorMessages;
+                } catch (Exception e) {
+                    errorMessages.put("BadIdFormat", "Id format is not proper");
+                }
+                break;
+            default:
+                break;
         }
+        return errorMessages;
+    }
+
+    public void send404Response(HttpServletRequest request, HttpServletResponse response, Map<String, String> errorMessages)
+            throws ServletException, IOException {
+        request.setAttribute("errors", HtmlUtility.getHtmlList(errorMessages));
+        response.setStatus(404);
+        request.getRequestDispatcher(Constant.JSP._404_).forward(request, response);
+    }
+    public void sendBadRequestResponse(HttpServletRequest request, HttpServletResponse response, Map<String, String> errorMessages)
+            throws ServletException, IOException {
+        request.setAttribute("errors", HtmlUtility.getHtmlList(errorMessages));
+        response.setStatus(400);
+        request.getRequestDispatcher(Constant.JSP.ERROR).forward(request, response);
     }
 }

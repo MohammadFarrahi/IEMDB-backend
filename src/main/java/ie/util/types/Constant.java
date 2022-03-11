@@ -166,14 +166,19 @@ public class Constant {
         public static final String ROOT = "/";
         public static final String LOGIN = "/login";
         public static final String LOGOUT = "/logout";
+        public static final String ACTOR = "/actors/*";
         public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
     }
     public static class JSP {
         public static final String LOGIN = "/auth-views/login.jsp";
         public static final String ERROR = "/error-views/error.jsp";
         public static final String _404_ = "/error-views/404.jsp";
+        public static final String ACTOR = "/actor-views/actor.jsp";
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";
+    }
+    public static enum PathType {
+        ID
     }
 }

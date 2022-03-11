@@ -29,7 +29,7 @@ public class Film {
 
     // for jackson serialization
     @JsonGetter(Constant.Movie.NAME)
-    private String getName() {
+    public String getName() {
         return this.name;
     }
     @JsonGetter(Constant.Movie.SUMM)
@@ -53,7 +53,7 @@ public class Film {
         return this.genres;
     }
     @JsonGetter(Constant.Movie.RATING)
-    private Double getAverageRating() {
+    public Double getAverageRating() {
         return this.averageRating;
     }
     @JsonGetter(Constant.Movie.DURATION)
