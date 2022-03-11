@@ -1,10 +1,12 @@
 <%@page import="ie.app.film.Film"%>
 <%@page import="ie.generic.view.HtmlUtility"%>
+<%@page import="java.util.List"%>
+<%@page import="ie.app.actor.Actor"%>
 
 
 <%
   Film movie = (Film)request.getAttribute("movie");
-
+  List<Actor> cast = (List<Actor>)request.getAttribute("cast");
 %>
 
 <!DOCTYPE html>
@@ -37,6 +39,23 @@
     <li id="duration">duration: <%= movie.getDuration()%> minutes</li>
     <li id="ageLimit">ageLimit: <%= movie.getAgeLimit()%></li>
   </ul>
+  <h3>Cast</h3>
+  <table>
+    <tr>
+      <th>name</th>
+      <th>age</th>
+      <th></th>
+    </tr>
+    <tr>
+      <% for (Actor actor : cast){%>
+        <tr>
+            <td><%= actor.getName()%></td>
+            <td><%= actor.getAge()%></td>
+            <td><a href="/actors/<%= actor.getId() %>">Link</a></td>
+
+        </tr>
+      <%}%>
+  </table>
 
 </body>
 

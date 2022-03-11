@@ -36,8 +36,9 @@ public class MoviesPageController extends Controller {
             var movieId = pathParts[0];
             try {
                 var movie = FilmManager.getInstance().getElementById(movieId);
-
+                var cast = ActorManager.getInstance().getElementsById(movie.getCast());
                 request.setAttribute("movie", movie);
+                request.setAttribute("cast", cast);
                 request.getRequestDispatcher(Constant.JSP.MOVIE).forward(request, response);
 
 
