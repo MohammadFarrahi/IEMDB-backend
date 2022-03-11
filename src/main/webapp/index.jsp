@@ -6,8 +6,8 @@
     <title>Home</title>
 </head>
 <body>
+    <jsp:include page="/header.jsp" />
     <ul>
-        <li id="email">email: <%=Iemdb.loggedInUser%></li>
         <li>
             <a href="/movies">Movies</a>
         </li>
