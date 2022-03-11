@@ -2,6 +2,7 @@ package ie.generic.model;
 
 import ie.exception.CustomException;
 import ie.exception.ObjectNotFoundException;
+import io.javalin.http.NotFoundResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public abstract class Manager <T> {
     protected Map<String,T> objectMap;
-
+    protected ObjectNotFoundException notFoundException;
     public Manager () {
         objectMap = new HashMap<>();
     }
@@ -18,13 +19,13 @@ public abstract class Manager <T> {
     public abstract String addElement(T newObject) throws CustomException;
     public abstract String updateElement(T newObject) throws CustomException;
 
-    public T getElementById(String id) throws CustomException {
+    public T getElementById(String id) throws ObjectNotFoundException {
         if (!objectMap.containsKey(id)) {
-            throw new ObjectNotFoundException(); // TODO: handle exception message properly
+            throw notFoundException;
         }
         return objectMap.get(id);
     }
-    public List<T> getElementsById(List<String> ids) throws CustomException {
+    public List<T> getElementsById(List<String> ids) throws ObjectNotFoundException {
         if (ids == null) {
             return new ArrayList<T>(objectMap.values());
         }

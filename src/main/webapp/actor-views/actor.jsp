@@ -1,8 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="ie.app.actor.Actor"%>
 <%@page import="ie.app.film.Film"%>
-<%@page import="ie.util.types.Constant"%>
-<%@page import="ie.Iemdb"%>
+
 <%
     Actor actor = (Actor)request.getAttribute("actor");
     List<Film> performedMovies = (List<Film>)request.getAttribute("movies");
@@ -19,8 +18,7 @@
     </style>
 </head>
 <body>
-    <a href="<%=Constant.URLS.ROOT%>">Home</a>
-    <p id="email">email: <%= Iemdb.loggedInUser%></p>
+    <jsp:include page="/header.jsp" />
     <ul>
         <li id="name">name:  <%= actor.getName()%></li>
         <li id="birthDate">birthDate: <%= actor.getBirthDate()%></li>
