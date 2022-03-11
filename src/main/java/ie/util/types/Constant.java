@@ -175,6 +175,7 @@ public class Constant {
         public static final String ERROR = "/error-views/error.jsp";
         public static final String _404_ = "/error-views/404.jsp";
         public static final String ACTOR = "/actor-views/actor.jsp";
+        public static final String W_LIST = "/user-views/watchList.jsp";
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";
