@@ -167,6 +167,7 @@ public class Constant {
         public static final String LOGIN = "/login";
         public static final String LOGOUT = "/logout";
         public static final String ACTOR = "/actors/*";
+        public static final String WATCH_LIST = "/watchlist";
         public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
     }
     public static class JSP {
