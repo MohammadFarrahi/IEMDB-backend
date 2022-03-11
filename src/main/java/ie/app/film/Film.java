@@ -33,31 +33,31 @@ public class Film {
         return this.name;
     }
     @JsonGetter(Constant.Movie.SUMM)
-    private String getSummary() {
+    public String getSummary() {
         return this.summary;
     }
     @JsonGetter(Constant.Movie.R_DATE)
-    private String getReleaseDate() {
+    public String getReleaseDate() {
         return this.releaseDate.toString();
     }
     @JsonGetter(Constant.Movie.DIRECTOR)
-    private String getDirector() {
+    public String getDirector() {
         return this.director;
     }
     @JsonGetter(Constant.Movie.WRITERS)
-    private ArrayList<String> getWriters() {
+    public ArrayList<String> getWriters() {
         return this.writers;
     }
     @JsonGetter(Constant.Movie.GENRE)
-    private ArrayList<String> getGenres() {
+    public ArrayList<String> getGenres() {
         return this.genres;
     }
     @JsonGetter(Constant.Movie.RATING)
     public Double getAverageRating() {
-        return this.averageRating;
+        return this.averageRating == null ? 0.0 : this.averageRating;
     }
     @JsonGetter(Constant.Movie.DURATION)
-    private Integer getDuration() {
+    public Integer getDuration() {
         return this.duration;
     }
     @JsonGetter(Constant.Movie.IMDB)
