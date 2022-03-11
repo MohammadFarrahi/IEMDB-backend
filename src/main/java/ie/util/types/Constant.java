@@ -177,6 +177,7 @@ public class Constant {
         public static final String _404_ = "/error-views/404.jsp";
         public static final String ACTOR = "/actor-views/actor.jsp";
         public static final String MOVIES = "/movie-views/movies.jsp";
+        public static final String MOVIE = "/movie-views/movie.jsp";
         public static final String W_LIST  = "/user-views/watchList.jsp";
     }
     public static class FormInputNames {
