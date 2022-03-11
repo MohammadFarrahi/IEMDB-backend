@@ -1,5 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="ie.app.film.Film"%>
+<%@page import="ie.generic.view.HtmlUtility"%>
 
 <%
     List<Film> watchlistMovies = (List<Film>)request.getAttribute("movies");
@@ -39,7 +40,7 @@
             <td><%= film.getName()%></td>
             <td><%= film.getReleaseDate()%></td>
             <td><%= film.getDirector()%></td>
-            <td>hello, folan</td>
+            <td><%= HtmlUtility.getCSVFromList(film.getGenres())%></td>
             <td><%= film.getImdbRate()%></td>
             <td><%= film.getAverageRating()%></td>
             <td><%= film.getDuration()%></td>
