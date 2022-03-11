@@ -11,6 +11,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Watch List</title>
+    <style>
+        li, td, th {
+          padding: 5px;
+        }
+      </style>
 </head>
 <body>
     <jsp:include page="/header.jsp" />
