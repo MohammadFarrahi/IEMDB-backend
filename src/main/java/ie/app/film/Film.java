@@ -37,11 +37,11 @@ public class Film {
         return this.summary;
     }
     @JsonGetter(Constant.Movie.R_DATE)
-    private String getReleaseDate() {
+    public String getReleaseDate() {
         return this.releaseDate.toString();
     }
     @JsonGetter(Constant.Movie.DIRECTOR)
-    private String getDirector() {
+    public String getDirector() {
         return this.director;
     }
     @JsonGetter(Constant.Movie.WRITERS)
@@ -49,7 +49,7 @@ public class Film {
         return this.writers;
     }
     @JsonGetter(Constant.Movie.GENRE)
-    private ArrayList<String> getGenres() {
+    public ArrayList<String> getGenres() {
         return this.genres;
     }
     @JsonGetter(Constant.Movie.RATING)
@@ -57,7 +57,7 @@ public class Film {
         return this.averageRating;
     }
     @JsonGetter(Constant.Movie.DURATION)
-    private Integer getDuration() {
+    public Integer getDuration() {
         return this.duration;
     }
     @JsonGetter(Constant.Movie.IMDB)
