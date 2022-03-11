@@ -184,6 +184,7 @@ public class Constant {
         public static final String USER_EMAIL = "email";
         public static final String MOVIE_ACTION = "action";
         public static final String MOVIE_NAME = "search";
+        public static final String MOVIE_RATE = "quantity";
     }
     public static enum PathType {
         ID
@@ -193,5 +194,6 @@ public class Constant {
         public static final String CLEAR = "clear";
         public static final String SORT_IMDB = "sort_by_imdb";
         public static final String SORT_DATE = "sort_by_date";
+        public static final String RATE = "rate";
     }
 }

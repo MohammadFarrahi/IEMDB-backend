@@ -1,5 +1,6 @@
 package ie.app.film.controllers;
 
+import ie.Iemdb;
 import ie.app.actor.Actor;
 import ie.app.actor.ActorManager;
 import ie.app.film.Film;
@@ -54,28 +55,44 @@ public class MoviesPageController extends Controller {
         var pathParts = splitPathParams(request.getPathInfo());
 
         if (pathParts != null) {
-            // TODO : special movie
-        }
-        switch (action) {
-            case Constant.MovieActionType.SEARCH:
-                FilmManager.getInstance().setNameFilter(request.getParameter(Constant.FormInputNames.MOVIE_NAME));
-                response.sendRedirect(Constant.URLS.MOVIES);
-                break;
-            case Constant.MovieActionType.CLEAR:
-                FilmManager.getInstance().setNameFilter(null);
-                response.sendRedirect(Constant.URLS.MOVIES);
-                break;
-            case Constant.MovieActionType.SORT_DATE:
-                FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_DATE);
-                response.sendRedirect(Constant.URLS.MOVIES);
-                break;
-            case Constant.MovieActionType.SORT_IMDB:
-                FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_IMDB);
-                response.sendRedirect(Constant.URLS.MOVIES);
-                break;
-            default:
-                sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
-                break;
+            try {
+                var movieId = pathParts[0];
+                switch (action) {
+                    case Constant.MovieActionType.RATE:
+                        FilmManager.getInstance().rateMovie(movieId, Iemdb.loggedInUser.getId(), Integer.parseInt(Constant.FormInputNames.MOVIE_RATE));
+                        response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
+                        break;
+
+                    default:
+                        sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
+                        break;
+                }
+            } catch (Exception e) {
+                // TODO: handle exception if needed
+                e.printStackTrace();
+            }
+        } else {
+            switch (action) {
+                case Constant.MovieActionType.SEARCH:
+                    FilmManager.getInstance().setNameFilter(request.getParameter(Constant.FormInputNames.MOVIE_NAME));
+                    response.sendRedirect(Constant.URLS.MOVIES);
+                    break;
+                case Constant.MovieActionType.CLEAR:
+                    FilmManager.getInstance().setNameFilter(null);
+                    response.sendRedirect(Constant.URLS.MOVIES);
+                    break;
+                case Constant.MovieActionType.SORT_DATE:
+                    FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_DATE);
+                    response.sendRedirect(Constant.URLS.MOVIES);
+                    break;
+                case Constant.MovieActionType.SORT_IMDB:
+                    FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_IMDB);
+                    response.sendRedirect(Constant.URLS.MOVIES);
+                    break;
+                default:
+                    sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
+                    break;
+            }
         }
     }
 
