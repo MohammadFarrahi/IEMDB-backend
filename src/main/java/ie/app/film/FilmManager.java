@@ -32,6 +32,7 @@ public class FilmManager extends Manager<Film> {
     private FilmManager() {
         jsonMapper = new FilmJsonHandler();
         mapper = new ObjectMapper();
+        this.notFoundException = new MovieNotFoundException();
     }
 
     @Override

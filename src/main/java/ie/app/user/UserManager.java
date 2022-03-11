@@ -26,6 +26,7 @@ public class UserManager extends Manager<User> {
     private UserManager () {
         jsonMapper = new UserJsonHandler();
         mapper = new ObjectMapper();
+        this.notFoundException = new UserNotFoundException();
     }
 
     @Override
