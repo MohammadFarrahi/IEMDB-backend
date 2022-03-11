@@ -3,9 +3,7 @@ package ie.app.film;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.*;
 
 import ie.app.actor.ActorManager;
 import ie.app.user.UserManager;
@@ -15,13 +13,56 @@ import ie.generic.model.Manager;
 import ie.util.types.Constant;
 import jdk.jshell.execution.LoaderDelegate;
 
-import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class FilmManager extends Manager<Film> {
     private static FilmManager instance = null;
     // TODO : remove mapper
     private final ObjectMapper mapper;
     private final JsonHandler<Film> jsonMapper;
+
+    private String nameFilter;
+    private String sortType;
+    private boolean filterFlag;
+    private boolean sortFlag;
+    public void setNameFilter(String nameFilter) {
+        this.nameFilter = nameFilter;
+        filterFlag = true;
+    }
+    public void setSortType(String sortType) {
+        // TODO : validation of sortType is missing
+        this.sortType = sortType;
+        sortFlag = true;
+    }
+    public List<Film> fetchFilmsForUser() {
+        try {
+            var films = getElementsById(null);
+            if(filterFlag) {
+                films = filterElementsByName(films,  nameFilter);
+                filterFlag = false;
+            }
+            if(sortFlag) {
+                films = sortElements(films, sortType);
+                sortFlag = false;
+            }
+            return films;
+        } catch (ObjectNotFoundException e) {}
+        return null;
+
+    }
+    public List<Film> filterElementsByName(List<Film> films, String name) {
+        if(name==null)
+            return films;
+        return films.stream().filter(film -> film.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
+    }
+    public List<Film> sortElements(List<Film> films, String type){
+        switch (type) {
+            case Constant.MovieActionType.SORT_IMDB -> Collections.sort(films, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
+            case Constant.MovieActionType.SORT_DATE -> Collections.sort(films, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
+            default -> {}
+        }
+        return films;
+    }
 
     public static FilmManager getInstance() {
         if (instance == null) {
@@ -32,6 +73,10 @@ public class FilmManager extends Manager<Film> {
     private FilmManager() {
         jsonMapper = new FilmJsonHandler();
         mapper = new ObjectMapper();
+        nameFilter = null;
+        sortType = null;
+        filterFlag = false;
+        sortFlag = false;
         this.notFoundException = new MovieNotFoundException();
     }
 
@@ -86,6 +131,7 @@ public class FilmManager extends Manager<Film> {
             return addElementJson(jsonData);
         }
     }
+
     public ArrayList<String> filterElementsByGenre(String genre) {
         try {
             ArrayList<String> filteredIdList = new ArrayList<>();

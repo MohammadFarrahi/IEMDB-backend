@@ -1,6 +1,7 @@
 package ie.app.user.controllers;
 
 import ie.Iemdb;
+import ie.app.film.FilmManager;
 import ie.generic.controller.Controller;
 import ie.util.types.Constant;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +16,8 @@ public class UserLogout extends Controller {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         Iemdb.logoutUser(null);
+        FilmManager.getInstance().setSortType(null);
+        FilmManager.getInstance().setNameFilter(null);
         response.sendRedirect(Constant.URLS.LOGIN);
     }
     // TODO : how to handle different(useless) http methods properly with proper code-page-message

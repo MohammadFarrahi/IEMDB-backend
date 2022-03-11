@@ -181,8 +181,16 @@ public class Constant {
     }
     public static class FormInputNames {
         public static final String USER_EMAIL = "email";
+        public static final String MOVIE_ACTION = "action";
+        public static final String MOVIE_NAME = "search";
     }
     public static enum PathType {
         ID
+    }
+    public static class MovieActionType {
+        public static final String SEARCH = "search";
+        public static final String CLEAR = "clear";
+        public static final String SORT_IMDB = "sort_by_imdb";
+        public static final String SORT_DATE = "sort_by_date";
     }
 }
