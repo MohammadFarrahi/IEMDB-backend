@@ -3,6 +3,7 @@
 
 <%
     List<Film> watchlistMovies = (List<Film>)request.getAttribute("movies");
+    List<Film> recMovies = (List<Film>)request.getAttribute("recMovies");
 %>
 
 <!DOCTYPE html>
@@ -44,6 +45,26 @@
                     <button type="submit">Remove</button>
                 </form>
             </td>
+        </tr>
+            <%}%>
+    </table>
+    <br>
+    <br>
+    <h2>Recommendation List</h2>
+    <table>
+        <tr>
+            <th>Movie</th>
+            <th>imdb Rate</th> 
+            <th></th>
+        </tr>
+        <%
+            for (int idx = 0; idx < recMovies.size(); idx++){
+                Film film = recMovies.get(idx);
+        %>
+        <tr>
+            <td><%= film.getName()%></td>
+            <td><%= film.getImdbRate()%></td>
+            <td><a href="/movies/<%= film.getId() %>">Link</a></td>
         </tr>
             <%}%>
     </table>

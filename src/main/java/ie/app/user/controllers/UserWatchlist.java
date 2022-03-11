@@ -1,6 +1,7 @@
 package ie.app.user.controllers;
 
 import ie.Iemdb;
+import ie.app.film.Film;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
 import ie.exception.ObjectNotFoundException;
@@ -22,7 +23,12 @@ public class UserWatchlist extends Controller {
 
             var movieIds = Iemdb.loggedInUser.getWatchList();
             var movies = FilmManager.getInstance().getElementsById(movieIds);
+
+            var recMovieIds = UserManager.getInstance().getRecommendedWatchlist(Iemdb.loggedInUser);
+            var recMovies = FilmManager.getInstance().getElementsById(recMovieIds);
+
             request.setAttribute("movies", movies);
+            request.setAttribute("recMovies", recMovies);
             request.getRequestDispatcher(Constant.JSP.W_LIST).forward(request, response);
 
         } catch (ObjectNotFoundException e) {
