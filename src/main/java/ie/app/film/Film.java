@@ -141,4 +141,17 @@ public class Film {
         }
         return releaseDate.getYear() > year;
     }
+
+    public Double getBaseScoreForWatchList(){
+        return getImdbRate() + getAverageRating();
+    }
+
+    public Integer getSameGenre(Film other){
+        int count = 0;
+        for(var genre : genres){
+            if(other.getGenres().contains(genre))
+                count += 1;
+        }
+        return count;
+    }
 }
