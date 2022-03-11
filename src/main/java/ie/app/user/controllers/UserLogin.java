@@ -43,7 +43,11 @@ public class UserLogin extends Controller {
         if(!errorMessages.isEmpty()) {
             send404Response(request, response, errorMessages);
         } else {
-            response.sendRedirect(Constant.URLS.ROOT);
+            var query = request.getQueryString();
+            if(query != null)
+                response.sendRedirect(query.split("=")[1]);
+            else
+                response.sendRedirect(Constant.URLS.ROOT);
         }
     }
 }

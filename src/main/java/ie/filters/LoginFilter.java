@@ -21,7 +21,7 @@ public class LoginFilter implements Filter {
         if (needsAuthentication(requestPath) && !Iemdb.isLoggedIn(null)) {
             // TODO : here we can't set proper http status code
             // TODO : after that, redirect to requested page
-            response.sendRedirect(Constant.URLS.LOGIN);
+            response.sendRedirect(Constant.URLS.LOGIN + "?after=" + requestPath);
         } else {
             filterChain.doFilter(request, response);
         }
