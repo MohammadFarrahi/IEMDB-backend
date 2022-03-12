@@ -192,7 +192,7 @@ public class Constant {
     public static enum PathType {
         ID
     }
-    public static class MovieActionType {
+    public static class ActionType {
         public static final String SEARCH = "search";
         public static final String CLEAR = "clear";
         public static final String SORT_IMDB = "sort_by_imdb";
@@ -202,5 +202,6 @@ public class Constant {
         public static final String LIKE = "like";
         public static final String DISLIKE = "dislike";
         public static final String COMMENT = "comment";
+        public static final String DELETE = "delete";
     }
 }

@@ -11,7 +11,6 @@ import ie.exception.*;
 import ie.generic.model.JsonHandler;
 import ie.generic.model.Manager;
 import ie.util.types.Constant;
-import jdk.jshell.execution.LoaderDelegate;
 
 import java.util.stream.Collectors;
 
@@ -57,8 +56,8 @@ public class FilmManager extends Manager<Film> {
     }
     public List<Film> sortElements(List<Film> films, String type){
         switch (type) {
-            case Constant.MovieActionType.SORT_IMDB -> Collections.sort(films, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
-            case Constant.MovieActionType.SORT_DATE -> Collections.sort(films, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
+            case Constant.ActionType.SORT_IMDB -> Collections.sort(films, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
+            case Constant.ActionType.SORT_DATE -> Collections.sort(films, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
             default -> {}
         }
         return films;

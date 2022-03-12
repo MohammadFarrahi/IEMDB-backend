@@ -61,7 +61,7 @@ public class MoviesPageController extends Controller {
             try {
                 var movieId = pathParts[0];
                 switch (action) {
-                    case Constant.MovieActionType.RATE:
+                    case Constant.ActionType.RATE:
                         FilmManager.getInstance().rateMovie(movieId, Iemdb.loggedInUser.getId(), Integer.parseInt(request.getParameter(Constant.FormInputNames.MOVIE_RATE)));
                         response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
                         break;
@@ -76,20 +76,20 @@ public class MoviesPageController extends Controller {
             }
         } else {
             switch (action) {
-                case Constant.MovieActionType.SEARCH:
+                case Constant.ActionType.SEARCH:
                     FilmManager.getInstance().setNameFilter(request.getParameter(Constant.FormInputNames.MOVIE_NAME));
                     response.sendRedirect(Constant.URLS.MOVIES);
                     break;
-                case Constant.MovieActionType.CLEAR:
+                case Constant.ActionType.CLEAR:
                     FilmManager.getInstance().setNameFilter(null);
                     response.sendRedirect(Constant.URLS.MOVIES);
                     break;
-                case Constant.MovieActionType.SORT_DATE:
-                    FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_DATE);
+                case Constant.ActionType.SORT_DATE:
+                    FilmManager.getInstance().setSortType(Constant.ActionType.SORT_DATE);
                     response.sendRedirect(Constant.URLS.MOVIES);
                     break;
-                case Constant.MovieActionType.SORT_IMDB:
-                    FilmManager.getInstance().setSortType(Constant.MovieActionType.SORT_IMDB);
+                case Constant.ActionType.SORT_IMDB:
+                    FilmManager.getInstance().setSortType(Constant.ActionType.SORT_IMDB);
                     response.sendRedirect(Constant.URLS.MOVIES);
                     break;
                 default:
