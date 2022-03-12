@@ -94,8 +94,10 @@ public class UserManager extends Manager<User> {
 
         try {
             var films = FilmManager.getInstance().getElementsById(null);
-            var watchListFilms = FilmManager.getInstance().getElementsById(user.getWatchList());
+            var watchListIds = user.getWatchList();
+            var watchListFilms = FilmManager.getInstance().getElementsById(watchListIds);
             for(var film : films) {
+                if (watchListIds.contains(film.getId().toString())) { continue; }
                 scoreFilmList.add(new Pair<>(film.getId().toString(), calFilmScore(film, watchListFilms)));
             }
         } catch (ObjectNotFoundException e) {
@@ -124,7 +126,7 @@ public class UserManager extends Manager<User> {
         score += film.getBaseScoreForWatchList();
         double similarity = 0;
         for(var wFilm : films){
-            score += film.getSameGenre(wFilm);
+            similarity += film.getSameGenre(wFilm);
         }
         score += 3 * similarity;
         return score;

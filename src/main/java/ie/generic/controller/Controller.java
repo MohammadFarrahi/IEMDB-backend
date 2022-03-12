@@ -21,6 +21,10 @@ public abstract class Controller extends HttpServlet {
                     if (!Email.isValid(formItem.getValue()))
                         errorMessages.put(Constant.FormInputNames.USER_EMAIL, "Input must be in format of email!");
                     break;
+                case Constant.FormInputNames.MOVIE_ID :
+                    var movieId = formItem.getValue();
+                    if(movieId == null || !movieId.matches("-?\\d+(\\.\\d+)?"))
+                        errorMessages.put(Constant.FormInputNames.MOVIE_ID, "Input must be in format of numeric id!");
                 default:
                     break;
             }

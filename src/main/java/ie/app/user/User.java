@@ -39,7 +39,7 @@ public class User {
         return this.password;
     }
     @JsonGetter(Constant.User.NICKNAME)
-    private String getNickname() {
+    public String getNickname() {
         return this.nickname;
     }
     @JsonGetter(Constant.User.B_DATE)
