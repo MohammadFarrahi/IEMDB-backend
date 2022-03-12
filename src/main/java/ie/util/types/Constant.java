@@ -166,10 +166,10 @@ public class Constant {
         public static final String ROOT = "/";
         public static final String LOGIN = "/login";
         public static final String LOGOUT = "/logout";
-        public static final String ACTOR = "/actors/*";
-        public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
+        public static final String ACTOR = "/actors";
         public static final String MOVIES = "/movies";
         public static final String WATCH_LIST = "/watchlist";
+        public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
     }
     public static class JSP {
         public static final String LOGIN = "/auth-views/login.jsp";
