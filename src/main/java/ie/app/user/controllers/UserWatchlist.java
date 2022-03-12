@@ -4,6 +4,7 @@ import ie.Iemdb;
 import ie.app.film.Film;
 import ie.app.film.FilmManager;
 import ie.app.user.UserManager;
+import ie.exception.CustomException;
 import ie.exception.ObjectNotFoundException;
 import ie.generic.controller.Controller;
 import ie.util.types.Constant;
@@ -13,6 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 @WebServlet(Constant.URLS.WATCH_LIST)
 public class UserWatchlist extends Controller {
@@ -33,6 +37,22 @@ public class UserWatchlist extends Controller {
 
         } catch (ObjectNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        var movieId = request.getParameter(Constant.FormInputNames.MOVIE_ID);
+
+        // validation logic
+        var errorMessages = validateForm(Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ID, movieId)));
+        if(!errorMessages.isEmpty())
+            sendBadRequestResponse(request, response, errorMessages);
+
+        try {
+            UserManager.getInstance().removeFromWatchList(Iemdb.loggedInUser.getId(), movieId);
+            response.sendRedirect(Constant.URLS.WATCH_LIST);
+        } catch (CustomException e) {
+            send404Response(request, response, errorMessages);
         }
     }
 }

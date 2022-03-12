@@ -181,6 +181,7 @@ public class Constant {
         public static final String W_LIST  = "/user-views/watchList.jsp";
     }
     public static class FormInputNames {
+        public static final String MOVIE_ID = "movie_id";
         public static final String USER_EMAIL = "email";
         public static final String MOVIE_ACTION = "action";
         public static final String MOVIE_NAME = "search";

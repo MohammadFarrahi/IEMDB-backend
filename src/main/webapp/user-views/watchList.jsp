@@ -1,7 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="ie.app.film.Film"%>
 <%@page import="ie.generic.view.HtmlUtility"%>
-
 <%
     List<Film> watchlistMovies = (List<Film>)request.getAttribute("movies");
     List<Film> recMovies = (List<Film>)request.getAttribute("recMovies");
