@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.util.types.Constant;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,9 @@ public class Actor {
         this.performedMovies = new ArrayList<>();
     }
 
+    public int getAge() {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
     public void addToPerformedMovies(String id) {
         performedMovies.add(id);
     }

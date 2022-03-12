@@ -168,7 +168,7 @@ public class Constant {
         public static final String LOGOUT = "/logout";
         public static final String ACTOR = "/actors/*";
         public static final Set<String> NonAuthURLs = Set.of(LOGIN, LOGOUT);
-        public static final String MOVIES = "/movies/*";
+        public static final String MOVIES = "/movies";
         public static final String WATCH_LIST = "/watchlist";
     }
     public static class JSP {
@@ -177,6 +177,7 @@ public class Constant {
         public static final String _404_ = "/error-views/404.jsp";
         public static final String ACTOR = "/actor-views/actor.jsp";
         public static final String MOVIES = "/movie-views/movies.jsp";
+        public static final String MOVIE = "/movie-views/movie.jsp";
         public static final String W_LIST  = "/user-views/watchList.jsp";
     }
     public static class FormInputNames {
@@ -184,6 +185,9 @@ public class Constant {
         public static final String USER_EMAIL = "email";
         public static final String MOVIE_ACTION = "action";
         public static final String MOVIE_NAME = "search";
+        public static final String MOVIE_RATE = "quantity";
+        public static final String COMMENT_ID = "comment_id";
+        public static final String COMMENT_TEXT = "comment_text";
     }
     public static enum PathType {
         ID
@@ -193,5 +197,10 @@ public class Constant {
         public static final String CLEAR = "clear";
         public static final String SORT_IMDB = "sort_by_imdb";
         public static final String SORT_DATE = "sort_by_date";
+        public static final String RATE = "rate";
+        public static final String ADD_TO_WL = "add";
+        public static final String LIKE = "like";
+        public static final String DISLIKE = "dislike";
+        public static final String COMMENT = "comment";
     }
 }
