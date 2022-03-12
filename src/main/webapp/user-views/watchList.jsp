@@ -39,7 +39,7 @@
             <td><%= film.getName()%></td>
             <td><%= film.getReleaseDate()%></td>
             <td><%= film.getDirector()%></td>
-            <td>hello, folan</td>
+            <td><%= HtmlUtility.getCSVFromList(film.getGenres())%></td>
             <td><%= film.getImdbRate()%></td>
             <td><%= film.getAverageRating()%></td>
             <td><%= film.getDuration()%></td>
