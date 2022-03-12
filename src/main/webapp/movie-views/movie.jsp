@@ -2,11 +2,13 @@
 <%@page import="ie.generic.view.HtmlUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="ie.app.actor.Actor"%>
+<%@page import="ie.app.comment.Comment"%>
 
 
 <%
   Film movie = (Film)request.getAttribute("movie");
   List<Actor> cast = (List<Actor>)request.getAttribute("cast");
+  List<Comment> comments = (List<Comment>)request.getAttribute("comments");
 %>
 
 <!DOCTYPE html>
@@ -64,6 +66,66 @@
       <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
       <button type="submit">rate</button>
     </form>
+    <br>
+    <form action="" method="POST">
+      <input type="hidden" id="form_action" name="action" value="add">
+      <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
+      <button type="submit">Add to WatchList</button>
+    </form>
+    <br>
+    <table>
+      <tr>
+        <th>nickname</th>
+        <th>comment</th>
+        <th></th>
+        <th></th>
+      </tr>
+      <tr>
+        <% for (Comment comment : comments){%>
+          <tr>
+              <td><%= comment.getCommentOwner() %></td>
+              <td><%= comment.getText()%></td>
+              <td>
+                <form action="" method="POST">
+                  <label for=""><%= comment.getCommentLikes()%></label>
+                  <input
+                    id="form_comment_id"
+                    type="hidden"
+                    name="comment_id"
+                    value="<%= comment.getId()%>"
+                  />
+                  <input type="hidden" id="form_action" name="action" value="like">
+                  <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
+                  <button type="submit">like</button>
+                </form>
+              </td>
+              <td>
+                <form action="" method="POST">
+                  <label for=""><%= comment.getCommentDislikes()%></label>
+                  <input
+                    id="form_comment_id"
+                    type="hidden"
+                    name="comment_id"
+                    value="<%= comment.getId()%>"
+                  />
+                  <input type="hidden" id="form_action" name="action" value="dislike">
+                  <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
+                  <button type="submit">dislike</button>
+                </form>
+              </td>
+          </tr>
+        <%}%>
+    </table>
+
+    <br><br>
+    <form action="" method="POST">
+      <label>Your Comment:</label>
+      <input type="text" name="comment" value="">
+      <input type="hidden" id="form_action" name="action" value="comment">
+      <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
+      <button type="submit">Add Comment</button>
+    </form>
+
 
 </body>
 

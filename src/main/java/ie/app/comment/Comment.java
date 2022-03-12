@@ -21,19 +21,19 @@ public class Comment {
 
     // for jackson serialization
     @JsonGetter(Constant.Comment.ID)
-    private Integer getId() {
+    public Integer getId() {
         return Integer.parseInt(id);
     }
     @JsonGetter(Constant.Comment.CONTENT)
-    private String getText() {
+    public String getText() {
         return text;
     }
     @JsonGetter(Constant.Comment.LIKES)
-    private Integer getCommentLikes() {
+    public Integer getCommentLikes() {
         return commentLikes;
     }
     @JsonGetter(Constant.Comment.DISLIKES)
-    private Integer getCommentDislikes() {
+    public Integer getCommentDislikes() {
         return commentDislikes;
     }
     @JsonGetter(Constant.Comment.C_DATE)

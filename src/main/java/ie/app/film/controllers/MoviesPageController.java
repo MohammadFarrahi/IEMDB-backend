@@ -3,6 +3,7 @@ package ie.app.film.controllers;
 import ie.Iemdb;
 import ie.app.actor.Actor;
 import ie.app.actor.ActorManager;
+import ie.app.comment.CommentManager;
 import ie.app.film.Film;
 import ie.app.film.FilmManager;
 import ie.exception.CustomException;
@@ -38,8 +39,10 @@ public class MoviesPageController extends Controller {
             try {
                 var movie = FilmManager.getInstance().getElementById(movieId);
                 var cast = ActorManager.getInstance().getElementsById(movie.getCast());
+                var comments = CommentManager.getInstance().getElementsById(movie.getComments());
                 request.setAttribute("movie", movie);
                 request.setAttribute("cast", cast);
+                request.setAttribute("comments", comments);
                 request.getRequestDispatcher(Constant.JSP.MOVIE).forward(request, response);
 
 
