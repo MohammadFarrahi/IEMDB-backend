@@ -47,6 +47,7 @@
             <td>        
                 <form action="" method="POST" >
                     <input id="form_movie_id" type="hidden" name="movie_id" value="<%= film.getId() %>">
+                    <input type="hidden" id="form_action" name="action" value="delete">
                     <button type="submit">Remove</button>
                 </form>
             </td>

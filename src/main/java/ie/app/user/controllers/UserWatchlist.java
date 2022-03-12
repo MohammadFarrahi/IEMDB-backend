@@ -41,6 +41,9 @@ public class UserWatchlist extends Controller {
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+
+        var action = request.getParameter(Constant.FormInputNames.MOVIE_ACTION);
+
         var movieId = request.getParameter(Constant.FormInputNames.MOVIE_ID);
 
         // validation logic
@@ -49,10 +52,23 @@ public class UserWatchlist extends Controller {
             sendBadRequestResponse(request, response, errorMessages);
 
         try {
-            UserManager.getInstance().removeFromWatchList(Iemdb.loggedInUser.getId(), movieId);
-            response.sendRedirect(Constant.URLS.WATCH_LIST);
+
+            switch (action) {
+            case Constant.ActionType.DELETE:
+                UserManager.getInstance().removeFromWatchList(Iemdb.loggedInUser.getId(), movieId);
+                response.sendRedirect(Constant.URLS.WATCH_LIST);
+                break;
+            case Constant.ActionType.ADD_TO_WL:
+                UserManager.getInstance().addToWatchList(Iemdb.loggedInUser.getId(), movieId);
+                response.sendRedirect(Constant.URLS.WATCH_LIST);
+                break;
+            default:
+                sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
+                break;
+        }
+
         } catch (CustomException e) {
-            send404Response(request, response, errorMessages);
+            sendBadRequestResponse(request, response, null);
         }
     }
 }

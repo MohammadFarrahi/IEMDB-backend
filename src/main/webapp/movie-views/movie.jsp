@@ -65,7 +65,7 @@
       <button type="submit">rate</button>
     </form>
     <br>
-    <form action="" method="POST">
+    <form action="/watchlist" method="POST">
       <input type="hidden" id="form_action" name="action" value="add">
       <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
       <button type="submit">Add to WatchList</button>
