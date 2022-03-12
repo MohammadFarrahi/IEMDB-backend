@@ -3,6 +3,7 @@ package ie.app.film.controllers;
 import ie.Iemdb;
 import ie.app.actor.Actor;
 import ie.app.actor.ActorManager;
+import ie.app.comment.Comment;
 import ie.app.comment.CommentManager;
 import ie.app.film.Film;
 import ie.app.film.FilmManager;
@@ -78,7 +79,11 @@ public class MoviesPageController extends Controller {
                         response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
                         break;
 
-                    
+                    case Constant.ActionType.COMMENT:
+                        var commentText = request.getParameter(Constant.FormInputNames.COMMENT_TEXT);
+                        CommentManager.getInstance().addElement(new Comment(movieId, Iemdb.loggedInUser.getId(), commentText));
+                        response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
+                        break;
 
                     default:
                         sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
