@@ -34,7 +34,7 @@ public abstract class Controller extends HttpServlet {
     public String[] splitPathParams(String pathInfo) {
         if (pathInfo == null || pathInfo.equals("/"))
             return null;
-        return pathInfo.substring(1).split("/");
+        return pathInfo.replace("/", " ").trim().split(" ");
     }
     // if pathParts is not in form of pathType, it will return null
     public Map<String, String> validatePath(String[] pathParts, Constant.PathType pathType) {
@@ -44,14 +44,8 @@ public abstract class Controller extends HttpServlet {
             return null;
         switch (pathType) {
             case ID:
-                if (pathParts.length != 1)
-                    return null;
-                try {
-                    Integer.parseInt(pathParts[0]);
-                    return errorMessages;
-                } catch (Exception e) {
+                if (pathParts.length != 1 ||  !pathParts[0].matches("-?\\d+(\\.\\d+)?"))
                     errorMessages.put("BadIdFormat", "Id format is not proper");
-                }
                 break;
             default:
                 break;

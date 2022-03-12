@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(Constant.URLS.ACTOR)
+@WebServlet(Constant.URLS.ACTOR + "/*")
 public class ActorPageController extends Controller {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {

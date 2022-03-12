@@ -4,10 +4,4 @@
 <!-- TODO : we have URL strings in two places in project; here and Constant class. can we gather them one place ?-->
 <web-app>
     <display-name>IEMDB</display-name>
-
-
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.html</url-pattern>
-    </servlet-mapping>
 </web-app>
