@@ -55,6 +55,8 @@ public class FilmManager extends Manager<Film> {
         return films.stream().filter(film -> film.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
     }
     public List<Film> sortElements(List<Film> films, String type){
+        if(type == null)
+            return films;
         switch (type) {
             case Constant.ActionType.SORT_IMDB -> Collections.sort(films, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
             case Constant.ActionType.SORT_DATE -> Collections.sort(films, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
