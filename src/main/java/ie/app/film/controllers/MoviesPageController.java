@@ -62,7 +62,7 @@ public class MoviesPageController extends Controller {
                 var movieId = pathParts[0];
                 switch (action) {
                     case Constant.MovieActionType.RATE:
-                        FilmManager.getInstance().rateMovie(movieId, Iemdb.loggedInUser.getId(), Integer.parseInt(Constant.FormInputNames.MOVIE_RATE));
+                        FilmManager.getInstance().rateMovie(movieId, Iemdb.loggedInUser.getId(), Integer.parseInt(request.getParameter(Constant.FormInputNames.MOVIE_RATE)));
                         response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
                         break;
 
