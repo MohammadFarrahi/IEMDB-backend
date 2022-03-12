@@ -3,8 +3,10 @@ package ie.app.comment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ie.app.user.UserManager;
 import ie.exception.CustomException;
 import ie.exception.InvalidVoteValueException;
+import ie.exception.ObjectNotFoundException;
 import ie.util.types.Constant;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -47,6 +49,14 @@ public class Comment {
     @JsonGetter(Constant.Comment.M_ID)
     public String getCommentFilm() {
         return commentFilm;
+    }
+
+    public String getCommentOwnerNickName() {
+        try {
+            return UserManager.getInstance().getElementById(commentOwner).getNickname();
+        } catch (ObjectNotFoundException e) {
+            return "SomeCoolGuy";
+        }
     }
 
     @JsonCreator

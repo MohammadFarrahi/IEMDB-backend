@@ -48,13 +48,11 @@
       <th>age</th>
       <th></th>
     </tr>
-    <tr>
       <% for (Actor actor : cast){%>
         <tr>
             <td><%= actor.getName()%></td>
             <td><%= actor.getAge()%></td>
             <td><a href="/actors/<%= actor.getId() %>">Link</a></td>
-
         </tr>
       <%}%>
   </table>
@@ -80,10 +78,9 @@
         <th></th>
         <th></th>
       </tr>
-      <tr>
         <% for (Comment comment : comments){%>
           <tr>
-              <td><%= comment.getCommentOwner() %></td>
+              <td>@<%= comment.getCommentOwnerNickName() %></td>
               <td><%= comment.getText()%></td>
               <td>
                 <form action="" method="POST">
@@ -116,17 +113,13 @@
           </tr>
         <%}%>
     </table>
-
     <br><br>
     <form action="" method="POST">
       <label>Your Comment:</label>
-      <input type="text" name="comment" value="">
+      <input type="text" name="comment_text" value="">
       <input type="hidden" id="form_action" name="action" value="comment">
       <input type="hidden" id="form_movie_id" name="movie_id" value="<%= movie.getId()%>">
       <button type="submit">Add Comment</button>
     </form>
-
-
 </body>
-
 </html>
