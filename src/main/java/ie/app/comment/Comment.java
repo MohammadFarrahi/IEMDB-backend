@@ -60,7 +60,7 @@ public class Comment {
     }
 
     @JsonCreator
-    private Comment (
+    public Comment (
             @JsonProperty(value = Constant.Comment.M_ID, required = true) String commentFilmId,
             @JsonProperty(value = Constant.Comment.U_ID, required = true) String commentOwnerId,
             @JsonProperty(value = Constant.Comment.CONTENT, required = true) String text) {
