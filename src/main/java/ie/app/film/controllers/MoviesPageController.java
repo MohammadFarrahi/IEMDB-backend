@@ -66,6 +66,20 @@ public class MoviesPageController extends Controller {
                         response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
                         break;
 
+                    case Constant.ActionType.LIKE:
+                        var commentId = request.getParameter(Constant.FormInputNames.COMMENT_ID);
+                        CommentManager.getInstance().voteComment(commentId, Iemdb.loggedInUser.getId(), +1);
+                        response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
+                        break;
+
+                    case Constant.ActionType.DISLIKE:
+                        commentId = request.getParameter(Constant.FormInputNames.COMMENT_ID);
+                        CommentManager.getInstance().voteComment(commentId, Iemdb.loggedInUser.getId(), -1);
+                        response.sendRedirect(Constant.URLS.MOVIES + "/" + movieId);
+                        break;
+
+                    
+
                     default:
                         sendBadRequestResponse(request, response, Map.ofEntries(entry(Constant.FormInputNames.MOVIE_ACTION, "Action is not proper")));
                         break;
