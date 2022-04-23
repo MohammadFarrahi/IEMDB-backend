@@ -1,4 +1,4 @@
-package ie.iemdb;
+package ie.iemdb.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
