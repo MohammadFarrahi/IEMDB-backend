@@ -1,4 +1,4 @@
-package ie.iemdb.service.DTO;
+package ie.iemdb.service;
 
 public class ResponseDTO {
     public short statusCode;
