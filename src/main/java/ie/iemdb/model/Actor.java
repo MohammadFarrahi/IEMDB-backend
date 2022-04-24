@@ -10,22 +10,25 @@ public class Actor {
     private String name;
     private LocalDate birthDate;
     private String nationality;
-    private ArrayList<String> performedMovies;
+    private ArrayList<Movie> performedMovies;
+    private String imgUrl;
 
 
-    private Actor ( String id, String name, String birthDate, String nationality) {
+    private Actor ( String id, String name, String birthDate, String nationality, String imgUrl ) {
         this.id = id;
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate);
         this.nationality = nationality;
         this.performedMovies = new ArrayList<>();
+        this.imgUrl = imgUrl;
     }
 
     public int getAge() {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
-    public void addToPerformedMovies(String id) {
-        performedMovies.add(id);
+    
+    public void addToPerformedMovies(Movie movie) {
+        performedMovies.add(movie);
     }
 
     public String getId() {

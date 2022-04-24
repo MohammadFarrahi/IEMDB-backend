@@ -15,9 +15,9 @@ public class User {
     private String name;
     private LocalDate birthDate;
 
-    private ArrayList<String> watchList;
+    private ArrayList<Movie> watchList;
 
-    private User (String email, String password, String nickname, String name, String birthDate) throws CustomException {
+    private User(String email, String password, String nickname, String name, String birthDate) throws CustomException {
         this.watchList = new ArrayList<>();
 
         this.email = new Email(email);
@@ -27,31 +27,32 @@ public class User {
         this.birthDate = LocalDate.parse(birthDate);
     }
 
-    public String getId() { return this.email.toString(); }
+    public String getId() {
+        return this.email.toString();
+    }
 
-
-    public void addToWatchList(String id) throws CustomException {
-        if(watchList.contains(id))
+    public void addToWatchList(Movie movie) throws CustomException {
+        if (watchList.contains(movie))
             throw new MovieAlreadyExistsException();
-        watchList.add(id);
+        watchList.add(movie);
     }
 
     public void removeFromWatchList(String id) throws CustomException {
-        if(!watchList.contains(id))
-            throw new CustomException("MovieNotFoundInWatchList");
-        watchList.remove(id);
+        for (var movie : this.watchList) {
+            if (movie.getId().equals(id)) {
+                watchList.remove(movie);
+                return;
+            }
+        }
+        throw new CustomException("MovieNotFoundInWatchList");
     }
 
     public boolean isOlderThan(Integer age) {
         return age <= Period.between(birthDate, LocalDate.now()).getYears();
     }
 
-    public ArrayList<String> getWatchList() {
+    public ArrayList<Movie> getWatchList() {
         return watchList;
-    }
-
-    public void setWatchList(ArrayList<String> watchList) {
-        this.watchList = watchList;
     }
 
     public String getNickname() {
