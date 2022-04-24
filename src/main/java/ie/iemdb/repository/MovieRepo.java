@@ -22,7 +22,6 @@ public class MovieRepo extends Repo<Movie> {
     }
 
     public void setSortType(String sortType) {
-        // TODO : validation of sortType is missing
         this.sortType = sortType;
         sortFlag = true;
     }

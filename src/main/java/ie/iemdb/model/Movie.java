@@ -1,8 +1,5 @@
 package ie.iemdb.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidRateScoreException;
 import ie.iemdb.util.types.Constant;
@@ -27,73 +24,9 @@ public class Movie {
     private ArrayList<String> comments;
     private HashMap<String, Integer> userRateMap;
 
-    // for jackson serialization
-    @JsonGetter(Constant.Movie.NAME)
-    public String getName() {
-        return this.name;
-    }
-    @JsonGetter(Constant.Movie.SUMM)
-    public String getSummary() {
-        return this.summary;
-    }
-    @JsonGetter(Constant.Movie.R_DATE)
-    public String getReleaseDate() {
-        return this.releaseDate.toString();
-    }
-    @JsonGetter(Constant.Movie.DIRECTOR)
-    public String getDirector() {
-        return this.director;
-    }
-    @JsonGetter(Constant.Movie.WRITERS)
-    public ArrayList<String> getWriters() {
-        return this.writers;
-    }
-    @JsonGetter(Constant.Movie.GENRE)
-    public ArrayList<String> getGenres() {
-        return this.genres;
-    }
-    @JsonGetter(Constant.Movie.RATING)
-    public Double getAverageRating() {
-        return this.averageRating == null ? 0.0 : this.averageRating;
-    }
-    @JsonGetter(Constant.Movie.DURATION)
-    public Integer getDuration() {
-        return this.duration;
-    }
-    @JsonGetter(Constant.Movie.IMDB)
-    public Double getImdbRate() { return imdbRate; }
+  
 
-    @JsonGetter(Constant.Movie.ID_G)
-    public Integer getId() {
-        return Integer.parseInt(this.id);
-    }
-    @JsonGetter(Constant.Movie.AGE_L)
-    public Integer getAgeLimit() {
-        return this.ageLimit;
-    }
-    @JsonGetter(Constant.Movie.CAST)
-    public ArrayList<String> getCast() {
-        return this.cast;
-    }
-    @JsonGetter(Constant.Movie.COMMENTS)
-    public ArrayList<String> getComments() {
-        return this.comments;
-    }
-
-
-    @JsonCreator
-    private Movie (
-            @JsonProperty(value=Constant.Movie.ID_S, required = true) String id,
-            @JsonProperty(value=Constant.Movie.NAME, required = true) String name,
-            @JsonProperty(value=Constant.Movie.SUMM, required = true) String summary,
-            @JsonProperty(value=Constant.Movie.DIRECTOR, required = true) String director,
-            @JsonProperty(value=Constant.Movie.CAST, required = true) ArrayList<String> cast,
-            @JsonProperty(value =Constant.Movie.R_DATE, required = true) String releaseDate,
-            @JsonProperty(value=Constant.Movie.WRITERS, required = true) ArrayList<String> writers,
-            @JsonProperty(value=Constant.Movie.GENRE, required = true) ArrayList<String> genres,
-            @JsonProperty(value=Constant.Movie.AGE_L, required = true) Integer ageLimit,
-            @JsonProperty(value=Constant.Movie.DURATION, required = true) Integer duration,
-            @JsonProperty(value=Constant.Movie.IMDB, required = true) Double imdbRate) {
+    private Movie (String id, String name, String summary, String director, ArrayList<String> cast, String releaseDate, ArrayList<String> writers, ArrayList<String> genres, Integer ageLimit, Integer duration, Double imdbRate) {
         userRateMap = new HashMap<>();
         comments = new ArrayList<>();
         averageRating = null;
@@ -109,6 +42,58 @@ public class Movie {
         this.ageLimit = ageLimit;
         this.duration = duration;
         this.imdbRate = imdbRate;
+    }
+
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getSummary() {
+        return this.summary;
+    }
+
+    public String getReleaseDate() {
+        return this.releaseDate.toString();
+    }
+
+    public String getDirector() {
+        return this.director;
+    }
+
+    public ArrayList<String> getWriters() {
+        return this.writers;
+    }
+
+    public ArrayList<String> getGenres() {
+        return this.genres;
+    }
+
+    public Double getAverageRating() {
+        return this.averageRating == null ? 0.0 : this.averageRating;
+    }
+
+    public Integer getDuration() {
+        return this.duration;
+    }
+
+    public Double getImdbRate() { return imdbRate; }
+
+
+    public Integer getId() {
+        return Integer.parseInt(this.id);
+    }
+
+    public Integer getAgeLimit() {
+        return this.ageLimit;
+    }
+
+    public ArrayList<String> getCast() {
+        return this.cast;
+    }
+
+    public ArrayList<String> getComments() {
+        return this.comments;
     }
 
     public void addCommentId(String commentId) {
