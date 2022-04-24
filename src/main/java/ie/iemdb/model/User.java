@@ -1,0 +1,60 @@
+package ie.iemdb.model;
+
+import ie.iemdb.exception.CustomException;
+import ie.iemdb.exception.MovieAlreadyExistsException;
+import ie.iemdb.util.types.Email;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+
+public class User {
+    private Email email;
+    private String password;
+    private String nickname;
+    private String name;
+    private LocalDate birthDate;
+
+    private ArrayList<String> watchList;
+
+    private User (String email, String password, String nickname, String name, String birthDate) throws CustomException {
+        this.watchList = new ArrayList<>();
+
+        this.email = new Email(email);
+        this.password = password;
+        this.nickname = nickname;
+        this.name = name;
+        this.birthDate = LocalDate.parse(birthDate);
+    }
+
+    public String getId() { return this.email.toString(); }
+
+
+    public void addToWatchList(String id) throws CustomException {
+        if(watchList.contains(id))
+            throw new MovieAlreadyExistsException();
+        watchList.add(id);
+    }
+
+    public void removeFromWatchList(String id) throws CustomException {
+        if(!watchList.contains(id))
+            throw new CustomException("MovieNotFoundInWatchList");
+        watchList.remove(id);
+    }
+
+    public boolean isOlderThan(Integer age) {
+        return age <= Period.between(birthDate, LocalDate.now()).getYears();
+    }
+
+    public ArrayList<String> getWatchList() {
+        return watchList;
+    }
+
+    public void setWatchList(ArrayList<String> watchList) {
+        this.watchList = watchList;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+}

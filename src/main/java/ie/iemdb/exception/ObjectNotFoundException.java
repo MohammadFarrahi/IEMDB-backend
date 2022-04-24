@@ -1,4 +1,4 @@
-package ie.exception;
+package ie.iemdb.exception;
 
 public class ObjectNotFoundException extends CustomException {
     public static final String defaultMessage = "ObjectNotFound";

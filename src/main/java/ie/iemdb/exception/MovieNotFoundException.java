@@ -1,4 +1,4 @@
-package ie.exception;
+package ie.iemdb.exception;
 
 public class MovieNotFoundException extends ObjectNotFoundException {
     public static final String message = "MovieNotFound";

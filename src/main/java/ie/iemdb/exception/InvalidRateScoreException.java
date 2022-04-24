@@ -1,4 +1,4 @@
-package ie.exception;
+package ie.iemdb.exception;
 
 public class InvalidRateScoreException extends CustomException {
     public static final String message = " InvalidRateScore";

@@ -1,7 +1,7 @@
 package ie.iemdb.repository;
 
-import ie.exception.CustomException;
-import ie.exception.ObjectNotFoundException;
+import ie.iemdb.exception.CustomException;
+import ie.iemdb.exception.ObjectNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

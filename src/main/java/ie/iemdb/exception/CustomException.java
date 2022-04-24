@@ -1,4 +1,4 @@
-package ie.exception;
+package ie.iemdb.exception;
 
 public class CustomException extends Exception {
     public CustomException(String errorMessage) {
