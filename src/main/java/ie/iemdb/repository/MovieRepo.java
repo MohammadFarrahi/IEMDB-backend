@@ -81,61 +81,55 @@ public class MovieRepo extends Repo<Movie> {
     }
 
     @Override
-    public String addElement(Movie newObject) throws CustomException {
-        if (!ActorRepo.getInstance().isIdListValid(newObject.getCast())) {
-            throw new ActorNotFoundException();
-        }
+    public void addElement(Movie newObject) throws CustomException {
+        // if (!ActorRepo.getInstance().isIdListValid(newObject.getCast())) {
+        //     throw new ActorNotFoundException();
+        // }
         var objectId = newObject.getId().toString();
         if (isIdValid(objectId)) {
             throw new MovieAlreadyExistsException();
         }
         this.objectMap.put(objectId, newObject);
-        ActorRepo.getInstance().getElementsById(newObject.getCast())
-                .forEach(actor -> actor.addToPerformedMovies(newObject.getId().toString()));
-        return objectId;
+        newObject.getCast().forEach(actor -> actor.addToPerformedMovies(newObject));
     }
 
     @Override
-    public String updateElement(Movie newObject) throws CustomException {
-        if (!ActorRepo.getInstance().isIdListValid(newObject.getCast())) {
-            throw new ActorNotFoundException();
-        }
-        var objectId = newObject.getId().toString();
+    public void updateElement(Movie newObject) throws CustomException {
+        var objectId = newObject.getId();
         if (!isIdValid(objectId)) {
             throw new MovieNotFoundException();
         }
         objectMap.put(objectId, newObject);
-        return objectId;
     }
 
-    public ArrayList<String> filterElementsByGenre(String genre) {
+    public ArrayList<Movie> filterElementsByGenre(String genre, List<Movie> elements) {
         try {
-            ArrayList<String> filteredIdList = new ArrayList<>();
-            for (var pair : objectMap.entrySet()) {
-                if (pair.getValue().includeGenre(genre))
-                    filteredIdList.add(pair.getKey());
+            ArrayList<Movie> filteredList = new ArrayList<>();
+            for (var element : elements) {
+                if (element.includeGenre(genre))
+                filteredList.add(element);
             }
-            return filteredIdList;
+            return filteredList;
         } catch (Exception e) {
             return null;
         }
     }
 
-    public ArrayList<String> filterElementsByYear(int from, int to) throws CustomException {
-        var ids = new ArrayList<String>();
-        for (var movie : objectMap.entrySet()) {
-            if (!movie.getValue().isCreatedBefore(from) && !movie.getValue().isCreatedAfter(to)) {
-                ids.add(movie.getKey());
+    public ArrayList<Movie> filterElementsByYear(int from, int to, List<Movie> elements) throws CustomException {
+        var filteredList = new ArrayList<Movie>();
+        for (var element : elements) {
+            if (!element.isCreatedBefore(from) && !element.isCreatedAfter(to)) {
+                filteredList.add(element);
             }
         }
-        return ids;
+        return filteredList;
     }
 
-    public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
-        if (!UserRepo.getInstance().isIdValid(userEmail)) {
-            throw new UserNotFoundException();
-        }
-        getElementById(movieId).updateMovieRating(userEmail, rate);
-    }
+    // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
+    //     if (!UserRepo.getInstance().isIdValid(userEmail)) {
+    //         throw new UserNotFoundException();
+    //     }
+    //     getElementById(movieId).updateMovieRating(userEmail, rate);
+    // }
 
 }
