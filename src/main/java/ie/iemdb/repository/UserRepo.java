@@ -1,6 +1,5 @@
 package ie.iemdb.repository;
 
-
 import ie.iemdb.exception.AgeLimitException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
@@ -21,87 +20,43 @@ public class UserRepo extends Repo<User> {
         }
         return instance;
     }
+
     private UserRepo() {
         this.notFoundException = new UserNotFoundException();
     }
 
     @Override
-    public String addElement(User newObject) throws CustomException {
+    public void addElement(User newObject) throws CustomException {
         var objectId = newObject.getId();
         if (isIdValid(objectId)) {
-            throw new CustomException("ObjectAlreadyExists");
+            throw this.notFoundException;
         }
         this.objectMap.put(objectId, newObject);
-        return objectId;
+        return;
     }
+
     @Override
-    public String updateElement(User newObject) throws UserNotFoundException {
+    public void updateElement(User newObject) throws CustomException {
         var objectId = newObject.getId();
         if (!isIdValid(objectId)) {
-            throw new UserNotFoundException();
+            throw this.notFoundException;
         }
         objectMap.put(objectId, newObject);
-        return objectId;
     }
 
-
-    public ArrayList<String> getWatchList(String userId) throws CustomException {
+    public List<Movie> getWatchList(String userId) throws CustomException {
         return getElementById(userId).getWatchList();
     }
 
-    public void addToWatchList(String userId, String movieId) throws CustomException {
-        var user = getElementById(userId);
-        if (!user.isOlderThan(MovieRepo.getInstance().getElementById(movieId).getAgeLimit()))
+    public void addToWatchList(User user, Movie movie) throws CustomException {
+        if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
 
-        user.addToWatchList(movieId);
+        user.addToWatchList(movie);
     }
-    public void removeFromWatchList(String userId, String movieId) throws CustomException {
-        var user = getElementById(userId);
+
+    public void removeFromWatchList(User user, String movieId) throws CustomException {
         user.removeFromWatchList(movieId);
-    }
-
-    public ArrayList<String> getRecommendedWatchlist(User user){
-        ArrayList <Pair <String, Double>> scoreMovieList = new ArrayList<>();
-
-        try {
-            var movies = MovieRepo.getInstance().getElementsById(null);
-            var watchListIds = user.getWatchList();
-            var watchListMovies = MovieRepo.getInstance().getElementsById(watchListIds);
-            for(var movie : movies) {
-                if (watchListIds.contains(movie.getId().toString())) { continue; }
-                scoreMovieList.add(new Pair<>(movie.getId().toString(), calMovieScore(movie, watchListMovies)));
-            }
-        } catch (ObjectNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        // sorting by score and returning best 3
-        Collections.sort(scoreMovieList, new Comparator<Pair<String, Double>>() {
-            @Override
-            public int compare(final Pair<String, Double> o1, final Pair<String, Double> o2) {
-                return o2.getSecond().compareTo(o1.getSecond());
-            }
-        });
-        ArrayList<String> result = new ArrayList<>();
-        for(int i = 0; i < scoreMovieList.size(); i++){
-            if(i > 2)
-                break;
-            result.add(scoreMovieList.get(i).getFirst());
-        }
-
-        return result;
-    }
-
-    public Double calMovieScore(Movie movie, List<Movie> movies){
-        double score = 0;
-        score += movie.getBaseScoreForWatchList();
-        double similarity = 0;
-        for(var wMovie : movies){
-            similarity += movie.getSameGenre(wMovie);
-        }
-        score += 3 * similarity;
-        return score;
     }
 
 }
