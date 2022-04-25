@@ -2,7 +2,6 @@ package ie.iemdb.model;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidRateScoreException;
-import ie.iemdb.util.types.Constant;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

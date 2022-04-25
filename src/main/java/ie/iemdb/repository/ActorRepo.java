@@ -1,12 +1,10 @@
 package ie.iemdb.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ie.iemdb.exception.ActorAlreadyExistsException;
 import ie.iemdb.exception.ActorNotFoundException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
-import ie.iemdb.util.types.Constant;
 
 
 public class ActorRepo extends Repo<Actor> {

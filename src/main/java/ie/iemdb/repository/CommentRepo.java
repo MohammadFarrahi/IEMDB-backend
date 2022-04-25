@@ -2,7 +2,6 @@ package ie.iemdb.repository;
 
 import ie.iemdb.exception.CommentNotFoundException;
 import ie.iemdb.exception.CustomException;
-import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Comment;
 
 public class CommentRepo extends Repo<Comment> {
