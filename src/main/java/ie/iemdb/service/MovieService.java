@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class MoviesService {
+public class MovieService {
     @RequestMapping(value = "/movies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MovieBriefDTO> getMoviesList() throws ObjectNotFoundException {
         // TODO : validation and exception handling
