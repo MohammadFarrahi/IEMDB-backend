@@ -28,7 +28,7 @@ public class Movie {
     private ArrayList<Comment> comments;
     private HashMap<String, Integer> userRateMap;
 
-    private Movie(
+    public Movie(
             String id,
             String name,
             String summary,
@@ -39,7 +39,7 @@ public class Movie {
             ArrayList<String> genres,
             Integer ageLimit,
             Integer duration,
-            Double imdbRate, 
+            Double imdbRate,
             String coverImgUrl,
             String imgUrl) {
 
