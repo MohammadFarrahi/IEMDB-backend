@@ -1,8 +1,12 @@
 package ie.iemdb.model;
 
+import ie.iemdb.model.DTO.ActorDTO;
+import ie.iemdb.model.DTO.MovieBriefDTO;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Actor {
@@ -34,4 +38,18 @@ public class Actor {
     public String getId() {
         return this.id;
     }
+
+    public ActorDTO getDTO() {
+        var actorDTO = new ActorDTO();
+        actorDTO.setId(Integer.parseInt(id));
+        actorDTO.setBirthDate(birthDate);
+        actorDTO.setImgUrl(imgUrl);
+        actorDTO.setName(name);
+        actorDTO.setNationality(nationality);
+        var performedMoviesDTO = new ArrayList<MovieBriefDTO>();
+        performedMovies.forEach(movie -> performedMoviesDTO.add(movie.getShortDTO()));
+        actorDTO.setPerformedMovies(performedMoviesDTO);
+        return actorDTO;
+    }
+
 }

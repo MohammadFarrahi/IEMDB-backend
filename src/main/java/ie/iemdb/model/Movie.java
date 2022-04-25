@@ -2,6 +2,7 @@ package ie.iemdb.model;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidRateScoreException;
+import ie.iemdb.model.DTO.MovieBriefDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -137,5 +138,15 @@ public class Movie {
                 count += 1;
         }
         return count;
+    }
+
+    public MovieBriefDTO getShortDTO() {
+        var movieBriefDTO = new MovieBriefDTO();
+        movieBriefDTO.setId(Integer.parseInt(id));
+        movieBriefDTO.setName(name);
+        movieBriefDTO.setSummary(summary);
+        movieBriefDTO.setImdbRate(imdbRate);
+        movieBriefDTO.setCoverImgUrl(coverImgUrl);
+        return movieBriefDTO;
     }
 }
