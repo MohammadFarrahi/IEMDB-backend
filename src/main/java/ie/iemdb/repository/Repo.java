@@ -15,9 +15,9 @@ public abstract class Repo <T> {
         objectMap = new HashMap<>();
     }
 
-    public abstract String addElement(T newObject) throws CustomException;
+    public abstract void addElement(T newObject) throws CustomException;
 
-    public abstract String updateElement(T newObject) throws CustomException;
+    public abstract void updateElement(T newObject) throws CustomException;
 
     public T getElementById(String id) throws ObjectNotFoundException {
         if (!objectMap.containsKey(id)) {
