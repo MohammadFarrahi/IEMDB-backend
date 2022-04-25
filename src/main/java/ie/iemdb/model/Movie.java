@@ -2,11 +2,15 @@ package ie.iemdb.model;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidRateScoreException;
+import ie.iemdb.model.DTO.ActorBriefDTO;
+import ie.iemdb.model.DTO.CommentDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
+import ie.iemdb.model.DTO.MovieDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Movie {
     private String id;
@@ -148,5 +152,32 @@ public class Movie {
         movieBriefDTO.setImdbRate(imdbRate);
         movieBriefDTO.setCoverImgUrl(coverImgUrl);
         return movieBriefDTO;
+    }
+
+    public MovieDTO getDTO() {
+        var DTO = new MovieDTO();
+        DTO.setId(Integer.parseInt(id));
+        DTO.setAgeLimit(ageLimit);
+        DTO.setAverageRating(averageRating);
+        DTO.setCoverImgUrl(coverImgUrl);
+        DTO.setImdbRate(imdbRate);
+        DTO.setDirector(director);
+        DTO.setName(name);
+        DTO.setDuration(duration);
+        DTO.setGenres(genres);
+        DTO.setWriters(writers);
+        DTO.setImgUrl(imgUrl);
+        DTO.setReleaseDate(releaseDate);
+        DTO.setSummary(summary);
+        DTO.setRateCount(userRateMap.size());
+
+        var castDTO = new ArrayList<ActorBriefDTO>();
+        cast.forEach(actor -> castDTO.add(actor.getBriefDTO()));
+        DTO.setCast(castDTO);
+
+        var commentsDTO = new ArrayList<CommentDTO>();
+        comments.forEach(comment -> commentsDTO.add(comment.getDTO()));
+        DTO.setComments(commentsDTO);
+        return DTO;
     }
 }

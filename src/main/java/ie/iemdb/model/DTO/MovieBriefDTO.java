@@ -1,16 +1,11 @@
 package ie.iemdb.model.DTO;
 
-public class MovieBriefDTO extends ResponseDTO {
+public class MovieBriefDTO{
     private int id;
     private String name;
     private String summary;
     private Double imdbRate;
     private String coverImgUrl;
-
-
-    public MovieBriefDTO() {
-        super(true, "OK");
-    }
 
     public int getId() {
         return id;

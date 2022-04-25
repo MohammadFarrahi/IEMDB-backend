@@ -62,4 +62,8 @@ public class User {
     public String getNickname() {
         return this.nickname;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }

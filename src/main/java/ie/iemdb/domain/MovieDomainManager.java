@@ -2,6 +2,7 @@ package ie.iemdb.domain;
 
 import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.DTO.MovieBriefDTO;
+import ie.iemdb.model.DTO.MovieDTO;
 import ie.iemdb.repository.MovieRepo;
 
 import java.util.ArrayList;
@@ -21,5 +22,9 @@ public class MovieDomainManager {
         List<MovieBriefDTO> moviesDTO = new ArrayList<>();
         movies.forEach(movie -> moviesDTO.add(movie.getShortDTO()));
         return moviesDTO;
+    }
+
+    public MovieDTO getMovieDTO(String movieId) throws ObjectNotFoundException {
+        return MovieRepo.getInstance().getElementById(movieId).getDTO();
     }
 }

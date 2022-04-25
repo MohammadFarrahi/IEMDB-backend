@@ -1,5 +1,6 @@
 package ie.iemdb.model;
 
+import ie.iemdb.model.DTO.ActorBriefDTO;
 import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
 
@@ -50,6 +51,14 @@ public class Actor {
         performedMovies.forEach(movie -> performedMoviesDTO.add(movie.getShortDTO()));
         actorDTO.setPerformedMovies(performedMoviesDTO);
         return actorDTO;
+    }
+    public ActorBriefDTO getBriefDTO() {
+        var DTO = new ActorBriefDTO();
+        DTO.setId(Integer.parseInt(id));
+        DTO.setAge(this.getAge());
+        DTO.setImgUrl(imgUrl);
+        DTO.setName(name);
+        return DTO;
     }
 
 }
