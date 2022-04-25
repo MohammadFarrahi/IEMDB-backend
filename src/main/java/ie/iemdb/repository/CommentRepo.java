@@ -15,34 +15,31 @@ public class CommentRepo extends Repo<Comment> {
         }
         return instance;
     }
+
     private CommentRepo() {
         this.notFoundException = new CommentNotFoundException();
     }
-    @Override
-    public String addElement(Comment newObject) throws CustomException {
-        if (! UserRepo.getInstance().isIdValid(newObject.getCommentOwner())) {
-            throw new UserNotFoundException();
-        }
-        var movie = MovieRepo.getInstance().getElementById(newObject.getCommentMovie());
 
-        if(newObject.setId(lastCommentId+1)) {
+    @Override
+    public void addElement(Comment newObject) throws CustomException {
+        // if (! UserRepo.getInstance().isIdValid(newObject.getCommentOwner())) {
+        // throw new UserNotFoundException();
+        // }
+        var movie = newObject.getMovie();
+
+        if (newObject.setId(lastCommentId + 1)) {
             objectMap.put((++lastCommentId).toString(), newObject);
-            movie.addCommentId(lastCommentId.toString());
-            return lastCommentId.toString();
+            movie.addComment(newObject);
         } else {
             throw new CustomException("InvalidComment");
         }
     }
+
     @Override
-    public String updateElement(Comment newObject) throws CustomException {
-        return null;
+    public void updateElement(Comment newObject) throws CustomException {
     }
 
-    public void voteComment(String commentId, String userId, int vote) throws CustomException {
-        if (! UserRepo.getInstance().isIdValid(userId)) {
-            throw new UserNotFoundException();
-        }
-        getElementById(commentId).updateCommentVotes(userId, vote);
+    public void updateCommentVotes(Comment comment, String userId, int vote) throws CustomException {
+        comment.updateCommentVotes(userId, vote);
     }
 }
-

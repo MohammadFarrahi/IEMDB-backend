@@ -51,6 +51,10 @@ public class Comment {
         userVoteMap.put(userId, vote.shortValue());
     }
 
+    public Movie getMovie(){
+        return this.commentMovie;
+    }
+
 
     public boolean setId(Integer id) {
         if (this.id == null) {
