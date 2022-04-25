@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
 	public static void main(String[] args) throws CustomException {
-		ActorRepo.getInstance().addElement(new Actor("1", "a", "1999-09-09", "hello", "sldkjf"));
 		SpringApplication.run(IemdbBackendApplication.class, args);
 	}
 
