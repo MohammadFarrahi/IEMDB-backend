@@ -55,6 +55,10 @@ public class User {
         return watchList;
     }
 
+    public Boolean hasMovieInWatchList(Movie movie) {
+        return watchList.contains(movie);
+    }
+
     public String getNickname() {
         return this.nickname;
     }

@@ -2,12 +2,9 @@ package ie.iemdb.repository;
 
 import ie.iemdb.exception.AgeLimitException;
 import ie.iemdb.exception.CustomException;
-import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
-
-import kotlin.Pair;
 
 import java.util.*;
 
