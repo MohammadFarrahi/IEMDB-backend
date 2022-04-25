@@ -14,7 +14,7 @@ public class Actor {
     private String imgUrl;
 
 
-    private Actor ( String id, String name, String birthDate, String nationality, String imgUrl ) {
+    public Actor ( String id, String name, String birthDate, String nationality, String imgUrl ) {
         this.id = id;
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate);
