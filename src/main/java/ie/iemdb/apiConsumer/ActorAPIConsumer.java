@@ -1,39 +1,17 @@
 package ie.iemdb.apiConsumer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
-import ie.iemdb.model.Movie;
 import ie.iemdb.repository.ActorRepo;
-import org.jsoup.Jsoup;
 
 
-import ie.iemdb.util.types.Constant;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-public class ActorAPIConsumer {
-
-    public void importData() throws IOException {
-        var jsonData = getJsonData();
-        var nodeArray = getJsonNode(jsonData);
-
-
+public class ActorAPIConsumer extends APIConsumer {
+    ActorAPIConsumer(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 
-    private String getJsonData() throws IOException {
-        return Jsoup.connect(Constant.FetchApiUrl.BASE + Constant.FetchApiUrl.ACTOR).ignoreContentType(true).execute().body();
-    }
-
-    private JsonNode getJsonNode(String jsonData) throws JsonProcessingException {
-        return new ObjectMapper().convertValue(jsonData, JsonNode.class);
-    }
-
-    private void loadRepo(JsonNode arrayNode) {
+    protected void loadRepo(JsonNode arrayNode) {
         try {
             var repo = ActorRepo.getInstance();
             for (var node : arrayNode) {
