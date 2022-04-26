@@ -4,6 +4,7 @@ import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.MovieDTO;
+import ie.iemdb.model.DTO.ResponseDTO;
 import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
@@ -33,8 +34,9 @@ public class MovieDomainManager {
         return DTO;
     }
 
-    public void rateMovie(String movieId, int rate) throws CustomException {
+    public ResponseDTO rateMovie(String movieId, int rate) throws CustomException {
         var ratingUser = UserRepo.loggedInUser;
         MovieRepo.getInstance().getElementById(movieId).updateMovieRating(ratingUser.getId(), rate);
+        return new ResponseDTO(true, "Okeb");
     }
 }

@@ -28,7 +28,6 @@ public class MovieService {
     @RequestMapping(value = "/movies/{id}/rate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDTO postMovieRate(@PathVariable(value = "id") String movieId, @RequestBody String rateObj) throws CustomException, JsonProcessingException {
         var rate = new ObjectMapper().readTree(rateObj).get("rate").asInt();
-        MovieDomainManager.getInstance().rateMovie(movieId, rate);
-        return new ResponseDTO(true, "Okeb");
+        return MovieDomainManager.getInstance().rateMovie(movieId, rate);
     }
 }

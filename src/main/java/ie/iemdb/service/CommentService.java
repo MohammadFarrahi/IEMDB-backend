@@ -20,7 +20,6 @@ public class CommentService {
         if(newComment.getCommentMovieId() == null || newComment.getText() == null) {
             // TODO : do something with error
         }
-        CommentDomainManager.getInstance().postNewComment(newComment);
-        return new ResponseDTO(true, "Okeb");
+        return CommentDomainManager.getInstance().postNewComment(newComment);
     }
 }

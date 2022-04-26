@@ -2,6 +2,7 @@ package ie.iemdb.domain;
 
 import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.Actor;
+import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.repository.ActorRepo;
 
 public class ActorDomainManager {
@@ -14,7 +15,7 @@ public class ActorDomainManager {
         }
         return instance;
     }
-    public Actor getActor(String actorId) throws ObjectNotFoundException {
-        return ActorRepo.getInstance().getElementById(actorId);
+    public ActorDTO getActorDTO(String actorId) throws ObjectNotFoundException {
+        return ActorRepo.getInstance().getElementById(actorId).getDTO();
     }
 }
