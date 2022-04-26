@@ -22,7 +22,7 @@ public abstract class APIConsumer {
     }
 
     private JsonNode getJsonNode(String jsonData) throws JsonProcessingException {
-        return new ObjectMapper().convertValue(jsonData, JsonNode.class);
+        return new ObjectMapper().readTree(jsonData);
     }
 
     protected abstract void loadRepo(JsonNode nodeArray);
