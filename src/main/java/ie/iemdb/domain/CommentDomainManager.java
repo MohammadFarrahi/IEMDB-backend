@@ -19,13 +19,10 @@ public class CommentDomainManager {
         }
         return instance;
     }
-  public void voteComment(String commentId, String userId, int vote) throws CustomException {
-    if (! UserRepo.getInstance().isIdValid(userId)) {
-        throw new UserNotFoundException();
+    public ResponseDTO voteComment(String commentId, int vote) throws CustomException {
+        CommentRepo.getInstance().updateCommentVotes(commentId, UserRepo.loggedInUser.getId(), vote);
+        return new ResponseDTO(true, "Okeb");
     }
-    // getElementById(commentId).updateCommentVotes(userId, vote);
-    //TODO: connect it to the repo the method in the repo is: updateCommentVotes
-}
 
     public ResponseDTO postNewComment(CommentDTO commentDTO) throws CustomException {
         // TODO : handle if new comment is actually repeatitve comment

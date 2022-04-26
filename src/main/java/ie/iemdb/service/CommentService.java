@@ -22,11 +22,9 @@ public class CommentService {
         }
         return CommentDomainManager.getInstance().postNewComment(newComment);
     }
-//    @RequestMapping(value = "/comments/{id}/vote", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseDTO updateComment(@RequestBody CommentDTO newComment) throws CustomException {
-//        if(newComment.getCommentMovieId() == null || newComment.getText() == null) {
-//            // TODO : do something with error
-//        }
-//        return CommentDomainManager.getInstance().postNewComment(newComment);
-//    }
+    @RequestMapping(value = "/comments/{id}/vote", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDTO updateComment(@PathVariable(value = "id") Integer commentId,  @RequestBody String voteObj) throws CustomException, JsonProcessingException {
+        var voteValue = new ObjectMapper().readTree(voteObj).get("vote").asInt();
+        return CommentDomainManager.getInstance().voteComment(commentId.toString(), voteValue);
+    }
 }

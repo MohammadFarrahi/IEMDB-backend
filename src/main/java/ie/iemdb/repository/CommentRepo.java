@@ -32,7 +32,7 @@ public class CommentRepo extends Repo<Comment> {
     public void updateElement(Comment newObject) throws CustomException {
     }
 
-    public void updateCommentVotes(Comment comment, String userId, int vote) throws CustomException {
-        comment.updateCommentVotes(userId, vote);
+    public void updateCommentVotes(String commentId, String userId, int vote) throws CustomException {
+        getElementById(commentId).updateCommentVotes(userId, vote);
     }
 }
