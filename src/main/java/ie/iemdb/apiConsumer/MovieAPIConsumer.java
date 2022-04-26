@@ -1,7 +1,9 @@
 package ie.iemdb.apiConsumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import ie.iemdb.exception.ActorNotFoundException;
 import ie.iemdb.exception.CustomException;
+import ie.iemdb.exception.MovieAlreadyExistsException;
 import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.Actor;
 import ie.iemdb.model.Movie;
@@ -20,8 +22,12 @@ public class MovieAPIConsumer extends APIConsumer {
         try {
             var repo = MovieRepo.getInstance();
             for (var node : arrayNode) {
-                var newMovie = makeNewMovie(node);
-                repo.addElement(newMovie);
+                try{
+                    var newMovie = makeNewMovie(node);
+                    repo.addElement(newMovie);
+                }catch (ActorNotFoundException | MovieAlreadyExistsException e){
+                    //ignore
+                };                ;
             }
         } catch (CustomException e) {
             e.printStackTrace();
@@ -43,6 +49,7 @@ public class MovieAPIConsumer extends APIConsumer {
         ArrayList<Actor> cast = getCastsForMovie(getStringCollection(node.get("cast")));
         ArrayList<String> writers = getStringCollection(node.get("writers"));
         ArrayList<String> genres =  getStringCollection(node.get("genres"));
+
 
         return new Movie(
                 id,

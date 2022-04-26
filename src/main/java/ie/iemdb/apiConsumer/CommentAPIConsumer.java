@@ -2,7 +2,9 @@ package ie.iemdb.apiConsumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import ie.iemdb.exception.CustomException;
+import ie.iemdb.exception.MovieNotFoundException;
 import ie.iemdb.exception.ObjectNotFoundException;
+import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Comment;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
@@ -11,7 +13,7 @@ import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
 
-public class CommentAPIConsumer extends APIConsumer{
+public class CommentAPIConsumer extends APIConsumer {
     public CommentAPIConsumer(String apiUrl) {
         this.apiUrl = apiUrl;
     }
@@ -20,8 +22,13 @@ public class CommentAPIConsumer extends APIConsumer{
         try {
             var repo = CommentRepo.getInstance();
             for (var node : arrayNode) {
-                var newComment = makeNewComment(node);
-                repo.addElement(newComment);
+                try {
+
+                    var newComment = makeNewComment(node);
+                    repo.addElement(newComment);
+                } catch (UserNotFoundException | MovieNotFoundException e) {
+                    //ignore
+                }
             }
         } catch (CustomException e) {
             e.printStackTrace();

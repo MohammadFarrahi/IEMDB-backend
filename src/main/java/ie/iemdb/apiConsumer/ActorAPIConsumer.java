@@ -1,9 +1,14 @@
 package ie.iemdb.apiConsumer;
 
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonNode;
+import ie.iemdb.exception.ActorAlreadyExistsException;
+import ie.iemdb.exception.ActorNotFoundException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
 import ie.iemdb.repository.ActorRepo;
+
+import java.time.format.DateTimeParseException;
 
 
 public class ActorAPIConsumer extends APIConsumer {
@@ -15,8 +20,13 @@ public class ActorAPIConsumer extends APIConsumer {
         try {
             var repo = ActorRepo.getInstance();
             for (var node : arrayNode) {
-                var newActor = makeNewActor(node);
-                repo.addElement(newActor);
+                try {
+                    var newActor = makeNewActor(node);
+                    repo.addElement(newActor);
+                } catch (ActorAlreadyExistsException | DateTimeParseException e) {
+                    //ignore
+                }
+
             }
         } catch (CustomException e) {
             e.printStackTrace();
