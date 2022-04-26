@@ -6,6 +6,7 @@ public class MovieBriefDTO{
     private String summary;
     private Double imdbRate;
     private String coverImgUrl;
+    private String releaseDate;
 
     public int getId() {
         return id;
@@ -45,5 +46,13 @@ public class MovieBriefDTO{
 
     public void setCoverImgUrl(String coverImgUrl) {
         this.coverImgUrl = coverImgUrl;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 }

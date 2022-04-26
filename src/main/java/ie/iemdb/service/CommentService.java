@@ -22,4 +22,11 @@ public class CommentService {
         }
         return CommentDomainManager.getInstance().postNewComment(newComment);
     }
+//    @RequestMapping(value = "/comments/{id}/vote", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseDTO updateComment(@RequestBody CommentDTO newComment) throws CustomException {
+//        if(newComment.getCommentMovieId() == null || newComment.getText() == null) {
+//            // TODO : do something with error
+//        }
+//        return CommentDomainManager.getInstance().postNewComment(newComment);
+//    }
 }

@@ -152,6 +152,7 @@ public class Movie {
         movieBriefDTO.setSummary(summary);
         movieBriefDTO.setImdbRate(imdbRate);
         movieBriefDTO.setCoverImgUrl(coverImgUrl);
+        movieBriefDTO.setReleaseDate(releaseDate.toString());
         return movieBriefDTO;
     }
 
