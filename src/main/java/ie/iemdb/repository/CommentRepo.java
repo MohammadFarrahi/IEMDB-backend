@@ -21,14 +21,8 @@ public class CommentRepo extends Repo<Comment> {
 
     @Override
     public void addElement(Comment newObject) throws CustomException {
-        // if (! UserRepo.getInstance().isIdValid(newObject.getCommentOwner())) {
-        // throw new UserNotFoundException();
-        // }
-        var movie = newObject.getMovie();
-
         if (newObject.setId(lastCommentId + 1)) {
             objectMap.put((++lastCommentId).toString(), newObject);
-            movie.addComment(newObject);
         } else {
             throw new CustomException("InvalidComment");
         }

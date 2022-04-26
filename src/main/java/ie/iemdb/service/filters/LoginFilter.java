@@ -28,7 +28,7 @@ public class LoginFilter implements Filter {
         // TODO: remove shits
 
         // shit in the main method
-        if (needsAuthentication(requestPath) && UserRepo.loggedInUser == null) {
+        if (needsAuthentication(requestPath, request.getMethod()) && UserRepo.loggedInUser == null) {
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -46,8 +46,11 @@ public class LoginFilter implements Filter {
         Filter.super.destroy();
     }
 
-    private boolean needsAuthentication(String url) {
-        return !(url.startsWith("/auth") || url.equals("/movies") || url.equals("/movies/"));
+    private boolean needsAuthentication(String url, String httpMethod) {
+        if(!httpMethod.equals("GET")) {
+            return false;
+        }
+        return url.matches("^/users/d+/watchlist$") || url.matches("^/users/d+/watchlist/$");
     }
 
 }
