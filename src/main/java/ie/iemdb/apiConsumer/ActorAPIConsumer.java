@@ -7,7 +7,7 @@ import ie.iemdb.repository.ActorRepo;
 
 
 public class ActorAPIConsumer extends APIConsumer {
-    ActorAPIConsumer(String apiUrl) {
+    public ActorAPIConsumer(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 

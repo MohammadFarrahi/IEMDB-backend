@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class MovieAPIConsumer extends APIConsumer {
 
-    MovieAPIConsumer(String apiUrl) {
+    public MovieAPIConsumer(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 

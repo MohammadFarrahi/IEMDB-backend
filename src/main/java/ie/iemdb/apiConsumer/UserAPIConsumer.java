@@ -6,7 +6,7 @@ import ie.iemdb.model.User;
 import ie.iemdb.repository.UserRepo;
 
 public class UserAPIConsumer extends APIConsumer{
-    UserAPIConsumer(String apiUrl) {
+    public UserAPIConsumer(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 

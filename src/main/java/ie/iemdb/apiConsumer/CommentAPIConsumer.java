@@ -12,7 +12,7 @@ import ie.iemdb.repository.UserRepo;
 
 
 public class CommentAPIConsumer extends APIConsumer{
-    CommentAPIConsumer(String apiUrl) {
+    public CommentAPIConsumer(String apiUrl) {
         this.apiUrl = apiUrl;
     }
 
