@@ -1,16 +1,28 @@
 package ie.iemdb.server;
-
-import ie.iemdb.exception.CustomException;
+import ie.iemdb.apiConsumer.ActorAPIConsumer;
+import ie.iemdb.apiConsumer.CommentAPIConsumer;
+import ie.iemdb.apiConsumer.MovieAPIConsumer;
+import ie.iemdb.apiConsumer.UserAPIConsumer;
+import ie.iemdb.util.types.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.IOException;
+
 @SpringBootApplication
 @ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
-	public static void main(String[] args) throws CustomException {
-//		MovieRepo.getInstance().addElement(new Movie("1", "name", "summary", "director", new ArrayList<>(), "1999-10-10", new ArrayList<>(), new ArrayList<>(), 1, 2, 1.1, "lskadf", "lskdjf"));
-//		MovieRepo.getInstance().addElement(new Movie("2", "nameeee", "summary", "director", new ArrayList<>(), "1999-10-10", new ArrayList<>(), new ArrayList<>(), 1, 2, 1.1, "lskadf", "lskdjf"));
+	public static void main(String[] args) {
+
+		try {
+			(new ActorAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.ACTOR)).importData();
+			(new MovieAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.MOVIE)).importData();
+			(new UserAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.USER)).importData();
+			(new CommentAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.COMMENT)).importData();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		SpringApplication.run(IemdbBackendApplication.class, args);
 	}
 

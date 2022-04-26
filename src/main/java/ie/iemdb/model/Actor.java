@@ -6,6 +6,7 @@ import ie.iemdb.model.DTO.MovieBriefDTO;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Actor {
     public Actor ( String id, String name, String birthDate, String nationality, String imgUrl ) {
         this.id = id;
         this.name = name;
-        this.birthDate = LocalDate.parse(birthDate);
+        this.birthDate = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MMMM d, yyyy"));
         this.nationality = nationality;
         this.performedMovies = new ArrayList<>();
         this.imgUrl = imgUrl;

@@ -140,7 +140,8 @@ public class Constant {
 
     //-------------------- phase2-------------------
     public static class FetchApiUrl {
-        public static final String BASE = "http://138.197.181.131:5000/api";
+        public static final String BASE_V1 = "http://138.197.181.131:5000/api";
+        public static final String BASE_V2 = "http://138.197.181.131:5000/api/v2";
         public static final String ACTOR = "/actors";
         public static final String USER = "/users";
         public static final String MOVIE = "/movies";

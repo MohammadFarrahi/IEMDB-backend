@@ -17,7 +17,7 @@ public class User {
 
     private ArrayList<Movie> watchList;
 
-    private User(String email, String password, String nickname, String name, String birthDate) throws CustomException {
+    public User(String email, String password, String nickname, String name, String birthDate) throws CustomException {
         this.watchList = new ArrayList<>();
 
         this.email = new Email(email);
