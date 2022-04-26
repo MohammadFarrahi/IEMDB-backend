@@ -4,6 +4,7 @@ import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidRateScoreException;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,7 +28,7 @@ public class Movie {
     private ArrayList<Comment> comments;
     private HashMap<String, Integer> userRateMap;
 
-    private Movie(
+    public Movie(
             String id,
             String name,
             String summary,
@@ -50,7 +51,7 @@ public class Movie {
         this.summary = summary;
         this.director = director;
         this.cast = cast;
-        this.releaseDate = LocalDate.parse(releaseDate);
+        this.releaseDate = LocalDate.parse(releaseDate, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         this.writers = writers;
         this.genres = genres;
         this.ageLimit = ageLimit;
