@@ -1,24 +1,24 @@
-package ie.iemdb.service;
+package ie.iemdb.model.DTO;
 
 public class ResponseDTO {
-    public short statusCode;
+    public boolean status;
     public String statusMessage;
 
-    public ResponseDTO(short statusCode, String statusMessage) {
-        this.statusCode = statusCode;
+    public ResponseDTO(boolean status, String statusMessage) {
+        this.status = status;
         this.statusMessage = statusMessage;
     }
 
-    public short getStatusCode() {
-        return statusCode;
+    public boolean getStatusCode() {
+        return status;
     }
 
     public String getStatusMessage() {
         return statusMessage;
     }
 
-    public void setStatusCode(short statusCode) {
-        this.statusCode = statusCode;
+    public void setStatusCode(boolean status) {
+        this.status = status;
     }
 
     public void setStatusMessage(String statusMessage) {

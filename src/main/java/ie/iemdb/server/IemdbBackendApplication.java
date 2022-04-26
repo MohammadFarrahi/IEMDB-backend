@@ -1,21 +1,18 @@
 package ie.iemdb.server;
-
 import ie.iemdb.apiConsumer.ActorAPIConsumer;
 import ie.iemdb.apiConsumer.CommentAPIConsumer;
 import ie.iemdb.apiConsumer.MovieAPIConsumer;
 import ie.iemdb.apiConsumer.UserAPIConsumer;
-import ie.iemdb.exception.ObjectNotFoundException;
-import ie.iemdb.repository.CommentRepo;
-import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.util.types.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
 
 @SpringBootApplication
+@ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
-
 	public static void main(String[] args) {
 
 		try {
@@ -26,7 +23,6 @@ public class IemdbBackendApplication {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		SpringApplication.run(IemdbBackendApplication.class, args);
 	}
 

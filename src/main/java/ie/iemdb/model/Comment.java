@@ -3,6 +3,8 @@ package ie.iemdb.model;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.InvalidVoteValueException;
+import ie.iemdb.model.DTO.CommentDTO;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -62,5 +64,17 @@ public class Comment {
             return true;
         }
         return false;
+    }
+    public CommentDTO getDTO () {
+        var DTO = new CommentDTO();
+        DTO.setId(Integer.parseInt(id));
+        DTO.setCommentDislikes(commentDislikes);
+        DTO.setCommentLikes(commentLikes);
+        DTO.setCommentMovieId(Integer.parseInt(commentMovie.getId()));
+        DTO.setCommentOwnerId(commentOwner.getId());
+        DTO.setCommentOwnerName(commentOwner.getName());
+        DTO.setCreatedDate(createdDate);
+        DTO.setText(text);
+        return DTO;
     }
 }
