@@ -181,4 +181,11 @@ public class Movie {
         DTO.setComments(commentsDTO);
         return DTO;
     }
+
+    public Integer getUserRate(String userId) {
+        if(!userRateMap.containsKey(userId)) {
+            return null;
+        }
+        return userRateMap.get(userId);
+    }
 }

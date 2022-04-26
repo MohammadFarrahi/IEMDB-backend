@@ -27,6 +27,7 @@ public class MovieDTO extends ResponseDTO{
     private String imgUrl;
     private ArrayList<CommentDTO> comments;
     private Integer rateCount;
+    private Integer UserRate;
 
     public Integer getId() {
         return id;
@@ -92,6 +93,10 @@ public class MovieDTO extends ResponseDTO{
         return rateCount;
     }
 
+    public Integer getUserRate() {
+        return UserRate;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -154,5 +159,9 @@ public class MovieDTO extends ResponseDTO{
 
     public void setRateCount(Integer rateCount) {
         this.rateCount = rateCount;
+    }
+
+    public void setUserRate(Integer userRate) {
+        UserRate = userRate;
     }
 }

@@ -27,7 +27,10 @@ public class MovieDomainManager {
     }
 
     public MovieDTO getMovieDTO(String movieId) throws ObjectNotFoundException {
-        return MovieRepo.getInstance().getElementById(movieId).getDTO();
+        var movie = MovieRepo.getInstance().getElementById(movieId);
+        var DTO = movie.getDTO();
+        DTO.setUserRate(movie.getUserRate(UserRepo.loggedInUser.getId()));
+        return DTO;
     }
 
     public void rateMovie(String movieId, int rate) throws CustomException {
