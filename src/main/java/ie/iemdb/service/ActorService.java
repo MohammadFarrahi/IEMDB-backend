@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ActorService {
+    // TODO : validation and exception handling
     @RequestMapping(value = "/actors/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ActorDTO getActorInfo(@PathVariable(value = "id") String actorId) throws ObjectNotFoundException {
-        // TODO : validation and exception handling
         return ActorDomainManager.getInstance().getActor(actorId).getDTO();
     }
 }
