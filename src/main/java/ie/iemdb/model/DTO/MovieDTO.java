@@ -1,16 +1,9 @@
 package ie.iemdb.model.DTO;
 
-import ie.iemdb.model.Actor;
-import ie.iemdb.model.Comment;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class MovieDTO extends ResponseDTO{
-    public MovieDTO() {
-        super(true, "OK");
-    }
+public class MovieDTO {
     private Integer id;
     private String name;
     private String summary;

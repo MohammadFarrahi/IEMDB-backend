@@ -1,21 +1,15 @@
 package ie.iemdb.model.DTO;
 
-import ie.iemdb.model.Movie;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ActorDTO extends ResponseDTO {
+public class ActorDTO {
     private int id;
     private String name;
     private LocalDate birthDate;
     private String nationality;
     private ArrayList<MovieBriefDTO> performedMovies;
     private String imgUrl;
-
-    public ActorDTO() {
-        super(true, "OK");
-    }
 
     public int getId() {
         return id;

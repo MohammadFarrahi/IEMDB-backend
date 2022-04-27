@@ -1,7 +1,7 @@
 package ie.iemdb.service.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ie.iemdb.model.DTO.ResponseDTO;
+import ie.iemdb.model.DTO.Response;
 import ie.iemdb.repository.UserRepo;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ public class LoginFilter implements Filter {
             response.setCharacterEncoding("UTF-8");
             // shit here
 //            response.setStatus(401);
-            out.print(new ObjectMapper().writeValueAsString(new ResponseDTO(false, "Unauthorized")));
+            out.print(new ObjectMapper().writeValueAsString(new Response(false, "Unauthorized", null)));
             out.flush();
         } else {
             filterChain.doFilter(request, response);

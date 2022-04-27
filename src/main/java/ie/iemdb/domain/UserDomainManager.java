@@ -3,7 +3,6 @@ package ie.iemdb.domain;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.DTO.MovieBriefDTO;
-import ie.iemdb.model.DTO.ResponseDTO;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 import ie.iemdb.repository.MovieRepo;
@@ -84,22 +83,16 @@ public class UserDomainManager {
     return score;
   }
 
-  public ResponseDTO loginUser(String userEmail, String userPassword) {
-    try {
+  public void loginUser(String userEmail, String userPassword) throws ObjectNotFoundException {
       var user = UserRepo.getInstance().getElementById(userEmail);
       if(!user.checkPassword(userPassword)) {
         throw new ObjectNotFoundException();
       }
       UserRepo.getInstance().loginUser(user);
-      return new ResponseDTO(true, "Okeb");
-    } catch (ObjectNotFoundException e) {
-      return new ResponseDTO(false, "InvalidCredential");
-    }
   }
 
-  public ResponseDTO logoutUser() {
+  public void logoutUser() {
     UserRepo.getInstance().logoutUser();
-    return new ResponseDTO(true, "Okeb");
   }
 
   public List<MovieBriefDTO> getWatchlistDTO(String userId) throws CustomException {
@@ -113,17 +106,16 @@ public class UserDomainManager {
     return UserRepo.loggedInUser.getId().equals(userId);
   }
 
-  public ResponseDTO addToWatchlist(String userId, String movieId) throws CustomException {
+  public MovieBriefDTO addToWatchlist(String userId, String movieId) throws CustomException {
     var user = UserRepo.getInstance().getElementById(userId);
     var movie = MovieRepo.getInstance().getElementById(movieId);
     UserRepo.getInstance().addToWatchList(user, movie);
 
-    return new ResponseDTO(true, "Okeb");
+    return movie.getShortDTO();
   }
 
-  public ResponseDTO removeFromWatchList(String userId, String movieId) throws CustomException {
+  public void removeFromWatchList(String userId, String movieId) throws CustomException {
     var user = UserRepo.getInstance().getElementById(userId);
     UserRepo.getInstance().removeFromWatchList(user, movieId);
-    return new ResponseDTO(true, "Okeb");
   }
 }
