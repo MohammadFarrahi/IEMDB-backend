@@ -2,6 +2,7 @@ package ie.iemdb.model;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.MovieAlreadyExistsException;
+import ie.iemdb.exception.MovieNotFoundException;
 import ie.iemdb.util.types.Email;
 
 import java.time.LocalDate;
@@ -31,20 +32,19 @@ public class User {
         return this.email.toString();
     }
 
-    public void addToWatchList(Movie movie) throws CustomException {
-        if (watchList.contains(movie))
-            throw new MovieAlreadyExistsException();
-        watchList.add(movie);
+    public void addToWatchList(Movie movie) {
+        if (!watchList.contains(movie))
+            watchList.add(movie);
     }
 
-    public void removeFromWatchList(String id) throws CustomException {
+    public void removeFromWatchList(String id) throws MovieNotFoundException {
         for (var movie : this.watchList) {
             if (movie.getId().equals(id)) {
                 watchList.remove(movie);
                 return;
             }
         }
-        throw new CustomException("MovieNotFoundInWatchList");
+        throw new MovieNotFoundException();
     }
 
     public boolean isOlderThan(Integer age) {

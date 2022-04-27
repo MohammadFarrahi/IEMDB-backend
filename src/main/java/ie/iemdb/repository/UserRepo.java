@@ -2,6 +2,7 @@ package ie.iemdb.repository;
 
 import ie.iemdb.exception.AgeLimitException;
 import ie.iemdb.exception.CustomException;
+import ie.iemdb.exception.MovieNotFoundException;
 import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
@@ -47,14 +48,14 @@ public class UserRepo extends Repo<User> {
         return getElementById(userId).getWatchList();
     }
 
-    public void addToWatchList(User user, Movie movie) throws CustomException {
+    public void addToWatchList(User user, Movie movie) throws AgeLimitException {
         if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
 
         user.addToWatchList(movie);
     }
 
-    public void removeFromWatchList(User user, String movieId) throws CustomException {
+    public void removeFromWatchList(User user, String movieId) throws MovieNotFoundException {
         user.removeFromWatchList(movieId);
     }
 

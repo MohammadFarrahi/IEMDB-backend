@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommentService {
-    // TODO : validation and exception handling
     @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response postNewComment(@RequestBody CommentDTO newComment) {
         if(newComment.getCommentMovieId() == null || newComment.getText() == null) {

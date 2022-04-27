@@ -114,7 +114,7 @@ public class UserDomainManager {
     return movie.getShortDTO();
   }
 
-  public void removeFromWatchList(String userId, String movieId) throws CustomException {
+  public void removeFromWatchList(String userId, String movieId) throws ObjectNotFoundException {
     var user = UserRepo.getInstance().getElementById(userId);
     UserRepo.getInstance().removeFromWatchList(user, movieId);
   }
