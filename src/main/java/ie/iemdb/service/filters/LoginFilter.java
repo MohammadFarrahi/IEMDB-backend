@@ -25,15 +25,12 @@ public class LoginFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String requestPath = request.getRequestURI();
-        // TODO: remove shits
 
-        // shit in the main method
         if (needsAuthentication(requestPath, request.getMethod()) && UserRepo.loggedInUser == null) {
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            // shit here
-//            response.setStatus(401);
+            response.setStatus(401);
             out.print(new ObjectMapper().writeValueAsString(new Response(false, "Unauthorized", null)));
             out.flush();
         } else {
