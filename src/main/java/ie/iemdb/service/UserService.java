@@ -53,12 +53,12 @@ public class UserService {
         UserDomainManager.getInstance().removeFromWatchList(userId, movieId);
         return new Response(true, "okeb", null);
     }
-//    @RequestMapping(value = "/users/{userId}/recommended", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public List<> getRecommendedMovies(@PathVariable(value = "userId") String userId) throws CustomException {
-//        if(!UserDomainManager.getInstance().isloggedIn(userId)) {
-//            return new ResponseDTO(false, "Unauthorized");
-//        }
-//        return UserDomainManager.getInstance().getRecommendedWatchlist(userId);
-//    }
+    @RequestMapping(value = "/users/{userId}/recommended", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response getRecommendedMovies(@PathVariable(value = "userId") String userId) throws CustomException {
+        if(!UserDomainManager.getInstance().isloggedIn(userId)) {
+            return new Response(false, "Unauthorized", null);
+        }
+        return new Response(true, "okeb", UserDomainManager.getInstance().getRecommendedWatchlist(userId));
+    }
 
 }
