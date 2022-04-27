@@ -58,4 +58,7 @@ public class UserRepo extends Repo<User> {
         user.removeFromWatchList(movieId);
     }
 
+    public void loginUser(User user) {
+        loggedInUser = user;
+    }
 }

@@ -48,7 +48,9 @@ public class LoginFilter implements Filter {
 
     private boolean needsAuthentication(String url, String httpMethod) {
         if(!httpMethod.equals("GET")) {
-            return false;
+            if(url.matches("^/auth/login$") || url.matches("^/auth/login/$"))
+                return false;
+            return true;
         }
         return url.matches("^/users/d+/watchlist$") || url.matches("^/users/d+/watchlist/$");
     }

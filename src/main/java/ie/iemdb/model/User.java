@@ -66,4 +66,8 @@ public class User {
     public String getName() {
         return this.name;
     }
+
+    public boolean checkPassword(String password) {
+        return this.password.equals(password);
+    }
 }

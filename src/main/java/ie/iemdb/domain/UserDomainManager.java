@@ -1,9 +1,12 @@
 package ie.iemdb.domain;
 
 import ie.iemdb.exception.ObjectNotFoundException;
+import ie.iemdb.model.DTO.ActorDTO;
+import ie.iemdb.model.DTO.ResponseDTO;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 import ie.iemdb.repository.MovieRepo;
+import ie.iemdb.repository.UserRepo;
 import kotlin.Pair;
 
 import java.util.ArrayList;
@@ -12,6 +15,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class UserDomainManager {
+
+  private static UserDomainManager instance;
+  public static UserDomainManager getInstance() {
+    if (instance == null) {
+      instance = new UserDomainManager();
+    }
+    return instance;
+  }
+
   public ArrayList<Movie> getRecommendedWatchlist(User user) {
     var scoreMovieList = makeMovieScorePairs(user);
     scoreMovieList = getSortedMovieScorePairs(scoreMovieList);
@@ -67,4 +79,16 @@ public class UserDomainManager {
     return score;
   }
 
+  public ResponseDTO loginUser(String userEmail, String userPassword) {
+    try {
+      var user = UserRepo.getInstance().getElementById(userEmail);
+      if(!user.checkPassword(userPassword)) {
+        throw new ObjectNotFoundException();
+      }
+      UserRepo.getInstance().loginUser(user);
+      return new ResponseDTO(true, "Okeb");
+    } catch (ObjectNotFoundException e) {
+      return new ResponseDTO(false, "InvalidCredential");
+    }
+  }
 }

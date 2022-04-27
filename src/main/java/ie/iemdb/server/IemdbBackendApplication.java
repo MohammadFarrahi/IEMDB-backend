@@ -25,11 +25,11 @@ public class IemdbBackendApplication {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		try {
-			UserRepo.loggedInUser = UserRepo.getInstance().getElementsById(null).get(1);
-		} catch (ObjectNotFoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			UserRepo.loggedInUser = UserRepo.getInstance().getElementsById(null).get(1);
+//		} catch (ObjectNotFoundException e) {
+//			e.printStackTrace();
+//		}
 		SpringApplication.run(IemdbBackendApplication.class, args);
 	}
 
