@@ -11,7 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ActorService {
-    // TODO : validation and exception handling
     @RequestMapping(value = "/actors/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getActorInfo(@PathVariable(value = "id") String actorId) {
         try {
