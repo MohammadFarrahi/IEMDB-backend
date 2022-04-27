@@ -1,7 +1,8 @@
 package ie.iemdb.domain;
 
+import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
-import ie.iemdb.model.DTO.ActorDTO;
+import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.ResponseDTO;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
@@ -94,6 +95,31 @@ public class UserDomainManager {
 
   public ResponseDTO logoutUser() {
     UserRepo.getInstance().logoutUser();
+    return new ResponseDTO(true, "Okeb");
+  }
+
+  public List<MovieBriefDTO> getWatchlistDTO(String userId) throws CustomException {
+    List<MovieBriefDTO> DTOList = new ArrayList<>();
+      var watchlist = UserRepo.getInstance().getWatchList(userId);
+      watchlist.forEach(watchlistItem -> DTOList.add(watchlistItem.getShortDTO()));
+      return DTOList;
+  }
+
+  public boolean isloggedIn(String userId) {
+    return UserRepo.loggedInUser.getId().equals(userId);
+  }
+
+  public ResponseDTO addToWatchlist(String userId, String movieId) throws CustomException {
+    var user = UserRepo.getInstance().getElementById(userId);
+    var movie = MovieRepo.getInstance().getElementById(movieId);
+    UserRepo.getInstance().addToWatchList(user, movie);
+
+    return new ResponseDTO(true, "Okeb");
+  }
+
+  public ResponseDTO removeFromWatchList(String userId, String movieId) throws CustomException {
+    var user = UserRepo.getInstance().getElementById(userId);
+    UserRepo.getInstance().removeFromWatchList(user, movieId);
     return new ResponseDTO(true, "Okeb");
   }
 }
