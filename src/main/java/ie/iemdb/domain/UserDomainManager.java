@@ -91,4 +91,9 @@ public class UserDomainManager {
       return new ResponseDTO(false, "InvalidCredential");
     }
   }
+
+  public ResponseDTO logoutUser() {
+    UserRepo.getInstance().logoutUser();
+    return new ResponseDTO(true, "Okeb");
+  }
 }

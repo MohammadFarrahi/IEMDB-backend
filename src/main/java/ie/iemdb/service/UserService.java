@@ -20,4 +20,8 @@ public class UserService {
         var userPassword = loginJson.get("password").asText();
         return UserDomainManager.getInstance().loginUser(userEmail, userPassword);
     }
+    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDTO logoutUser() throws CustomException, JsonProcessingException {
+        return UserDomainManager.getInstance().logoutUser();
+    }
 }

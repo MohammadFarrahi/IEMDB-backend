@@ -61,4 +61,8 @@ public class UserRepo extends Repo<User> {
     public void loginUser(User user) {
         loggedInUser = user;
     }
+
+    public void logoutUser() {
+        loggedInUser = null;
+    }
 }
