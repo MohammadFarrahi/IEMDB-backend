@@ -26,6 +26,7 @@ public class CommentAPIConsumer extends APIConsumer {
 
                     var newComment = makeNewComment(node);
                     repo.addElement(newComment);
+                    addCommentToMovie(node, newComment);
                 } catch (UserNotFoundException | MovieNotFoundException e) {
                     //ignore
                 }
@@ -50,6 +51,12 @@ public class CommentAPIConsumer extends APIConsumer {
 
     private User getCommentOwner(String userEmail) throws ObjectNotFoundException {
         return UserRepo.getInstance().getElementById(userEmail);
+    }
+
+    private void addCommentToMovie(JsonNode node, Comment newComment) throws ObjectNotFoundException {
+        String movieId = node.get("movieId").asText();
+        Movie commentMovie = getCommentMovie(movieId);
+        commentMovie.addComment(newComment);
     }
 
 }
