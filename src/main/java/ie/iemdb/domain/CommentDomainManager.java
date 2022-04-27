@@ -19,9 +19,9 @@ public class CommentDomainManager {
         }
         return instance;
     }
-    public ResponseDTO voteComment(String commentId, int vote) throws CustomException {
+    public CommentDTO voteComment(String commentId, int vote) throws CustomException {
         CommentRepo.getInstance().updateCommentVotes(commentId, UserRepo.loggedInUser.getId(), vote);
-        return new ResponseDTO(true, "Okeb");
+        return CommentRepo.getInstance().getElementById(commentId).getDTO();
     }
 
     public ResponseDTO postNewComment(CommentDTO commentDTO) throws CustomException {

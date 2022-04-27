@@ -25,10 +25,14 @@ public class UserDomainManager {
     return instance;
   }
 
-  public ArrayList<Movie> getRecommendedWatchlist(User user) {
-    var scoreMovieList = makeMovieScorePairs(user);
+  public List<MovieBriefDTO> getRecommendedWatchlist(String userId) throws ObjectNotFoundException {
+    var scoreMovieList = makeMovieScorePairs(UserRepo.getInstance().getElementById(userId));
     scoreMovieList = getSortedMovieScorePairs(scoreMovieList);
-    return getTopThreeMovies(scoreMovieList);
+    var recommendedMovies = getTopThreeMovies(scoreMovieList);
+
+    List<MovieBriefDTO> DTOList = new ArrayList<>();
+    recommendedMovies.forEach(movie -> DTOList.add(movie.getShortDTO()));
+    return DTOList;
   }
 
   private ArrayList<Pair<Movie, Double>> makeMovieScorePairs(User user) {
