@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
-    // TODO : validation and exception handling
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response loginUser(@RequestBody String loginInfoForm) {
         try {
