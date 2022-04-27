@@ -43,6 +43,6 @@ public class MovieDomainManager {
         if(UserRepo.loggedInUser != null){
             DTO.setUserRate(movie.getUserRate(UserRepo.loggedInUser.getId()));
         }
-        return movie.getDTO();
+        return DTO;
     }
 }
