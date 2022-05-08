@@ -13,6 +13,8 @@ import java.util.*;
 
 public class UserRepo extends Repo<User, String> {
     private static UserRepo instance = null;
+    private static final String USER_TABLE = "User";
+    private static final String WATCH_LIST_TABLE = "Watchlist";
 
     public static User loggedInUser = null;
 
@@ -24,12 +26,43 @@ public class UserRepo extends Repo<User, String> {
     }
 
     private UserRepo() {
+        initUserTable();
+        initWatchlistTable();
         this.notFoundException = new UserNotFoundException();
+    }
+
+    private void initUserTable() {
+        initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(" +
+                                "email VARCHAR(255),\n" +
+                                "password VARCHAR(255),\n" +
+                                "nickname VARCHAR(255),\n" +
+                                "name VARCHAR(255),\n" +
+                                "birthday VARCHAR(225),\n" +
+                                "PRIMARY KEY(email)" +
+                                ");", USER_TABLE
+                )
+        );
+    }
+
+    private void initWatchlistTable() {
+        initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(" +
+                                "email VARCHAR(255),\n" +
+                                "movieId INT), \n" +
+                                "PRIMARY KEY(email, movieId)" +
+                                "FOREIGN KEY (email) REFERENCES " + USER_TABLE + "(email),\n" +
+                                "FOREIGN KEY (email) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                ");", WATCH_LIST_TABLE
+                )
+        );
     }
 
     @Override
     protected String getGetElementByIdStatement() {
-        return null;
+        return String.format("SELECT* FROM %s a WHERE a.id = ?;", USER_TABLE);
     }
 
     @Override
