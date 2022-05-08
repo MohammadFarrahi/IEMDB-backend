@@ -6,6 +6,7 @@ import ie.iemdb.model.DTO.ActorBriefDTO;
 import ie.iemdb.model.DTO.CommentDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.MovieDTO;
+import ie.iemdb.repository.Retriever;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,14 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Movie {
-    private String id;
+    private Integer id;
     private String name;
     private String summary;
     private LocalDate releaseDate;
     private String director;
     private ArrayList<String> writers;
     private ArrayList<String> genres;
-    private ArrayList<Actor> cast;
+    private ArrayList<Actor> cast = null;
     private Double imdbRate;
     private Double averageRating;
     private Integer duration;
@@ -32,9 +33,10 @@ public class Movie {
 
     private ArrayList<Comment> comments;
     private HashMap<String, Integer> userRateMap;
+    private Retriever retriever;
 
     public Movie(
-            String id,
+            Integer id,
             String name,
             String summary,
             String director,
@@ -66,6 +68,42 @@ public class Movie {
         this.coverImgUrl = coverImgUrl;
     }
 
+    // Movie without cast for lazy loading
+    public Movie(
+            Integer id,
+            String name,
+            String summary,
+            String director,
+            String releaseDate,
+            ArrayList<String> writers,
+            ArrayList<String> genres,
+            Integer ageLimit,
+            Integer duration,
+            Double imdbRate,
+            String coverImgUrl,
+            String imgUrl) {
+
+        this.userRateMap = new HashMap<>();
+        this.comments = new ArrayList<>();
+        this.averageRating = null;
+        this.id = id;
+        this.name = name;
+        this.summary = summary;
+        this.director = director;
+        this.releaseDate = LocalDate.parse(releaseDate, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        this.writers = writers;
+        this.genres = genres;
+        this.ageLimit = ageLimit;
+        this.duration = duration;
+        this.imdbRate = imdbRate;
+        this.imgUrl = imgUrl;
+        this.coverImgUrl = coverImgUrl;
+    }
+
+    public void setRetriever(Retriever retriever){
+        this.retriever = retriever;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -87,7 +125,7 @@ public class Movie {
     }
 
     public String getId() {
-        return this.id;
+        return this.id.toString();
     }
 
     public Integer getAgeLimit() {
@@ -95,6 +133,8 @@ public class Movie {
     }
 
     public ArrayList<Actor> getCast() {
+        if(this.cast == null)
+            this.cast = retriever.getCastForMovie(this.id);
         return this.cast;
     }
 
@@ -147,7 +187,7 @@ public class Movie {
 
     public MovieBriefDTO getShortDTO() {
         var movieBriefDTO = new MovieBriefDTO();
-        movieBriefDTO.setId(Integer.parseInt(id));
+        movieBriefDTO.setId(id);
         movieBriefDTO.setName(name);
         movieBriefDTO.setSummary(summary);
         movieBriefDTO.setImdbRate(imdbRate);
@@ -162,7 +202,7 @@ public class Movie {
 
     public MovieDTO getDTO() {
         var DTO = new MovieDTO();
-        DTO.setId(Integer.parseInt(id));
+        DTO.setId(id);
         DTO.setAgeLimit(ageLimit);
         DTO.setAverageRating(averageRating);
         DTO.setCoverImgUrl(coverImgUrl);

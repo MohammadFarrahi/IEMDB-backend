@@ -93,4 +93,8 @@ public class UserRepo extends Repo<User, String> {
     public void logoutUser() {
         loggedInUser = null;
     }
+
+    public User getUserForComment(int commentId) {
+        return null;
+    }
 }

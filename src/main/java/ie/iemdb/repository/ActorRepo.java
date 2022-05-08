@@ -5,10 +5,10 @@ import ie.iemdb.exception.ActorAlreadyExistsException;
 import ie.iemdb.exception.ActorNotFoundException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
 
 
 public class ActorRepo extends Repo<Actor, Integer> {
@@ -67,4 +67,7 @@ public class ActorRepo extends Repo<Actor, Integer> {
         objectMap.put(objectId, newObject);
     }
 
+    public ArrayList<Actor> getCastForMovie(int movieId) {
+        return new ArrayList<>();
+    }
 }
