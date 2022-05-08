@@ -6,6 +6,9 @@ import ie.iemdb.exception.ActorNotFoundException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ActorRepo extends Repo<Actor> {
     private static ActorRepo instance = null;
@@ -37,4 +40,9 @@ public class ActorRepo extends Repo<Actor> {
             throw new ActorNotFoundException();
         }
         objectMap.put(objectId, newObject);
-    }}
+    }
+
+    public List<Actor> getCastForMovie(int movieId) {
+        return new ArrayList<>();
+    }
+}
