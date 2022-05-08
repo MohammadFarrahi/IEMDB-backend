@@ -3,6 +3,7 @@ package ie.iemdb.model;
 import ie.iemdb.model.DTO.ActorBriefDTO;
 import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
+import ie.iemdb.repository.Retriever;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,21 +13,31 @@ import java.util.List;
 
 
 public class Actor {
-    private String id;
+    private Integer id;
     private String name;
     private LocalDate birthDate;
     private String nationality;
-    private ArrayList<Movie> performedMovies;
+    private ArrayList<Movie> performedMovies = null;
     private String imgUrl;
+    private Retriever retriever;
 
 
-    public Actor ( String id, String name, String birthDate, String nationality, String imgUrl ) {
+    public Actor ( Integer id, String name, String birthDate, String nationality, String imgUrl ) {
         this.id = id;
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MMMM d, yyyy"));
         this.nationality = nationality;
-        this.performedMovies = new ArrayList<>();
         this.imgUrl = imgUrl;
+    }
+
+    public void setRetriever(Retriever retriever){
+        this.retriever = retriever;
+    }
+
+    private ArrayList<Movie> getPerformedMovies() {
+        if(this.performedMovies == null)
+            this.performedMovies = this.retriever.getMoviesForActor(this.id);
+        return this.performedMovies;
     }
 
     public int getAge() {
@@ -34,28 +45,28 @@ public class Actor {
     }
     
     public void addToPerformedMovies(Movie movie) {
-        performedMovies.add(movie);
+        getPerformedMovies().add(movie);
     }
 
     public String getId() {
-        return this.id;
+        return this.id.toString();
     }
 
     public ActorDTO getDTO() {
         var actorDTO = new ActorDTO();
-        actorDTO.setId(Integer.parseInt(id));
+        actorDTO.setId(id);
         actorDTO.setBirthDate(birthDate);
         actorDTO.setImgUrl(imgUrl);
         actorDTO.setName(name);
         actorDTO.setNationality(nationality);
         var performedMoviesDTO = new ArrayList<MovieBriefDTO>();
-        performedMovies.forEach(movie -> performedMoviesDTO.add(movie.getShortDTO()));
+        getPerformedMovies().forEach(movie -> performedMoviesDTO.add(movie.getShortDTO()));
         actorDTO.setPerformedMovies(performedMoviesDTO);
         return actorDTO;
     }
     public ActorBriefDTO getBriefDTO() {
         var DTO = new ActorBriefDTO();
-        DTO.setId(Integer.parseInt(id));
+        DTO.setId(id);
         DTO.setAge(this.getAge());
         DTO.setImgUrl(imgUrl);
         DTO.setName(name);

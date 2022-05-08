@@ -125,7 +125,19 @@ public class MovieRepo extends Repo<Movie> {
         return filteredList;
     }
 
-    // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
+    public ArrayList<Movie> getMoviesForActor(int actorId){
+        return new ArrayList<>();
+    }
+
+    public ArrayList<Movie> getWatchlistForUser(String username) {
+        return new ArrayList<>();
+    }
+
+    public Movie getMovieForComment(int commentId) {
+        return null;
+    }
+
+        // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
     //     if (!UserRepo.getInstance().isIdValid(userEmail)) {
     //         throw new UserNotFoundException();
     //     }

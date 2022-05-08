@@ -34,7 +34,7 @@ public class ActorAPIConsumer extends APIConsumer {
     }
 
     private Actor makeNewActor(JsonNode node) {
-        String id = node.get("id").asText();
+        Integer id = node.get("id").asInt();
         String name = node.get("name").asText();
         String birthDate = node.get("birthDate").asText();
         String nationality = node.get("nationality").asText();
