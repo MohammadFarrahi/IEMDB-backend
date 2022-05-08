@@ -48,8 +48,8 @@ public class Actor {
         getPerformedMovies().add(movie);
     }
 
-    public String getId() {
-        return this.id.toString();
+    public Integer getId() {
+        return this.id;
     }
 
     public ActorDTO getDTO() {

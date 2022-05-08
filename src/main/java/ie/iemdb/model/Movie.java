@@ -124,8 +124,8 @@ public class Movie {
         return imdbRate;
     }
 
-    public String getId() {
-        return this.id.toString();
+    public Integer getId() {
+        return this.id;
     }
 
     public Integer getAgeLimit() {
