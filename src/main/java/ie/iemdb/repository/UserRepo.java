@@ -83,7 +83,7 @@ public class UserRepo extends Repo<User, String> {
     @Override
     protected User convertResultSetToDomainModel(ResultSet rs) {
         try {
-            var newUser =  new User(
+            var newUser = new User(
                     rs.getString("email"),
                     rs.getString("password"),
                     rs.getString("nickname"),
@@ -100,6 +100,15 @@ public class UserRepo extends Repo<User, String> {
 
     @Override
     protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) {
+        try {
+            ArrayList<User> users = new ArrayList<>();
+            while (rs.next()) {
+                users.add(this.convertResultSetToDomainModel(rs));
+            }
+            return users;
+        } catch (SQLException e) {
+            //ignore
+        }
         return null;
     }
 
