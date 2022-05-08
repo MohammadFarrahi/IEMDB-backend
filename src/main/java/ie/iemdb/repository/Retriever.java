@@ -3,6 +3,7 @@ package ie.iemdb.repository;
 
 import ie.iemdb.model.Actor;
 import ie.iemdb.model.Movie;
+import ie.iemdb.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class Retriever {
 
     public Movie getMovieForComment(int commentId){
         return MovieRepo.getInstance().getMovieForComment(commentId);
+    }
+
+    public User getUserForComment(int commentId){
+        return UserRepo.getInstance().getUserForComment(commentId);
     }
 
 

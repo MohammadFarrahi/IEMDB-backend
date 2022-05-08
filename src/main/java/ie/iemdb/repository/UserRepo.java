@@ -66,4 +66,8 @@ public class UserRepo extends Repo<User> {
     public void logoutUser() {
         loggedInUser = null;
     }
+
+    public User getUserForComment(int commentId) {
+        return null;
+    }
 }
