@@ -12,13 +12,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public abstract class Repo <T, PK> {
+public abstract class Repo<T, PK> {
     protected ObjectNotFoundException notFoundException;
 
     abstract protected String getGetElementByIdStatement();
+
     abstract protected void fillGetElementByIdValues(PreparedStatement st, PK id);
+
     abstract protected String getGetAllElementsStatement();
+
     abstract protected T convertResultSetToDomainModel(ResultSet rs);
+
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs);
 
     // TODO : refactor these
@@ -52,6 +56,7 @@ public abstract class Repo <T, PK> {
             throw e;
         }
     }
+
     public List<T> getElementsById(List<PK> ids) throws SQLException, ObjectNotFoundException {
         List<T> result = new ArrayList<>();
         Connection con = ConnectionPool.getConnection();
@@ -95,6 +100,18 @@ public abstract class Repo <T, PK> {
             System.out.println("error in Repository.findAll query.");
             e.printStackTrace();
             throw e;
+        }
+    }
+
+    protected void initTable(String createTableSql) {
+        try {
+            Connection con = ConnectionPool.getConnection();
+            PreparedStatement createTableStatement = con.prepareStatement(createTableSql);
+            createTableStatement.executeUpdate();
+            createTableStatement.close();
+            con.close();
+        } catch (SQLException e) {
+            //ignore
         }
     }
 
