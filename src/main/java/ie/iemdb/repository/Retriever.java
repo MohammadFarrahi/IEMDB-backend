@@ -19,5 +19,16 @@ public class Retriever {
         return casts;
     }
 
+    public List<Movie> getMoviesForActor(int actorId) {
+        List<Movie> movies = new ArrayList<>();
+        try {
+            movies = MovieRepo.getInstance().getMoviesForActor(actorId);
+            return movies;
+        } catch (Exception e) {
+            //ignore
+        }
+        return movies;
+    }
+
 
 }
