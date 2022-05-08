@@ -9,6 +9,7 @@ import ie.iemdb.model.User;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class UserRepo extends Repo<User, String> {
@@ -39,7 +40,7 @@ public class UserRepo extends Repo<User, String> {
                                 "password VARCHAR(255),\n" +
                                 "nickname VARCHAR(255),\n" +
                                 "name VARCHAR(255),\n" +
-                                "birthday VARCHAR(225),\n" +
+                                "birthDate VARCHAR(225),\n" +
                                 "PRIMARY KEY(email)" +
                                 ");", USER_TABLE
                 )
@@ -67,16 +68,33 @@ public class UserRepo extends Repo<User, String> {
 
     @Override
     protected void fillGetElementByIdValues(PreparedStatement st, String id) {
-
+        try {
+            st.setString(1, id);
+        } catch (SQLException e) {
+            //ignore
+        }
     }
 
     @Override
     protected String getGetAllElementsStatement() {
-        return null;
+        return String.format("SELECT * FROM %s;", USER_TABLE);
     }
 
     @Override
     protected User convertResultSetToDomainModel(ResultSet rs) {
+        try {
+            var newUser =  new User(
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("nickname"),
+                    rs.getString("name"),
+                    rs.getString("birthDate")
+            );
+            newUser.setRetriever(new Retriever());
+            return newUser;
+        } catch (Exception e) {
+            //ignore
+        }
         return null;
     }
 
