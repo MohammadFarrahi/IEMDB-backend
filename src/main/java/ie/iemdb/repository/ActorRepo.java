@@ -42,7 +42,7 @@ public class ActorRepo extends Repo<Actor> {
         objectMap.put(objectId, newObject);
     }
 
-    public List<Actor> getCastForMovie(int movieId) {
+    public ArrayList<Actor> getCastForMovie(int movieId) {
         return new ArrayList<>();
     }
 }

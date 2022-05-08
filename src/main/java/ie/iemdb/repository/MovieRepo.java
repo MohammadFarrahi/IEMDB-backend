@@ -125,11 +125,11 @@ public class MovieRepo extends Repo<Movie> {
         return filteredList;
     }
 
-    public List<Movie> getMoviesForActor(int actorId){
+    public ArrayList<Movie> getMoviesForActor(int actorId){
         return new ArrayList<>();
     }
 
-    public List<Movie> getWatchlistForUser(String username) {
+    public ArrayList<Movie> getWatchlistForUser(String username) {
         return new ArrayList<>();
     }
 
