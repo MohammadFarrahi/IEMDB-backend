@@ -54,22 +54,8 @@ public class UserRepo extends Repo<User, String> {
 
     @Override
     public void addElement(User newObject) throws CustomException {
-        var objectId = newObject.getId();
-        if (isIdValid(objectId)) {
-            throw this.notFoundException;
-        }
-        this.objectMap.put(objectId, newObject);
-        return;
     }
 
-    @Override
-    public void updateElement(User newObject) throws CustomException {
-        var objectId = newObject.getId();
-        if (!isIdValid(objectId)) {
-            throw this.notFoundException;
-        }
-        objectMap.put(objectId, newObject);
-    }
 
     public List<Movie> getWatchList(String userId) throws CustomException {
         return getElementById(userId).getWatchList();

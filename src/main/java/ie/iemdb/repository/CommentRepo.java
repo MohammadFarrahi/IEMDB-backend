@@ -50,16 +50,8 @@ public class CommentRepo extends Repo<Comment, Integer> {
 
     @Override
     public void addElement(Comment newObject) throws CustomException {
-        if (newObject.setId(lastCommentId + 1)) {
-            objectMap.put((++lastCommentId).toString(), newObject);
-        } else {
-            throw new CustomException("InvalidComment");
-        }
     }
 
-    @Override
-    public void updateElement(Comment newObject) throws CustomException {
-    }
 
     public void updateCommentVotes(String commentId, String userId, int vote) throws CustomException {
         getElementById(commentId).updateCommentVotes(userId, vote);

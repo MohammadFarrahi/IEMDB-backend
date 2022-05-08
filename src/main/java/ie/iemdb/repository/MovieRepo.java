@@ -109,24 +109,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     @Override
     public void addElement(Movie newObject) throws CustomException {
-        // if (!ActorRepo.getInstance().isIdListValid(newObject.getCast())) {
-        //     throw new ActorNotFoundException();
-        // }
-        var objectId = newObject.getId();
-        if (isIdValid(objectId)) {
-            throw new MovieAlreadyExistsException();
-        }
-        this.objectMap.put(objectId, newObject);
-        newObject.getCast().forEach(actor -> actor.addToPerformedMovies(newObject));
-    }
-
-    @Override
-    public void updateElement(Movie newObject) throws CustomException {
-        var objectId = newObject.getId();
-        if (!isIdValid(objectId)) {
-            throw new MovieNotFoundException();
-        }
-        objectMap.put(objectId, newObject);
     }
 
 

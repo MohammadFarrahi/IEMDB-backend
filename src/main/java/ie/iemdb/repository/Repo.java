@@ -23,7 +23,6 @@ public abstract class Repo <T, PK> {
 
     // TODO : refactor these
     public abstract void addElement(T newObject) throws CustomException;
-    public abstract void updateElement(T newObject) throws CustomException;
 
     public boolean isIdValid(PK id) {
         // TODO: refactor

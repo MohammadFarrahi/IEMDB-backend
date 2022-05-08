@@ -21,7 +21,7 @@ public class MovieDomainManager {
         return instance;
     }
     public List<MovieBriefDTO> getMoviesDTOList() throws ObjectNotFoundException {
-        var movies = MovieRepo.getInstance().getAllElements(null);
+        var movies = MovieRepo.getInstance().getAllElements();
         List<MovieBriefDTO> moviesDTO = new ArrayList<>();
         movies.forEach(movie -> moviesDTO.add(movie.getShortDTO()));
         return moviesDTO;

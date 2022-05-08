@@ -51,21 +51,8 @@ public class ActorRepo extends Repo<Actor, Integer> {
 
     @Override
     public void addElement(Actor newObject) throws CustomException {
-        var objectId = newObject.getId();
-        if (isIdValid(objectId)) {
-            throw new ActorAlreadyExistsException();
-        }
-        this.objectMap.put(objectId, newObject);
     }
 
-    @Override
-    public void updateElement(Actor newObject) throws ActorNotFoundException {
-        var objectId = newObject.getId();
-        if (!isIdValid(objectId)) {
-            throw new ActorNotFoundException();
-        }
-        objectMap.put(objectId, newObject);
-    }
 
     public ArrayList<Actor> getCastForMovie(int movieId) {
         return new ArrayList<>();
