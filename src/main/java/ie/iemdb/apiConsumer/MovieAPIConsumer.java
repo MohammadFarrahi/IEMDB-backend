@@ -35,7 +35,7 @@ public class MovieAPIConsumer extends APIConsumer {
     }
 
     private Movie makeNewMovie(JsonNode node) throws ObjectNotFoundException {
-        String id = node.get("id").asText();
+        Integer id = node.get("id").asInt();
         String name = node.get("name").asText();
         String summary = node.get("summary").asText();
         String director = node.get("director").asText();
