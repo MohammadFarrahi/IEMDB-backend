@@ -9,36 +9,15 @@ import java.util.List;
 
 public class Retriever {
     public List<Actor> getCastForMovie(int movieId) {
-        List<Actor> casts = new ArrayList<>();
-        try {
-            casts = ActorRepo.getInstance().getCastForMovie(movieId);
-            return casts;
-        } catch (Exception e) {
-            //ignore
-        }
-        return casts;
+        return ActorRepo.getInstance().getCastForMovie(movieId);
     }
 
     public List<Movie> getMoviesForActor(int actorId) {
-        List<Movie> movies = new ArrayList<>();
-        try {
-            movies = MovieRepo.getInstance().getMoviesForActor(actorId);
-            return movies;
-        } catch (Exception e) {
-            //ignore
-        }
-        return movies;
+        return MovieRepo.getInstance().getMoviesForActor(actorId);
     }
 
     public List<Movie> getWatchlistForUser(String username) {
-        List<Movie> movies = new ArrayList<>();
-        try {
-            movies = MovieRepo.getInstance().getWatchlistForUser(username);
-            return movies;
-        } catch (Exception e) {
-            //ignore
-        }
-        return movies;
+        return MovieRepo.getInstance().getWatchlistForUser(username);
     }
 
 
