@@ -129,7 +129,12 @@ public class MovieRepo extends Repo<Movie> {
         return new ArrayList<>();
     }
 
-    // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
+    public List<Movie> getWatchlistForUser(String username) {
+        return new ArrayList<>();
+
+    }
+
+        // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
     //     if (!UserRepo.getInstance().isIdValid(userEmail)) {
     //         throw new UserNotFoundException();
     //     }

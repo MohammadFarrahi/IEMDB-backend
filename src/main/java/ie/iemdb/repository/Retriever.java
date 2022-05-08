@@ -30,5 +30,16 @@ public class Retriever {
         return movies;
     }
 
+    public List<Movie> getWatchlistForUser(String username) {
+        List<Movie> movies = new ArrayList<>();
+        try {
+            movies = MovieRepo.getInstance().getWatchlistForUser(username);
+            return movies;
+        } catch (Exception e) {
+            //ignore
+        }
+        return movies;
+    }
+
 
 }
