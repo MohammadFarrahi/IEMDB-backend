@@ -4,11 +4,13 @@ import ie.iemdb.exception.*;
 import ie.iemdb.model.Movie;
 import ie.iemdb.util.types.Constant;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 import java.util.stream.Collectors;
 
-public class MovieRepo extends Repo<Movie> {
+public class MovieRepo extends Repo<Movie, Integer> {
     private static MovieRepo instance = null;
 
     private String nameFilter;
@@ -28,7 +30,7 @@ public class MovieRepo extends Repo<Movie> {
 
     public List<Movie> fetchMoviesForUser() {
         try {
-            var movies = getElementsById(null);
+            var movies = getAllElements();
             if (filterFlag) {
                 movies = filterElementsByName(movies, nameFilter);
                 filterFlag = false;
@@ -81,11 +83,36 @@ public class MovieRepo extends Repo<Movie> {
     }
 
     @Override
+    protected String getGetElementByIdStatement() {
+        return null;
+    }
+
+    @Override
+    protected void fillGetElementByIdValues(PreparedStatement st, Integer id) {
+
+    }
+
+    @Override
+    protected String getGetAllElementsStatement() {
+        return null;
+    }
+
+    @Override
+    protected Movie convertResultSetToDomainModel(ResultSet rs) {
+        return null;
+    }
+
+    @Override
+    protected ArrayList<Movie> convertResultSetToDomainModelList(ResultSet rs) {
+        return null;
+    }
+
+    @Override
     public void addElement(Movie newObject) throws CustomException {
         // if (!ActorRepo.getInstance().isIdListValid(newObject.getCast())) {
         //     throw new ActorNotFoundException();
         // }
-        var objectId = newObject.getId().toString();
+        var objectId = newObject.getId();
         if (isIdValid(objectId)) {
             throw new MovieAlreadyExistsException();
         }
@@ -101,6 +128,7 @@ public class MovieRepo extends Repo<Movie> {
         }
         objectMap.put(objectId, newObject);
     }
+
 
     public ArrayList<Movie> filterElementsByGenre(String genre, List<Movie> elements) {
         try {
@@ -131,5 +159,4 @@ public class MovieRepo extends Repo<Movie> {
     //     }
     //     getElementById(movieId).updateMovieRating(userEmail, rate);
     // }
-
 }

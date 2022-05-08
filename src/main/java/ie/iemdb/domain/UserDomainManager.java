@@ -37,7 +37,7 @@ public class UserDomainManager {
   private ArrayList<Pair<Movie, Double>> makeMovieScorePairs(User user) {
     ArrayList<Pair<Movie, Double>> scoreMovieList = new ArrayList<>();
     try {
-      var movies = MovieRepo.getInstance().getElementsById(null);
+      var movies = MovieRepo.getInstance().getAllElements(null);
       var watchList = user.getWatchList();
       for (var movie : movies) {
         if (user.hasMovieInWatchList(movie))

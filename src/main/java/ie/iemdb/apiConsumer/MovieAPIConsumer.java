@@ -69,7 +69,7 @@ public class MovieAPIConsumer extends APIConsumer {
 
     private ArrayList<Actor> getCastsForMovie(ArrayList<String> ids) throws ObjectNotFoundException {
         var repo = ActorRepo.getInstance();
-        return (ArrayList<Actor>) repo.getElementsById(ids);
+        return (ArrayList<Actor>) repo.getAllElements(ids);
     }
 
     private ArrayList<String> getStringCollection(JsonNode node) {

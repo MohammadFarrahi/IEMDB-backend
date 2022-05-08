@@ -4,7 +4,11 @@ import ie.iemdb.exception.CommentNotFoundException;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Comment;
 
-public class CommentRepo extends Repo<Comment> {
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public class CommentRepo extends Repo<Comment, Integer> {
     private static CommentRepo instance = null;
     public static Integer lastCommentId = 0;
 
@@ -17,6 +21,31 @@ public class CommentRepo extends Repo<Comment> {
 
     private CommentRepo() {
         this.notFoundException = new CommentNotFoundException();
+    }
+
+    @Override
+    protected String getGetElementByIdStatement() {
+        return null;
+    }
+
+    @Override
+    protected void fillGetElementByIdValues(PreparedStatement st, Integer id) {
+
+    }
+
+    @Override
+    protected String getGetAllElementsStatement() {
+        return null;
+    }
+
+    @Override
+    protected Comment convertResultSetToDomainModel(ResultSet rs) {
+        return null;
+    }
+
+    @Override
+    protected ArrayList<Comment> convertResultSetToDomainModelList(ResultSet rs) {
+        return null;
     }
 
     @Override
@@ -35,4 +64,5 @@ public class CommentRepo extends Repo<Comment> {
     public void updateCommentVotes(String commentId, String userId, int vote) throws CustomException {
         getElementById(commentId).updateCommentVotes(userId, vote);
     }
+
 }

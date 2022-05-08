@@ -7,9 +7,11 @@ import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
-public class UserRepo extends Repo<User> {
+public class UserRepo extends Repo<User, String> {
     private static UserRepo instance = null;
 
     public static User loggedInUser = null;
@@ -23,6 +25,31 @@ public class UserRepo extends Repo<User> {
 
     private UserRepo() {
         this.notFoundException = new UserNotFoundException();
+    }
+
+    @Override
+    protected String getGetElementByIdStatement() {
+        return null;
+    }
+
+    @Override
+    protected void fillGetElementByIdValues(PreparedStatement st, String id) {
+
+    }
+
+    @Override
+    protected String getGetAllElementsStatement() {
+        return null;
+    }
+
+    @Override
+    protected User convertResultSetToDomainModel(ResultSet rs) {
+        return null;
+    }
+
+    @Override
+    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) {
+        return null;
     }
 
     @Override
