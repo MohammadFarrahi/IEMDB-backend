@@ -131,7 +131,10 @@ public class MovieRepo extends Repo<Movie> {
 
     public List<Movie> getWatchlistForUser(String username) {
         return new ArrayList<>();
+    }
 
+    public Movie getMovieForComment(int commentId) {
+        return null;
     }
 
         // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {

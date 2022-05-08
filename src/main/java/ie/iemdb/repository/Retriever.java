@@ -20,5 +20,9 @@ public class Retriever {
         return MovieRepo.getInstance().getWatchlistForUser(username);
     }
 
+    public Movie getMovieForComment(int commentId){
+        return MovieRepo.getInstance().getMovieForComment(commentId);
+    }
+
 
 }
