@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class MovieRepo extends Repo<Movie, Integer> {
     private static MovieRepo instance = null;
+    public static final String CAST_TABLE = "Cast";
 
     private String nameFilter;
     private String sortType;
