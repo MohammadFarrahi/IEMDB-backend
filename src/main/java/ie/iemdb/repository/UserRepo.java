@@ -154,23 +154,14 @@ public class UserRepo extends Repo<User, String> {
         if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
 
-        Connection con = ConnectionPool.getConnection();
-        PreparedStatement st = con.prepareStatement(getAddToWatchListStatement());
-        fillAddToWatchListValues(st, user.getId(), movie.getId());
-        st.executeQuery();
-        st.close();
-        con.close();
+        executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()))
 
         user.addToWatchList(movie);
     }
 
     public void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException, SQLException {
-        Connection con = ConnectionPool.getConnection();
-        PreparedStatement st = con.prepareStatement(getRemoveFromWatchListStatement());
-        fillRemoveFromWatchListValues(st, user.getId(), movieId);
-        st.executeQuery();
-        st.close();
-        con.close();
+
+        executeUpdate(getRemoveFromWatchListStatement(), List.of(user.getId(), movieId.toString()));
 
         user.removeFromWatchList(movieId);
     }
