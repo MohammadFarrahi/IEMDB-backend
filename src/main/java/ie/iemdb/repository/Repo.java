@@ -21,12 +21,14 @@ public abstract class Repo<T, PK> {
 
     abstract protected String getGetAllElementsStatement();
 
+    abstract protected String getAddElementStatement();
+
     abstract protected T convertResultSetToDomainModel(ResultSet rs);
 
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs);
 
     // TODO : refactor these
-    public abstract void addElement(T newObject) throws CustomException;
+    public abstract void addElement(T newObject) throws SQLException;
 
     public boolean isIdValid(PK id) {
         // TODO: refactor

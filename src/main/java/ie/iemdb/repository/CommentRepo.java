@@ -6,6 +6,7 @@ import ie.iemdb.model.Comment;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CommentRepo extends Repo<Comment, Integer> {
@@ -49,7 +50,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
     }
 
     @Override
-    public void addElement(Comment newObject) throws CustomException {
+    public void addElement(Comment newObject) throws SQLException {
     }
 
 
