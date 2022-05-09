@@ -6,6 +6,7 @@ import ie.iemdb.exception.InvalidVoteValueException;
 import ie.iemdb.model.DTO.CommentDTO;
 import ie.iemdb.repository.Retriever;
 
+import javax.print.DocFlavor;
 import java.time.LocalDate;
 import java.util.HashMap;
 
@@ -43,12 +44,12 @@ public class Comment {
         this.text = text;
     }
 
-    public Comment (String text) {
-        this.createdDate = LocalDate.now();
-        this.id = null;
-        this.userVoteMap = new HashMap<>();
-        this.commentLikes = 0;
-        this.commentDislikes = 0;
+    public Comment (Integer id, String text, String createdDate, Integer commentLikes, Integer commentDislikes, HashMap<String, Short> userVoteMap) {
+        this.createdDate = LocalDate.parse(createdDate);
+        this.id = id;
+        this.userVoteMap = userVoteMap;
+        this.commentLikes = commentLikes;
+        this.commentDislikes = commentDislikes;
         this.text = text;
     }
 
