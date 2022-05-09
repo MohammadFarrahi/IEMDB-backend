@@ -17,17 +17,16 @@ public abstract class Repo<T, PK> {
 
     abstract protected String getGetElementByIdStatement();
 
-    abstract protected void fillGetElementByIdValues(PreparedStatement st, PK id);
+    abstract protected void fillGetElementByIdValues(PreparedStatement st, PK id) throws SQLException;
 
     abstract protected String getGetAllElementsStatement();
 
+
+    abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException, CustomException;
     abstract protected String getAddElementStatement();
 
-    abstract protected T convertResultSetToDomainModel(ResultSet rs);
+    abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException, CustomException;
 
-    abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs);
-
-    // TODO : refactor these
     public abstract void addElement(T newObject) throws SQLException;
 
     public boolean isIdValid(PK id) {

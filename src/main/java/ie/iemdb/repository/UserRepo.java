@@ -68,12 +68,8 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    protected void fillGetElementByIdValues(PreparedStatement st, String id) {
-        try {
+    protected void fillGetElementByIdValues(PreparedStatement st, String id) throws SQLException {
             st.setString(1, id);
-        } catch (SQLException e) {
-            //ignore
-        }
     }
 
     @Override
@@ -82,8 +78,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    protected User convertResultSetToDomainModel(ResultSet rs) {
-        try {
+    protected User convertResultSetToDomainModel(ResultSet rs) throws SQLException, CustomException {
             var newUser = new User(
                     rs.getString("email"),
                     rs.getString("password"),
@@ -93,28 +88,32 @@ public class UserRepo extends Repo<User, String> {
             );
             newUser.setRetriever(new Retriever());
             return newUser;
-        } catch (Exception e) {
-            //ignore
-        }
-        return null;
     }
 
     @Override
-    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) {
-        try {
+    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) throws SQLException, CustomException {
             ArrayList<User> users = new ArrayList<>();
             while (rs.next()) {
                 users.add(this.convertResultSetToDomainModel(rs));
             }
             return users;
-        } catch (SQLException e) {
-            //ignore
-        }
-        return null;
+    }
+
+    private String getAddElementStatement() {
+        return String.format("INSERT INTO %s\n" +
+                "VALUES (?, ?, ?, ?, ?);", WATCH_LIST_TABLE);
     }
 
     @Override
     public void addElement(User newObject) throws SQLException {
+        var tupleMap = newObject.getDBTuple();
+        executeUpdate(getAddElementStatement(), List.of(
+                tupleMap.get("email"),
+                tupleMap.get("password"),
+                tupleMap.get("nickname"),
+                tupleMap.get("name"),
+                tupleMap.get("birthDate")
+        ));
     }
 
     private String getAddToWatchListStatement() {
@@ -122,27 +121,9 @@ public class UserRepo extends Repo<User, String> {
                 "VALUES (?, ?);", WATCH_LIST_TABLE);
     }
 
-    private void fillAddToWatchListValues(PreparedStatement st, String userId, Integer movieId) {
-        try {
-            st.setString(1, userId);
-            st.setString(2, movieId.toString());
-        } catch (SQLException e) {
-            //ignore
-        }
-    }
-
     private String getRemoveFromWatchListStatement() {
         return String.format("DELETE FROM %s\n" +
                 "WHERE userId=? AND movieId=?;", WATCH_LIST_TABLE);
-    }
-
-    private void fillRemoveFromWatchListValues(PreparedStatement st, String userId, Integer movieId) {
-        try {
-            st.setString(1, userId);
-            st.setString(2, movieId.toString());
-        } catch (SQLException e) {
-            //ignore
-        }
     }
 
 

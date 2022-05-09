@@ -9,6 +9,8 @@ import ie.iemdb.util.types.Email;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
     private Email email;
@@ -77,5 +79,15 @@ public class User {
 
     public boolean checkPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public Map<String, String> getDBTuple() {
+        Map<String, String> tuple = new HashMap<>();
+        tuple.put("email", this.email.toString());
+        tuple.put("password", this.password);
+        tuple.put("nickname", this.nickname);
+        tuple.put("name", this.name);
+        tuple.put("birthDate", this.birthDate.toString());
+        return tuple;
     }
 }
