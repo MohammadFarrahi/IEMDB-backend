@@ -107,8 +107,12 @@ public class CommentRepo extends Repo<Comment, Integer> {
     }
 
     @Override
-    protected ArrayList<Comment> convertResultSetToDomainModelList(ResultSet rs) {
-        return null;
+    protected ArrayList<Comment> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
+        ArrayList<Comment> comments = new ArrayList<>();
+        while (rs.next()) {
+            comments.add(this.convertResultSetToDomainModel(rs));
+        }
+        return comments;
     }
 
     @Override
