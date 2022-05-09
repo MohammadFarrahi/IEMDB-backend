@@ -98,7 +98,7 @@ public class UserRepo extends Repo<User, String> {
             }
             return users;
     }
-
+    @Override
     private String getAddElementStatement() {
         return String.format("INSERT INTO %s\n" +
                 "VALUES (?, ?, ?, ?, ?);", WATCH_LIST_TABLE);
