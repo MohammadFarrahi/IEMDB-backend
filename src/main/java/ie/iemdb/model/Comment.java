@@ -9,6 +9,7 @@ import ie.iemdb.repository.Retriever;
 import javax.print.DocFlavor;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Comment {
     private Integer id;
@@ -93,11 +94,22 @@ public class Comment {
         DTO.setId(id);
         DTO.setCommentDislikes(commentDislikes);
         DTO.setCommentLikes(commentLikes);
-        DTO.setCommentMovieId(Integer.parseInt(getMovie().getId()));
+        DTO.setCommentMovieId(getMovie().getId());
         DTO.setCommentOwnerId(getCommentOwner().getId());
         DTO.setCommentOwnerName(getCommentOwner().getName());
         DTO.setCreatedDate(createdDate);
         DTO.setText(text);
         return DTO;
+    }
+
+    public Map<String, String> getDBTuple(){
+        Map<String, String> tuple = new HashMap<>();
+        tuple.put("text", this.text);
+        tuple.put("userId", this.commentOwner.getId());
+        tuple.put("movieId", this.commentMovie.getId().toString());
+        tuple.put("createdDate", this.createdDate.toString());
+        tuple.put("commentLikes", this.commentLikes.toString());
+        tuple.put("commentDislikes", this.commentDislikes.toString());
+        return tuple;
     }
 }
