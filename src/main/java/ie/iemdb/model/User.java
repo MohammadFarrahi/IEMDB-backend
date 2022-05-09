@@ -42,7 +42,7 @@ public class User {
             watchList.add(movie);
     }
 
-    public void removeFromWatchList(String id) throws MovieNotFoundException {
+    public void removeFromWatchList(Integer id) throws MovieNotFoundException {
         getWatchList();
         for (var movie : this.watchList) {
             if (movie.getId().equals(id)) {
