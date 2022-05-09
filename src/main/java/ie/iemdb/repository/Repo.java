@@ -115,5 +115,31 @@ public abstract class Repo<T, PK> {
         }
     }
 
+    protected ResultSet executeQuery(String sql, List<String> fillValues) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(sql);
+        fillValues(st, fillValues);
+        var result = st.executeQuery();
+        st.close();
+        con.close();
+        return result;
+    }
 
+    protected int executeUpdate(String sql, List<String> fillValues) throws SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(sql);
+        fillValues(st, fillValues);
+        var result = st.executeUpdate();
+        st.close();
+        con.close();
+        return result;
+    }
+
+    protected void fillValues(PreparedStatement st, List<String> values) throws SQLException {
+        int valuePosition = 1;
+        for (var value : values) {
+            st.setString(valuePosition, value);
+            valuePosition++;
+        }
+    }
 }
