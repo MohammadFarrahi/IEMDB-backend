@@ -41,9 +41,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
                                 "commentOwner VARCHAR(255),\n" +
                                 "commentMovie INT,\n" +
                                 "text VARCHAR(255),\n" +
-                                "createdDate VARCHAR(255)" +
-                                "commentLikes INT,\n" +
-                                "commentDislikes INT, \n" +
+                                "createdDate VARCHAR(255)\n" +
                                 "PRIMARY KEY(id),\n" +
                                 "FOREIGN KEY (commentOwner) REFERENCES " + UserRepo.USER_TABLE + "(email),\n" +
                                 "FOREIGN KEY (commentMovie) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
@@ -89,8 +87,6 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 rs.getInt("id"),
                 rs.getString("text"),
                 rs.getString("createdDate"),
-                rs.getInt("commentLikes"),
-                rs.getInt("commentDislikes"),
                 getUserVoteMap(rs.getInt("id"))
         );
         newComment.setRetriever(new Retriever());
@@ -142,6 +138,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "vote=?;", VOTE_MAP_TABLE);
         executeUpdate(sql, List.of(userId, commentId.toString(), String.valueOf(vote), String.valueOf(vote)));
+
         getElementById(commentId).updateCommentVotes(userId, vote);
     }
 

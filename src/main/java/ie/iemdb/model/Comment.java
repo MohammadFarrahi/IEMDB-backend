@@ -45,13 +45,25 @@ public class Comment {
         this.text = text;
     }
 
-    public Comment (Integer id, String text, String createdDate, Integer commentLikes, Integer commentDislikes, HashMap<String, Short> userVoteMap) {
+    public Comment (Integer id, String text, String createdDate, HashMap<String, Short> userVoteMap) {
         this.createdDate = LocalDate.parse(createdDate);
         this.id = id;
         this.userVoteMap = userVoteMap;
-        this.commentLikes = commentLikes;
-        this.commentDislikes = commentDislikes;
         this.text = text;
+        setLikesAndDislikes();
+    }
+
+    private void setLikesAndDislikes(){
+        int likes = 0;
+        int dislikes = 0;
+        for(var value : userVoteMap.values()){
+            if(value == 1)
+                likes++;
+            else if(value == -1)
+                dislikes++;
+        }
+        this.commentDislikes = dislikes;
+        this.commentLikes = likes;
     }
 
     public void setRetriever(Retriever retriever){
