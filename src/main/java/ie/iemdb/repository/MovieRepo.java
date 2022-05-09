@@ -1,6 +1,7 @@
 package ie.iemdb.repository;
 
 import ie.iemdb.exception.*;
+import ie.iemdb.model.Actor;
 import ie.iemdb.model.Movie;
 import ie.iemdb.util.types.Constant;
 
@@ -14,63 +15,117 @@ import java.util.stream.Collectors;
 public class MovieRepo extends Repo<Movie, Integer> {
     private static MovieRepo instance = null;
     public static final String CAST_TABLE = "Cast";
-
     public static final String MOVIE_TABLE = "Movie";
+    public static final String GENRE_TABLE = "Genre";
+    public static final String RATE_TABLE = "MovieRate";
 
-
-    private String nameFilter;
-    private String sortType;
-    private boolean filterFlag;
-    private boolean sortFlag;
-
-    public void setNameFilter(String nameFilter) {
-        this.nameFilter = nameFilter;
-        filterFlag = true;
+    private void initMovieTable() {
+        this.initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(id INTEGER," +
+                                "\nname VARCHAR(225)," +
+                                "\nsummary VARCHAR(225)," +
+                                "\nreleaseDate VARCHAR(225)," +
+                                "\ndirector VARCHAR(225)," +
+                                "\nwriters VARCHAR(225)," +
+                                "\nimdbRate FLOAT(24)," +
+                                "\nduration INTEGER," +
+                                "\nageLimit INTEGER," +
+                                "\ncoverImgUrl VARCHAR(225)," +
+                                "\nimgUrl VARCHAR(225)," +
+                                "\nPRIMARY KEY(id));",
+                        MOVIE_TABLE
+                )
+        );
     }
-
-    public void setSortType(String sortType) {
-        this.sortType = sortType;
-        sortFlag = true;
+    private void initCastTable() {
+        this.initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(movieId INTEGER," +
+                                "\nactorId INTEGER," +
+                                "\nFOREIGN KEY (actorId) REFERENCES " + ActorRepo.ACTOR_TABLE + "(id)," +
+                                "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
+                                "\nPRIMARY KEY(movieId, actorId));",
+                        CAST_TABLE
+                        )
+        );
     }
-
-    public List<Movie> fetchMoviesForUser() {
-        try {
-            var movies = getAllElements();
-            if (filterFlag) {
-                movies = filterElementsByName(movies, nameFilter);
-                filterFlag = false;
-            }
-            if (sortFlag) {
-                movies = sortElements(movies, sortType);
-                sortFlag = false;
-            }
-            return movies;
-        } catch (ObjectNotFoundException e) {
-        }
-        return null;
-
+    private void initGenreTable() {
+        this.initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(movieId INTEGER," +
+                                "\ngenre VARCHAR(225)," +
+                                "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id) ON DELETE CASCADE," +
+                                "\nPRIMARY KEY(movieId, genre));",
+                        GENRE_TABLE
+                        )
+        );
     }
-
-    public List<Movie> filterElementsByName(List<Movie> movies, String name) {
-        if (name == null)
-            return movies;
-        return movies.stream().filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList());
+    private void initMovieRateTable() {
+        this.initTable(
+                String.format(
+                        "CREATE TABLE IF NOT EXISTS %s(movieId INTEGER," +
+                                "\nuserId VARCHAR(225)," +
+                                "\nFOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email)," +
+                                "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
+                                "\nPRIMARY KEY(movieId, userId));",
+                        RATE_TABLE
+                )
+        );
     }
-
-    public List<Movie> sortElements(List<Movie> movies, String type) {
-        if (type == null)
-            return movies;
-        switch (type) {
-            case Constant.ActionType.SORT_IMDB ->
-                Collections.sort(movies, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
-            case Constant.ActionType.SORT_DATE ->
-                Collections.sort(movies, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
-            default -> {
-            }
-        }
-        return movies;
-    }
+//    private String nameFilter;
+//    private String sortType;
+//    private boolean filterFlag;
+//    private boolean sortFlag;
+//
+//    public void setNameFilter(String nameFilter) {
+//        this.nameFilter = nameFilter;
+//        filterFlag = true;
+//    }
+//
+//    public void setSortType(String sortType) {
+//        this.sortType = sortType;
+//        sortFlag = true;
+//    }
+//
+//    public List<Movie> fetchMoviesForUser() {
+//        try {
+//            var movies = getAllElements();
+//            if (filterFlag) {
+//                movies = filterElementsByName(movies, nameFilter);
+//                filterFlag = false;
+//            }
+//            if (sortFlag) {
+//                movies = sortElements(movies, sortType);
+//                sortFlag = false;
+//            }
+//            return movies;
+//        } catch (ObjectNotFoundException e) {
+//        }
+//        return null;
+//
+//    }
+//
+//    public List<Movie> filterElementsByName(List<Movie> movies, String name) {
+//        if (name == null)
+//            return movies;
+//        return movies.stream().filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public List<Movie> sortElements(List<Movie> movies, String type) {
+//        if (type == null)
+//            return movies;
+//        switch (type) {
+//            case Constant.ActionType.SORT_IMDB ->
+//                Collections.sort(movies, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
+//            case Constant.ActionType.SORT_DATE ->
+//                Collections.sort(movies, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
+//            default -> {
+//            }
+//        }
+//        return movies;
+//    }
 
     public static MovieRepo getInstance() {
         if (instance == null) {
@@ -80,30 +135,65 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     private MovieRepo() {
-        nameFilter = null;
-        sortType = null;
-        filterFlag = false;
-        sortFlag = false;
+        this.initCastTable();
+        this.initGenreTable();
+        this.initCastTable();
+        this.initMovieRateTable();
         this.notFoundException = new MovieNotFoundException();
     }
 
     @Override
     protected String getGetElementByIdStatement() {
-        return null;
+        return String.format("SELECT* FROM %s movie WHERE movie.id = ?;", MOVIE_TABLE);
     }
 
     @Override
     protected void fillGetElementByIdValues(PreparedStatement st, Integer id) {
-
+        try {
+            st.setString(1, String.valueOf(id));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected String getGetAllElementsStatement() {
-        return null;
+        return String.format("SELECT * FROM %s;", MOVIE_TABLE);
+    }
+
+    private ArrayList<String> getMovieGenres(Integer movieId) throws SQLException {
+        var genres = new ArrayList<String>();
+        var resultSet = executeQuery("SELECT G.genre FROM " + GENRE_TABLE + " G WHERE G.movieId = ?;", List.of(movieId.toString()));
+        while(resultSet.next()) {
+            genres.add(resultSet.getString("genre"));
+        }
+        return genres;
     }
 
     @Override
-    protected Movie convertResultSetToDomainModel(ResultSet rs) {
+    protected Movie convertResultSetToDomainModel(ResultSet rs) throws SQLException {
+        var movie = new Movie(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("summary"),
+                rs.getString("director"),
+                rs.getString("releaseDate"),
+                new ArrayList<>(Arrays.asList(rs.getString("writers").split(","))),
+                getMovieGenres(rs.getInt("id")),
+                rs.getInt("ageLimit"),
+                rs.getInt("duration"),
+                rs.getDouble("imdbRate"),
+                rs.getString("coverImgUrl"),
+                rs.getString("imgUrl")
+        );
+        // userRateMap and averagerating
+        movie.setRetriever(new Retriever());
+        return movie;
+
+    }
+
+    @Override
+    protected String getAddElementStatement() {
         return null;
     }
 
@@ -158,4 +248,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
     //     }
     //     getElementById(movieId).updateMovieRating(userEmail, rate);
     // }
+    public List<Integer> getCastIdsForMovie(Integer movieId) {
+
+    }
 }

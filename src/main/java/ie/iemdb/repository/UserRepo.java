@@ -15,7 +15,7 @@ import java.util.*;
 
 public class UserRepo extends Repo<User, String> {
     private static UserRepo instance = null;
-    private static final String USER_TABLE = "User";
+    public static final String USER_TABLE = "User";
     private static final String WATCH_LIST_TABLE = "Watchlist";
 
     public static User loggedInUser = null;
@@ -99,7 +99,7 @@ public class UserRepo extends Repo<User, String> {
             return users;
     }
     @Override
-    private String getAddElementStatement() {
+    protected String getAddElementStatement() {
         return String.format("INSERT INTO %s\n" +
                 "VALUES (?, ?, ?, ?, ?);", WATCH_LIST_TABLE);
     }

@@ -59,15 +59,11 @@ public class ActorRepo extends Repo<Actor, Integer> {
     }
 
     @Override
-    protected Actor convertResultSetToDomainModel(ResultSet rs) {
-        try {
-            var actor = new Actor(rs.getInt("id"), rs.getString("name"), rs.getString("birthDate"), rs.getString("nationality"), rs.getString("imgUrl"));
-            actor.setRetriever(new Retriever());
-            return actor;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    protected Actor convertResultSetToDomainModel(ResultSet rs) throws SQLException {
+        var actor = new Actor(rs.getInt("id"), rs.getString("name"), rs.getString("birthDate"), rs.getString("nationality"), rs.getString("imgUrl"));
+        actor.setRetriever(new Retriever());
+        return actor;
+
     }
 
     @Override

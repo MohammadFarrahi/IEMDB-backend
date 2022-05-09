@@ -22,7 +22,7 @@ public class Movie {
     private String director;
     private ArrayList<String> writers;
     private ArrayList<String> genres;
-    private ArrayList<Actor> cast = null;
+    private ArrayList<Actor> cast;
     private Double imdbRate;
     private Double averageRating;
     private Integer duration;
@@ -84,7 +84,6 @@ public class Movie {
             String imgUrl) {
 
         this.userRateMap = new HashMap<>();
-        this.comments = new ArrayList<>();
         this.averageRating = null;
         this.id = id;
         this.name = name;
@@ -98,6 +97,9 @@ public class Movie {
         this.imdbRate = imdbRate;
         this.imgUrl = imgUrl;
         this.coverImgUrl = coverImgUrl;
+
+        this.cast = null;
+        this.comments = null;
     }
 
     public void setRetriever(Retriever retriever){
