@@ -33,8 +33,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
         sortFlag = true;
     }
 
-    public List<Movie> fetchMoviesForUser() {
-        try {
+    public List<Movie> fetchMoviesForUser() throws SQLException {
             var movies = getAllElements();
             if (filterFlag) {
                 movies = filterElementsByName(movies, nameFilter);
@@ -45,10 +44,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 sortFlag = false;
             }
             return movies;
-        } catch (ObjectNotFoundException e) {
-        }
-        return null;
-
     }
 
     public List<Movie> filterElementsByName(List<Movie> movies, String name) {
@@ -109,6 +104,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     @Override
     protected ArrayList<Movie> convertResultSetToDomainModelList(ResultSet rs) {
+        return null;
+    }
+
+    @Override
+    protected String getAddElementStatement(){
         return null;
     }
 

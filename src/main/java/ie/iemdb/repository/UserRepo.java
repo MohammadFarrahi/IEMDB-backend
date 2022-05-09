@@ -127,7 +127,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
 
-    public List<Movie> getWatchList(String userId) throws CustomException {
+    public List<Movie> getWatchList(String userId) throws CustomException, SQLException {
         return getElementById(userId).getWatchList();
     }
 
@@ -135,7 +135,7 @@ public class UserRepo extends Repo<User, String> {
         if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
 
-        executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()))
+        executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()));
 
         user.addToWatchList(movie);
     }

@@ -55,6 +55,8 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.find query.");
             e.printStackTrace();
             throw e;
+        } catch (CustomException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,6 +83,8 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.find query.");
             e.printStackTrace();
             throw e;
+        } catch (CustomException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }
@@ -101,6 +105,8 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.findAll query.");
             e.printStackTrace();
             throw e;
+        } catch (CustomException e) {
+            throw new RuntimeException(e);
         }
     }
 
