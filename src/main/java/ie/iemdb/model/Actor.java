@@ -10,6 +10,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Actor {
@@ -72,5 +73,7 @@ public class Actor {
         DTO.setName(name);
         return DTO;
     }
-
+    public Map<String, String> getDBTuple() {
+        return Map.of("id", id.toString(), "name", name, "birthDate", birthDate.toString(), "nationality", nationality, "imgUrl", imgUrl);
+    }
 }

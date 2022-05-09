@@ -1,12 +1,8 @@
 package ie.iemdb.repository;
 
 
-import ie.iemdb.exception.ActorAlreadyExistsException;
 import ie.iemdb.exception.ActorNotFoundException;
-import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -87,12 +83,23 @@ public class ActorRepo extends Repo<Actor, Integer> {
             return actors;
         }
     }
-
     @Override
-    public void addElement(Actor newObject) throws CustomException {
+    protected String getAddElementStatement() {
+        return String.format("INSERT INTO %s (id, name, birthDate, nationality, imgUrl) VALUES (?,?,?,?,?);", ACTOR_TABLE);
     }
 
 
-    public ArrayList<Actor> getCastForMovie(int movieId) {
+    @Override
+    public void addElement(Actor newObject) throws SQLException {
+        var dbTuple = newObject.getDBTuple();
+        executeUpdate(getAddElementStatement(), List.of(dbTuple.get("id"), dbTuple.get("name"), dbTuple.get("birthDate"), dbTuple.get("nationality"), dbTuple.get("imgUrl")));
+    }
+
+    public String getGetCastForMovieStatement() {
+        return String.format("SELECT a.id, a.name, a.birthDate, a.nationality, a.imgUrl FROM %s a, %s c WHERE a.id = c.actorId AND c.movieId = ?;", ACTOR_TABLE, MovieRepo.CAST_TABLE);
+    }
+    public ArrayList<Actor> getCastForMovie(int movieId) throws SQLException {
+        var resultSet = executeQuery(getGetCastForMovieStatement(), List.of(Integer.valueOf(movieId).toString()));
+        return convertResultSetToDomainModelList(resultSet);
     }
 }

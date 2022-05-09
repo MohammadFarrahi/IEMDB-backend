@@ -8,6 +8,7 @@ import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Actor;
 import ie.iemdb.repository.ActorRepo;
 
+import java.sql.SQLException;
 import java.time.format.DateTimeParseException;
 
 
@@ -23,7 +24,7 @@ public class ActorAPIConsumer extends APIConsumer {
                 try {
                     var newActor = makeNewActor(node);
                     repo.addElement(newActor);
-                } catch (ActorAlreadyExistsException | DateTimeParseException e) {
+                } catch (SQLException | DateTimeParseException e) {
                     //ignore
                 }
 

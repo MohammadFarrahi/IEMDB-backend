@@ -114,7 +114,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    public void addElement(User newObject) throws CustomException {
+    public void addElement(User newObject) throws SQLException {
     }
 
     private String getAddToWatchListStatement() {
