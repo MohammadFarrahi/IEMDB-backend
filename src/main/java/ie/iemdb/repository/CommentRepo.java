@@ -36,7 +36,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
-                                "id INT,\n" +
+                                "id INT NOT NULL AUTO_INCREMENT,\n" +
                                 "commentOwner VARCHAR(255),\n" +
                                 "commentMovie INT,\n" +
                                 "text VARCHAR(255),\n" +
@@ -116,11 +116,26 @@ public class CommentRepo extends Repo<Comment, Integer> {
     }
 
     @Override
+    protected String getAddElementStatement() {
+        return String.format("INSERT INTO %s (text, userId, movieId, createdDate, commentLies,  commentDislikes)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?);", COMMENT_TABLE);
+    }
+
+    @Override
     public void addElement(Comment newObject) throws SQLException {
+        var tupleMap = newObject.getDBTuple();
+        executeUpdate(getAddElementStatement(), List.of(
+                tupleMap.get("text"),
+                tupleMap.get("userId"),
+                tupleMap.get("movieId"),
+                tupleMap.get("createdDate"),
+                tupleMap.get("commentLikes"),
+                tupleMap.get("commentDislikes")
+        ));
     }
 
 
-    public void updateCommentVotes(String commentId, String userId, int vote) throws CustomException {
+    public void updateCommentVotes(Integer commentId, String userId, int vote) throws CustomException, SQLException {
         getElementById(commentId).updateCommentVotes(userId, vote);
     }
 
