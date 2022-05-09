@@ -5,6 +5,7 @@ import ie.iemdb.exception.CustomException;
 import ie.iemdb.model.Comment;
 import ie.iemdb.model.User;
 
+import javax.print.DocFlavor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,7 +52,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
         );
     }
 
-    private void initVoteMapTable(){
+    private void initVoteMapTable() {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s( \n" +
@@ -100,7 +101,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
         var userVoteMap = new HashMap<String, Short>();
         String sql = String.format("SELECT userId, vote FROM %s WHERE commentId=?;", VOTE_MAP_TABLE);
         var res = executeQuery(sql, List.of(commentId.toString()));
-        while(res.next()){
+        while (res.next()) {
             userVoteMap.put(res.getString("userId"), res.getShort("vote"));
         }
         return userVoteMap;
@@ -136,6 +137,11 @@ public class CommentRepo extends Repo<Comment, Integer> {
 
 
     public void updateCommentVotes(Integer commentId, String userId, int vote) throws CustomException, SQLException {
+        String sql = String.format(
+                "INSERT INTO %s (userId, commentId, vote)\n" +
+                        "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
+                        "vote=?;", VOTE_MAP_TABLE);
+        executeUpdate(sql, List.of(userId, commentId.toString(), String.valueOf(vote), String.valueOf(vote)));
         getElementById(commentId).updateCommentVotes(userId, vote);
     }
 
