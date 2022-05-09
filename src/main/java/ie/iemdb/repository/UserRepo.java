@@ -7,6 +7,7 @@ import ie.iemdb.exception.UserNotFoundException;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,10 +51,10 @@ public class UserRepo extends Repo<User, String> {
     private void initWatchlistTable() {
         initTable(
                 String.format(
-                        "CREATE TABLE IF NOT EXISTS %s(" +
+                        "CREATE TABLE IF NOT EXISTS %s( \n" +
                                 "email VARCHAR(255),\n" +
                                 "movieId INT), \n" +
-                                "PRIMARY KEY(email, movieId)" +
+                                "PRIMARY KEY(email, movieId), \n" +
                                 "FOREIGN KEY (email) REFERENCES " + USER_TABLE + "(email),\n" +
                                 "FOREIGN KEY (email) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
                                 ");", WATCH_LIST_TABLE
@@ -116,19 +117,61 @@ public class UserRepo extends Repo<User, String> {
     public void addElement(User newObject) throws CustomException {
     }
 
+    private String getAddToWatchListStatement() {
+        return String.format("INSERT INTO %s (email, movieId)\n" +
+                "VALUES (?, ?);", WATCH_LIST_TABLE);
+    }
+
+    private void fillAddToWatchListValues(PreparedStatement st, String userId, Integer movieId) {
+        try {
+            st.setString(1, userId);
+            st.setString(2, movieId.toString());
+        } catch (SQLException e) {
+            //ignore
+        }
+    }
+
+    private String getRemoveFromWatchListStatement() {
+        return String.format("DELETE FROM %s\n" +
+                "WHERE userId=? AND movieId=?;", WATCH_LIST_TABLE);
+    }
+
+    private void fillRemoveFromWatchListValues(PreparedStatement st, String userId, Integer movieId) {
+        try {
+            st.setString(1, userId);
+            st.setString(2, movieId.toString());
+        } catch (SQLException e) {
+            //ignore
+        }
+    }
+
 
     public List<Movie> getWatchList(String userId) throws CustomException {
         return getElementById(userId).getWatchList();
     }
 
-    public void addToWatchList(User user, Movie movie) throws AgeLimitException {
+    public void addToWatchList(User user, Movie movie) throws AgeLimitException, SQLException {
         if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
+
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getAddToWatchListStatement());
+        fillAddToWatchListValues(st, user.getId(), movie.getId());
+        st.executeQuery();
+        st.close();
+        con.close();
 
         user.addToWatchList(movie);
     }
 
-    public void removeFromWatchList(User user, String movieId) throws MovieNotFoundException {
+    public void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException, SQLException {
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(getRemoveFromWatchListStatement());
+        fillRemoveFromWatchListValues(st, user.getId(), movieId);
+        st.executeQuery();
+        st.close();
+        con.close();
+
         user.removeFromWatchList(movieId);
     }
 
