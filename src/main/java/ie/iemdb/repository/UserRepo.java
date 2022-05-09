@@ -15,7 +15,7 @@ import java.util.*;
 
 public class UserRepo extends Repo<User, String> {
     private static UserRepo instance = null;
-    private static final String USER_TABLE = "User";
+    public static final String USER_TABLE = "User";
     private static final String WATCH_LIST_TABLE = "Watchlist";
 
     public static User loggedInUser = null;
@@ -52,11 +52,11 @@ public class UserRepo extends Repo<User, String> {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s( \n" +
-                                "email VARCHAR(255),\n" +
+                                "userId VARCHAR(255),\n" +
                                 "movieId INT), \n" +
-                                "PRIMARY KEY(email, movieId), \n" +
-                                "FOREIGN KEY (email) REFERENCES " + USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (email) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                "PRIMARY KEY(userId, movieId), \n" +
+                                "FOREIGN KEY (userId) REFERENCES " + USER_TABLE + "(email),\n" +
+                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
                                 ");", WATCH_LIST_TABLE
                 )
         );
