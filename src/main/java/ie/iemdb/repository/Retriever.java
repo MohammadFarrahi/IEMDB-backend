@@ -5,11 +5,12 @@ import ie.iemdb.model.Actor;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
 public class Retriever {
-    public ArrayList<Actor> getCastForMovie(int movieId) {
+    public ArrayList<Actor> getCastForMovie(int movieId) throws SQLException {
         return ActorRepo.getInstance().getCastForMovie(movieId);
     }
 

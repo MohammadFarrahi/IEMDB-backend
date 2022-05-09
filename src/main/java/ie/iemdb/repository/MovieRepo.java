@@ -6,12 +6,14 @@ import ie.iemdb.util.types.Constant;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import java.util.stream.Collectors;
 
 public class MovieRepo extends Repo<Movie, Integer> {
     private static MovieRepo instance = null;
+    public static final String CAST_TABLE = "Cast";
 
     public static final String MOVIE_TABLE = "Movie";
 
@@ -111,7 +113,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     @Override
-    public void addElement(Movie newObject) throws CustomException {
+    public void addElement(Movie newObject) throws SQLException {
     }
 
 

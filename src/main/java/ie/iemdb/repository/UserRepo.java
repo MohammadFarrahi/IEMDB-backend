@@ -105,7 +105,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    public void addElement(User newObject) throws CustomException, SQLException {
+    public void addElement(User newObject) throws SQLException {
         var tupleMap = newObject.getDBTuple();
         executeUpdate(getAddElementStatement(), List.of(
                 tupleMap.get("email"),
