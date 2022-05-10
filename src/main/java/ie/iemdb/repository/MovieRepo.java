@@ -201,10 +201,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     public ArrayList<Movie> getFilteredElementsByYear(int from, int to) throws CustomException, SQLException {
-        String sql = String.format(
-                "SELECT *\n" +
-                        "FROM %s" +
-                        "WHERE releasedDate>? AND releasedDate<?", MOVIE_TABLE);
+        String sql = String.format("""
+                        SELECT *
+                        FROM %s
+                        WHERE releasedDate>? AND releasedDate<?;
+                        """, MOVIE_TABLE);
         var res = executeQuery(sql, List.of(String.valueOf(from), String.valueOf(to)));
         return convertResultSetToDomainModelList(res);
     }
