@@ -151,12 +151,12 @@ public class CommentRepo extends Repo<Comment, Integer> {
         return res.getInt("commentMovie");
     }
 
-    public Integer getUserIdForComment(Integer commentId) throws SQLException {
+    public String getUserIdForComment(Integer commentId) throws SQLException {
         String sql = String.format(
                 "SELECT commentOwner\n" +
                         "FROM %s\n" +
                         "WHERE id=?;", COMMENT_TABLE);
         var res = executeQuery(sql, List.of(commentId.toString()));
-        return res.getInt("commentOwner");
+        return res.getString("commentOwner");
     }
 }

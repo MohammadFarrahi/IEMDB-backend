@@ -1,9 +1,7 @@
 package ie.iemdb.repository;
 
-import ie.iemdb.exception.AgeLimitException;
-import ie.iemdb.exception.CustomException;
-import ie.iemdb.exception.MovieNotFoundException;
-import ie.iemdb.exception.UserNotFoundException;
+import ie.iemdb.exception.*;
+import ie.iemdb.model.Comment;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 
@@ -168,7 +166,12 @@ public class UserRepo extends Repo<User, String> {
         loggedInUser = null;
     }
 
-    public User getUserForComment(int commentId) {
-        return null;
+    public User getUserForComment(int commentId) throws SQLException {
+        var userId = CommentRepo.getInstance().getUserIdForComment(commentId);
+        try {
+            return getElementById(userId);
+        } catch (ObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
