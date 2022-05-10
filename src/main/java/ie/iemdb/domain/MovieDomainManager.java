@@ -39,7 +39,7 @@ public class MovieDomainManager {
         movie.updateMovieRating(ratingUser.getId(), rate);
         return getMovieDTO(movie);
     }
-    private MovieDTO getMovieDTO(Movie movie) {
+    private MovieDTO getMovieDTO(Movie movie) throws SQLException {
         var DTO = movie.getDTO();
         if(UserRepo.loggedInUser != null){
             DTO.setUserRate(movie.getUserRate(UserRepo.loggedInUser.getId()));

@@ -210,7 +210,7 @@ public class Movie {
         return movieBriefDTO;
     }
 
-    public MovieDTO getDTO() {
+    public MovieDTO getDTO() throws SQLException {
         var DTO = new MovieDTO();
         DTO.setId(id);
         DTO.setAgeLimit(ageLimit);
@@ -232,7 +232,9 @@ public class Movie {
         DTO.setCast(castDTO);
 
         var commentsDTO = new ArrayList<CommentDTO>();
-        comments.forEach(comment -> commentsDTO.add(comment.getDTO()));
+        for (Comment comment : comments) {
+            commentsDTO.add(comment.getDTO());
+        }
         DTO.setComments(commentsDTO);
         return DTO;
     }

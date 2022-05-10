@@ -5,6 +5,7 @@ import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.repository.Retriever;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +36,7 @@ public class Actor {
         this.retriever = retriever;
     }
 
-    private ArrayList<Movie> getPerformedMovies() {
+    private ArrayList<Movie> getPerformedMovies() throws SQLException {
         if(this.performedMovies == null)
             this.performedMovies = this.retriever.getMoviesForActor(this.id);
         return this.performedMovies;
@@ -45,7 +46,7 @@ public class Actor {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
     
-    public void addToPerformedMovies(Movie movie) {
+    public void addToPerformedMovies(Movie movie) throws SQLException {
         getPerformedMovies().add(movie);
     }
 
@@ -53,7 +54,7 @@ public class Actor {
         return this.id;
     }
 
-    public ActorDTO getDTO() {
+    public ActorDTO getDTO() throws SQLException {
         var actorDTO = new ActorDTO();
         actorDTO.setId(id);
         actorDTO.setBirthDate(birthDate);

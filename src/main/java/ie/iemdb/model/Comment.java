@@ -7,6 +7,7 @@ import ie.iemdb.model.DTO.CommentDTO;
 import ie.iemdb.repository.Retriever;
 
 import javax.print.DocFlavor;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +25,11 @@ public class Comment {
     private Retriever retriever;
 
 
-    public String getCommentOwnerNickName() {
+    public String getCommentOwnerNickName() throws SQLException {
         return getCommentOwner().getNickname();
     }
 
-    private User getCommentOwner() {
+    private User getCommentOwner() throws SQLException {
         if(this.commentOwner == null)
             this.commentOwner = this.retriever.getUserForComment(this.id);
         return this.commentOwner;
@@ -87,7 +88,7 @@ public class Comment {
         userVoteMap.put(userId, vote.shortValue());
     }
 
-    public Movie getMovie(){
+    public Movie getMovie() throws SQLException {
         if(this.commentMovie == null)
             this.commentMovie = this.retriever.getMovieForComment(this.id);
         return this.commentMovie;
@@ -101,7 +102,7 @@ public class Comment {
         }
         return false;
     }
-    public CommentDTO getDTO () {
+    public CommentDTO getDTO () throws SQLException {
         var DTO = new CommentDTO();
         DTO.setId(id);
         DTO.setCommentDislikes(commentDislikes);
