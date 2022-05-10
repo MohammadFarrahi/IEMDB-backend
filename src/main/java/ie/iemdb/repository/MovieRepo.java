@@ -210,7 +210,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return filteredList;
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException, ObjectNotFoundException {
+    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
         String sql = String.format(
                 "SELECT movieId\n" +
                         "FROM %s\n" +
@@ -250,6 +250,13 @@ public class MovieRepo extends Repo<Movie, Integer> {
         getElementById(movieId).updateMovieRating(userEmail, rate);
     }
 
-    public List<Integer> getCastIdsForMovie(Integer movieId) {
+    public List<Integer> getCastIdsForMovie(Integer movieId) throws SQLException {
+        String sql = String.format(
+                "SELECT actorId\n" +
+                        "FROM %s\n" +
+                        "WHERE movieId=?;", CAST_TABLE
+        );
+        var res = executeQuery(sql, List.of(String.valueOf(movieId)));
+        return (List<Integer>) res.getArray("actorId").getArray();
     }
 }
