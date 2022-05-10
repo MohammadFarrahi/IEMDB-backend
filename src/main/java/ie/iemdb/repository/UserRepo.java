@@ -147,6 +147,19 @@ public class UserRepo extends Repo<User, String> {
         user.removeFromWatchList(movieId);
     }
 
+    public List<Integer> getMovieIdsForUserWatchList(String userId) throws SQLException {
+        List<Integer> list = new ArrayList<>();
+        String sql = String.format(
+                "SELECT movieId\n" +
+                        "FROM %s\n" +
+                        "WHERE email=?;", userId);
+        var res = executeQuery(sql, List.of(userId));
+        while(res.next()){
+            list.add(res.getInt("movieId"));
+        }
+        return list;
+    }
+
     public void loginUser(User user) {
         loggedInUser = user;
     }
