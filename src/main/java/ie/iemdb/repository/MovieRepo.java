@@ -264,12 +264,23 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return filteredList;
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId) {
-        return new ArrayList<>();
+    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException, ObjectNotFoundException {
+        String sql = String.format(
+                "SELECT movieId\n" +
+                        "FROM %s\n" +
+                        "WHERE actorId=?;", CAST_TABLE
+        );
+        var res = executeQuery(sql, List.of(String.valueOf(actorId)));
+        return convertResultSetToDomainModelList(res);
     }
 
-    public ArrayList<Movie> getWatchlistForUser(String username) {
-        return new ArrayList<>();
+    public ArrayList<Movie> getWatchlistForUser(String userId) throws SQLException {
+        var movieIds = UserRepo.getInstance().getMovieIdsForUserWatchList(userId);
+        try {
+            return (ArrayList<Movie>) getElementsById(movieIds);
+        } catch (ObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Movie getMovieForComment(int commentId) {
