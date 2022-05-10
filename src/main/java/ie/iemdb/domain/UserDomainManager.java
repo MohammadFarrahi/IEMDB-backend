@@ -7,12 +7,13 @@ import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
-import kotlin.Pair;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import kotlin.Pair;
 
 public class UserDomainManager {
 
@@ -24,7 +25,7 @@ public class UserDomainManager {
     return instance;
   }
 
-  public List<MovieBriefDTO> getRecommendedWatchlist(String userId) throws ObjectNotFoundException {
+  public List<MovieBriefDTO> getRecommendedWatchlist(String userId) throws ObjectNotFoundException, SQLException {
     var scoreMovieList = makeMovieScorePairs(UserRepo.getInstance().getElementById(userId));
     scoreMovieList = getSortedMovieScorePairs(scoreMovieList);
     var recommendedMovies = getTopThreeMovies(scoreMovieList);
@@ -34,19 +35,15 @@ public class UserDomainManager {
     return DTOList;
   }
 
-  private ArrayList<Pair<Movie, Double>> makeMovieScorePairs(User user) {
+  private ArrayList<Pair<Movie, Double>> makeMovieScorePairs(User user) throws SQLException {
     ArrayList<Pair<Movie, Double>> scoreMovieList = new ArrayList<>();
-    try {
-      var movies = MovieRepo.getInstance().getAllElements();
-      var watchList = user.getWatchList();
-      for (var movie : movies) {
-        if (user.hasMovieInWatchList(movie))
-          continue;
+    var movies = MovieRepo.getInstance().getAllElements();
+    var watchList = user.getWatchList();
+    for (var movie : movies) {
+      if (user.hasMovieInWatchList(movie))
+        continue;
 
-        scoreMovieList.add(new Pair<>(movie, calMovieScore(movie, watchList)));
-      }
-    } catch (ObjectNotFoundException e) {
-      e.printStackTrace();
+      scoreMovieList.add(new Pair<>(movie, calMovieScore(movie, watchList)));
     }
     return scoreMovieList;
   }
@@ -83,7 +80,7 @@ public class UserDomainManager {
     return score;
   }
 
-  public void loginUser(String userEmail, String userPassword) throws ObjectNotFoundException {
+  public void loginUser(String userEmail, String userPassword) throws ObjectNotFoundException, SQLException {
       var user = UserRepo.getInstance().getElementById(userEmail);
       if(!user.checkPassword(userPassword)) {
         throw new ObjectNotFoundException();
@@ -95,7 +92,7 @@ public class UserDomainManager {
     UserRepo.getInstance().logoutUser();
   }
 
-  public List<MovieBriefDTO> getWatchlistDTO(String userId) throws CustomException {
+  public List<MovieBriefDTO> getWatchlistDTO(String userId) throws CustomException, SQLException {
     List<MovieBriefDTO> DTOList = new ArrayList<>();
       var watchlist = UserRepo.getInstance().getWatchList(userId);
       watchlist.forEach(watchlistItem -> DTOList.add(watchlistItem.getShortDTO()));
@@ -106,7 +103,7 @@ public class UserDomainManager {
     return UserRepo.loggedInUser.getId().equals(userId);
   }
 
-  public MovieBriefDTO addToWatchlist(String userId, String movieId) throws CustomException {
+  public MovieBriefDTO addToWatchlist(String userId, Integer movieId) throws CustomException, SQLException {
     var user = UserRepo.getInstance().getElementById(userId);
     var movie = MovieRepo.getInstance().getElementById(movieId);
     UserRepo.getInstance().addToWatchList(user, movie);
@@ -114,7 +111,7 @@ public class UserDomainManager {
     return movie.getShortDTO();
   }
 
-  public void removeFromWatchList(String userId, String movieId) throws ObjectNotFoundException {
+  public void removeFromWatchList(String userId, Integer movieId) throws ObjectNotFoundException, SQLException {
     var user = UserRepo.getInstance().getElementById(userId);
     UserRepo.getInstance().removeFromWatchList(user, movieId);
   }

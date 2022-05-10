@@ -5,6 +5,8 @@ import ie.iemdb.model.Actor;
 import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.repository.ActorRepo;
 
+import java.sql.SQLException;
+
 public class ActorDomainManager {
     // TODO : what if we had a instance in ActorService ??
     private static ActorDomainManager instance;
@@ -15,7 +17,7 @@ public class ActorDomainManager {
         }
         return instance;
     }
-    public ActorDTO getActorDTO(String actorId) throws ObjectNotFoundException {
+    public ActorDTO getActorDTO(Integer actorId) throws ObjectNotFoundException, SQLException {
         return ActorRepo.getInstance().getElementById(actorId).getDTO();
     }
 }

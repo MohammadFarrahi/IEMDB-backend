@@ -8,6 +8,7 @@ import ie.iemdb.model.Movie;
 import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +21,19 @@ public class MovieDomainManager {
         }
         return instance;
     }
-    public List<MovieBriefDTO> getMoviesDTOList() throws ObjectNotFoundException {
+    public List<MovieBriefDTO> getMoviesDTOList() throws ObjectNotFoundException, SQLException {
         var movies = MovieRepo.getInstance().getAllElements();
         List<MovieBriefDTO> moviesDTO = new ArrayList<>();
         movies.forEach(movie -> moviesDTO.add(movie.getShortDTO()));
         return moviesDTO;
     }
 
-    public MovieDTO getMovieDTO(String movieId) throws ObjectNotFoundException {
+    public MovieDTO getMovieDTO(Integer movieId) throws ObjectNotFoundException, SQLException {
         var movie = MovieRepo.getInstance().getElementById(movieId);
         return getMovieDTO(movie);
     }
 
-    public MovieDTO rateMovie(String movieId, int rate) throws CustomException {
+    public MovieDTO rateMovie(Integer movieId, int rate) throws CustomException, SQLException {
         var ratingUser = UserRepo.loggedInUser;
         var movie = MovieRepo.getInstance().getElementById(movieId);
         movie.updateMovieRating(ratingUser.getId(), rate);

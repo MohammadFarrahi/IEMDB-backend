@@ -7,6 +7,8 @@ import ie.iemdb.repository.CommentRepo;
 import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
+import java.sql.SQLException;
+
 public class CommentDomainManager {
 
     private static CommentDomainManager instance;
@@ -16,14 +18,14 @@ public class CommentDomainManager {
         }
         return instance;
     }
-    public CommentDTO voteComment(String commentId, int vote) throws CustomException {
+    public CommentDTO voteComment(Integer commentId, int vote) throws CustomException, SQLException {
         CommentRepo.getInstance().updateCommentVotes(commentId, UserRepo.loggedInUser.getId(), vote);
         return CommentRepo.getInstance().getElementById(commentId).getDTO();
     }
 
-    public CommentDTO postNewComment(CommentDTO commentDTO) throws CustomException {
+    public CommentDTO postNewComment(CommentDTO commentDTO) throws CustomException, SQLException {
         // TODO : handle if new comment is actually repeatitve comment
-        var commentMovie = MovieRepo.getInstance().getElementById(commentDTO.getCommentMovieId().toString());
+        var commentMovie = MovieRepo.getInstance().getElementById(commentDTO.getCommentMovieId());
         var newComment = new Comment(commentMovie, UserRepo.loggedInUser, commentDTO.getText());
         CommentRepo.getInstance().addElement(newComment);
         commentMovie.addComment(newComment);
