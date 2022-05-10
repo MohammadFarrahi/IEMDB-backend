@@ -38,6 +38,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 )
         );
     }
+
     private void initCastTable() {
         this.initTable(
                 String.format(
@@ -47,9 +48,10 @@ public class MovieRepo extends Repo<Movie, Integer> {
                                 "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
                                 "\nPRIMARY KEY(movieId, actorId));",
                         CAST_TABLE
-                        )
+                )
         );
     }
+
     private void initGenreTable() {
         this.initTable(
                 String.format(
@@ -58,9 +60,10 @@ public class MovieRepo extends Repo<Movie, Integer> {
                                 "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id) ON DELETE CASCADE," +
                                 "\nPRIMARY KEY(movieId, genre));",
                         GENRE_TABLE
-                        )
+                )
         );
     }
+
     private void initMovieRateTable() {
         this.initTable(
                 String.format(
@@ -167,7 +170,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
         var genres = new ArrayList<String>();
         String sql = String.format("SELECT G.genre FROM %s G WHERE G.movieId = ?;", GENRE_TABLE);
         var res = executeQuery(sql, List.of(movieId.toString()));
-        while(res.next()) {
+        while (res.next()) {
             genres.add(res.getString("genre"));
         }
         return genres;
@@ -177,7 +180,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
         var hashMap = new HashMap<String, Integer>();
         String sql = String.format("SELECT userId, rate FROM %s WHERE movieId=?;", RATE_TABLE);
         var res = executeQuery(sql, List.of(movieId.toString()));
-        while(res.next()){
+        while (res.next()) {
             hashMap.put(res.getString("userId"), res.getInt("rate"));
         }
         return hashMap;
@@ -223,17 +226,17 @@ public class MovieRepo extends Repo<Movie, Integer> {
     public void addElement(Movie newObject) throws SQLException {
         var tupleMap = newObject.getDBTuple();
         executeUpdate(getAddElementStatement(), List.of(
-            tupleMap.get("id"),
-            tupleMap.get("name"),
-            tupleMap.get("summary"),
-            tupleMap.get("director"),
-            tupleMap.get("writers"),
-            tupleMap.get("releaseDate"),
-            tupleMap.get("ageLimit"),
-            tupleMap.get("duration"),
-            tupleMap.get("imdbRate"),
-            tupleMap.get("coverImgUrl"),
-            tupleMap.get("imgUrl")
+                tupleMap.get("id"),
+                tupleMap.get("name"),
+                tupleMap.get("summary"),
+                tupleMap.get("director"),
+                tupleMap.get("writers"),
+                tupleMap.get("releaseDate"),
+                tupleMap.get("ageLimit"),
+                tupleMap.get("duration"),
+                tupleMap.get("imdbRate"),
+                tupleMap.get("coverImgUrl"),
+                tupleMap.get("imgUrl")
         ));
     }
 
@@ -243,7 +246,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
             ArrayList<Movie> filteredList = new ArrayList<>();
             for (var element : elements) {
                 if (element.includeGenre(genre))
-                filteredList.add(element);
+                    filteredList.add(element);
             }
             return filteredList;
         } catch (Exception e) {
@@ -261,7 +264,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return filteredList;
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId){
+    public ArrayList<Movie> getMoviesForActor(int actorId) {
         return new ArrayList<>();
     }
 
@@ -273,12 +276,18 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return null;
     }
 
-        // public void rateMovie(String movieId, String userEmail, int rate) throws CustomException {
-    //     if (!UserRepo.getInstance().isIdValid(userEmail)) {
-    //         throw new UserNotFoundException();
-    //     }
-    //     getElementById(movieId).updateMovieRating(userEmail, rate);
-    // }
+    public void rateMovie(Integer movieId, String userEmail, int rate) throws CustomException, SQLException {
+        if (!UserRepo.getInstance().isIdValid(userEmail)) {
+            throw new UserNotFoundException();
+        }
+        String sql = String.format(
+                "INSERT INTO %s (movieId, userId, rate\n" +
+                        "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
+                        "rate=?;", RATE_TABLE);
+        executeUpdate(sql, List.of(movieId.toString(), userEmail, String.valueOf(rate), String.valueOf(rate)));
+        getElementById(movieId).updateMovieRating(userEmail, rate);
+    }
+
     public List<Integer> getCastIdsForMovie(Integer movieId) {
 
     }
