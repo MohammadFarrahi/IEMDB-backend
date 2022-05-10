@@ -81,10 +81,11 @@ public class Movie {
             Integer duration,
             Double imdbRate,
             String coverImgUrl,
-            String imgUrl) {
+            String imgUrl,
+            HashMap<String, Integer> userRateMap) {
 
-        this.userRateMap = new HashMap<>();
-        this.averageRating = null;
+        this.userRateMap = userRateMap;
+        this.averageRating =  calculateAvgRate();
         this.id = id;
         this.name = name;
         this.summary = summary;
@@ -100,6 +101,14 @@ public class Movie {
 
         this.cast = null;
         this.comments = null;
+    }
+
+    private Double calculateAvgRate(){
+        int sum = 0;
+        for(var value : this.userRateMap.values()){
+            sum += value;
+        }
+        return (sum / (double) this.userRateMap.values().size());
     }
 
     public void setRetriever(Retriever retriever){

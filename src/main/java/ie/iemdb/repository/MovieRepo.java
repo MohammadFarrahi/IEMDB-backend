@@ -64,8 +64,10 @@ public class MovieRepo extends Repo<Movie, Integer> {
     private void initMovieRateTable() {
         this.initTable(
                 String.format(
-                        "CREATE TABLE IF NOT EXISTS %s(movieId INTEGER," +
+                        "CREATE TABLE IF NOT EXISTS %s(" +
+                                "movieId INTEGER," +
                                 "\nuserId VARCHAR(225)," +
+                                "\nrate INT," +
                                 "\nFOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email)," +
                                 "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
                                 "\nPRIMARY KEY(movieId, userId));",
@@ -163,11 +165,22 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     private ArrayList<String> getMovieGenres(Integer movieId) throws SQLException {
         var genres = new ArrayList<String>();
-        var resultSet = executeQuery("SELECT G.genre FROM " + GENRE_TABLE + " G WHERE G.movieId = ?;", List.of(movieId.toString()));
-        while(resultSet.next()) {
-            genres.add(resultSet.getString("genre"));
+        String sql = String.format("SELECT G.genre FROM %s G WHERE G.movieId = ?;", GENRE_TABLE);
+        var res = executeQuery(sql, List.of(movieId.toString()));
+        while(res.next()) {
+            genres.add(res.getString("genre"));
         }
         return genres;
+    }
+
+    private HashMap<String, Integer> getUserRateMap(Integer movieId) throws SQLException {
+        var hashMap = new HashMap<String, Integer>();
+        String sql = String.format("SELECT userId, rate FROM %s WHERE movieId=?;", RATE_TABLE);
+        var res = executeQuery(sql, List.of(movieId.toString()));
+        while(res.next()){
+            hashMap.put(res.getString("userId"), res.getInt("rate"));
+        }
+        return hashMap;
     }
 
     @Override
@@ -184,12 +197,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 rs.getInt("duration"),
                 rs.getDouble("imdbRate"),
                 rs.getString("coverImgUrl"),
-                rs.getString("imgUrl")
+                rs.getString("imgUrl"),
+                getUserRateMap(rs.getInt("id"))
         );
-        // userRateMap and averagerating
         movie.setRetriever(new Retriever());
         return movie;
-
     }
 
     @Override
