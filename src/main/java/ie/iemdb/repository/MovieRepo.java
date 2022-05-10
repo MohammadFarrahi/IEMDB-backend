@@ -187,27 +187,26 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
 
-    public ArrayList<Movie> filterElementsByGenre(String genre, List<Movie> elements) {
-        try {
-            ArrayList<Movie> filteredList = new ArrayList<>();
-            for (var element : elements) {
-                if (element.includeGenre(genre))
-                    filteredList.add(element);
-            }
-            return filteredList;
-        } catch (Exception e) {
-            return null;
-        }
+    public ArrayList<Movie> getFilteredElementsByGenre(String genre) throws SQLException {
+        String sql = String.format("""
+                        SELECT *
+                        FROM %s
+                        WHERE id IN (
+                            Select movieId
+                            FROM %s
+                            WHERE genre=?);
+                        """, MOVIE_TABLE, GENRE_TABLE);
+        var res = executeQuery(sql, List.of(genre));
+        return convertResultSetToDomainModelList(res);
     }
 
-    public ArrayList<Movie> filterElementsByYear(int from, int to, List<Movie> elements) throws CustomException {
-        var filteredList = new ArrayList<Movie>();
-        for (var element : elements) {
-            if (!element.isCreatedBefore(from) && !element.isCreatedAfter(to)) {
-                filteredList.add(element);
-            }
-        }
-        return filteredList;
+    public ArrayList<Movie> getFilteredElementsByYear(int from, int to) throws CustomException, SQLException {
+        String sql = String.format(
+                "SELECT *\n" +
+                        "FROM %s" +
+                        "WHERE releasedDate>? AND releasedDate<?", MOVIE_TABLE);
+        var res = executeQuery(sql, List.of(String.valueOf(from), String.valueOf(to)));
+        return convertResultSetToDomainModelList(res);
     }
 
     public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
