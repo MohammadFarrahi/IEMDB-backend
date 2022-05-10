@@ -206,16 +206,35 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     @Override
     protected String getAddElementStatement() {
-        return null;
+        return String.format("INSERT INTO %s\n" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", MOVIE_TABLE);
     }
 
     @Override
-    protected ArrayList<Movie> convertResultSetToDomainModelList(ResultSet rs) {
-        return null;
+    protected ArrayList<Movie> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
+        ArrayList<Movie> movies = new ArrayList<>();
+        while (rs.next()) {
+            movies.add(this.convertResultSetToDomainModel(rs));
+        }
+        return movies;
     }
 
     @Override
     public void addElement(Movie newObject) throws SQLException {
+        var tupleMap = newObject.getDBTuple();
+        executeUpdate(getAddElementStatement(), List.of(
+            tupleMap.get("id"),
+            tupleMap.get("name"),
+            tupleMap.get("summary"),
+            tupleMap.get("director"),
+            tupleMap.get("writers"),
+            tupleMap.get("releaseDate"),
+            tupleMap.get("ageLimit"),
+            tupleMap.get("duration"),
+            tupleMap.get("imdbRate"),
+            tupleMap.get("coverImgUrl"),
+            tupleMap.get("imgUrl")
+        ));
     }
 
 

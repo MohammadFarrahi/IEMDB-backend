@@ -8,11 +8,10 @@ import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.MovieDTO;
 import ie.iemdb.repository.Retriever;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Movie {
     private Integer id;
@@ -85,7 +84,7 @@ public class Movie {
             HashMap<String, Integer> userRateMap) {
 
         this.userRateMap = userRateMap;
-        this.averageRating =  calculateAvgRate();
+        this.averageRating = calculateAvgRate();
         this.id = id;
         this.name = name;
         this.summary = summary;
@@ -103,15 +102,15 @@ public class Movie {
         this.comments = null;
     }
 
-    private Double calculateAvgRate(){
+    private Double calculateAvgRate() {
         int sum = 0;
-        for(var value : this.userRateMap.values()){
+        for (var value : this.userRateMap.values()) {
             sum += value;
         }
         return (sum / (double) this.userRateMap.values().size());
     }
 
-    public void setRetriever(Retriever retriever){
+    public void setRetriever(Retriever retriever) {
         this.retriever = retriever;
     }
 
@@ -143,8 +142,8 @@ public class Movie {
         return this.ageLimit;
     }
 
-    public ArrayList<Actor> getCast() {
-        if(this.cast == null)
+    public ArrayList<Actor> getCast() throws SQLException {
+        if (this.cast == null)
             this.cast = retriever.getCastForMovie(this.id);
         return this.cast;
     }
@@ -238,8 +237,24 @@ public class Movie {
         return DTO;
     }
 
+    public Map<String, String> getDBTuple() {
+        Map<String, String> tuple = new HashMap<>();
+        tuple.put("id", this.id.toString());;
+        tuple.put("name", this.name);
+        tuple.put("summary", this.summary);
+        tuple.put("director", this.director);
+        tuple.put("releaseDate", this.releaseDate.toString());
+        tuple.put("writers", String.join(",", this.writers));
+        tuple.put("ageLimit", this.ageLimit.toString());
+        tuple.put("duration", this.duration.toString());
+        tuple.put("imdbRate", this.imdbRate.toString());
+        tuple.put("coverImgUrl", this.coverImgUrl);
+        tuple.put("imgUrl", this.toString());
+        return tuple;
+    }
+
     public Integer getUserRate(String userId) {
-        if(!userRateMap.containsKey(userId)) {
+        if (!userRateMap.containsKey(userId)) {
             return null;
         }
         return userRateMap.get(userId);
