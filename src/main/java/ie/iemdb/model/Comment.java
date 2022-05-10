@@ -6,8 +6,10 @@ import ie.iemdb.exception.InvalidVoteValueException;
 import ie.iemdb.model.DTO.CommentDTO;
 import ie.iemdb.repository.Retriever;
 
+import javax.print.DocFlavor;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Comment {
     private Integer id;
@@ -43,13 +45,25 @@ public class Comment {
         this.text = text;
     }
 
-    public Comment (String text) {
-        this.createdDate = LocalDate.now();
-        this.id = null;
-        this.userVoteMap = new HashMap<>();
-        this.commentLikes = 0;
-        this.commentDislikes = 0;
+    public Comment (Integer id, String text, String createdDate, HashMap<String, Short> userVoteMap) {
+        this.createdDate = LocalDate.parse(createdDate);
+        this.id = id;
+        this.userVoteMap = userVoteMap;
         this.text = text;
+        setLikesAndDislikes();
+    }
+
+    private void setLikesAndDislikes(){
+        int likes = 0;
+        int dislikes = 0;
+        for(var value : userVoteMap.values()){
+            if(value == 1)
+                likes++;
+            else if(value == -1)
+                dislikes++;
+        }
+        this.commentDislikes = dislikes;
+        this.commentLikes = likes;
     }
 
     public void setRetriever(Retriever retriever){
@@ -92,11 +106,22 @@ public class Comment {
         DTO.setId(id);
         DTO.setCommentDislikes(commentDislikes);
         DTO.setCommentLikes(commentLikes);
-        DTO.setCommentMovieId(Integer.parseInt(getMovie().getId()));
+        DTO.setCommentMovieId(getMovie().getId());
         DTO.setCommentOwnerId(getCommentOwner().getId());
         DTO.setCommentOwnerName(getCommentOwner().getName());
         DTO.setCreatedDate(createdDate);
         DTO.setText(text);
         return DTO;
+    }
+
+    public Map<String, String> getDBTuple(){
+        Map<String, String> tuple = new HashMap<>();
+        tuple.put("text", this.text);
+        tuple.put("userId", this.commentOwner.getId());
+        tuple.put("movieId", this.commentMovie.getId().toString());
+        tuple.put("createdDate", this.createdDate.toString());
+        tuple.put("commentLikes", this.commentLikes.toString());
+        tuple.put("commentDislikes", this.commentDislikes.toString());
+        return tuple;
     }
 }

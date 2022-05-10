@@ -52,11 +52,11 @@ public class UserRepo extends Repo<User, String> {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s( \n" +
-                                "email VARCHAR(255),\n" +
+                                "userId VARCHAR(255),\n" +
                                 "movieId INT), \n" +
-                                "PRIMARY KEY(email, movieId), \n" +
-                                "FOREIGN KEY (email) REFERENCES " + USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (email) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                "PRIMARY KEY(userId, movieId), \n" +
+                                "FOREIGN KEY (userId) REFERENCES " + USER_TABLE + "(email),\n" +
+                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
                                 ");", WATCH_LIST_TABLE
                 )
         );
@@ -127,7 +127,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
 
-    public List<Movie> getWatchList(String userId) throws CustomException {
+    public List<Movie> getWatchList(String userId) throws CustomException, SQLException {
         return getElementById(userId).getWatchList();
     }
 
@@ -135,7 +135,7 @@ public class UserRepo extends Repo<User, String> {
         if (!user.isOlderThan(movie.getAgeLimit()))
             throw new AgeLimitException();
 
-        executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()))
+        executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()));
 
         user.addToWatchList(movie);
     }
