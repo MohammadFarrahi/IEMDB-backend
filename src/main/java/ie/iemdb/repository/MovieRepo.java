@@ -229,8 +229,13 @@ public class MovieRepo extends Repo<Movie, Integer> {
         }
     }
 
-    public Movie getMovieForComment(int commentId) {
-        return null;
+    public Movie getMovieForComment(int commentId) throws SQLException {
+        Integer movieId = CommentRepo.getInstance().getMovieIdForComment(commentId);
+        try {
+            return getElementById(movieId);
+        } catch (ObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void rateMovie(Integer movieId, String userEmail, int rate) throws CustomException, SQLException {
@@ -246,6 +251,5 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     public List<Integer> getCastIdsForMovie(Integer movieId) {
-
     }
 }
