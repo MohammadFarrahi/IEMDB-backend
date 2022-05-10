@@ -169,11 +169,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     @Override
-    protected String getAddElementStatement(){
-        return null;
-    }
-
-    @Override
     public void addElement(Movie newObject) throws SQLException {
         var tupleMap = newObject.getDBTuple();
         executeUpdate(getAddElementStatement(), List.of(
