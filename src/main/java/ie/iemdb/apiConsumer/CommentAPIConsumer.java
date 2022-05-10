@@ -12,6 +12,8 @@ import ie.iemdb.repository.CommentRepo;
 import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
+import java.sql.SQLException;
+
 
 public class CommentAPIConsumer extends APIConsumer {
     public CommentAPIConsumer(String apiUrl) {
@@ -27,7 +29,7 @@ public class CommentAPIConsumer extends APIConsumer {
                     var newComment = makeNewComment(node);
                     repo.addElement(newComment);
                     addCommentToMovie(node, newComment);
-                } catch (UserNotFoundException | MovieNotFoundException e) {
+                } catch (UserNotFoundException | MovieNotFoundException | SQLException e) {
                     //ignore
                 }
             }
@@ -36,25 +38,25 @@ public class CommentAPIConsumer extends APIConsumer {
         }
     }
 
-    private Comment makeNewComment(JsonNode node) throws ObjectNotFoundException {
+    private Comment makeNewComment(JsonNode node) throws ObjectNotFoundException, SQLException {
         String userEmail = node.get("userEmail").asText();
-        String movieId = node.get("movieId").asText();
+        var movieId = node.get("movieId").asInt();
         String text = node.get("text").asText();
         Movie commentMovie = getCommentMovie(movieId);
         User commentOwner = getCommentOwner(userEmail);
         return new Comment(commentMovie, commentOwner, text);
     }
 
-    private Movie getCommentMovie(String movieId) throws ObjectNotFoundException {
+    private Movie getCommentMovie(Integer movieId) throws ObjectNotFoundException, SQLException {
         return MovieRepo.getInstance().getElementById(movieId);
     }
 
-    private User getCommentOwner(String userEmail) throws ObjectNotFoundException {
+    private User getCommentOwner(String userEmail) throws ObjectNotFoundException, SQLException {
         return UserRepo.getInstance().getElementById(userEmail);
     }
 
-    private void addCommentToMovie(JsonNode node, Comment newComment) throws ObjectNotFoundException {
-        String movieId = node.get("movieId").asText();
+    private void addCommentToMovie(JsonNode node, Comment newComment) throws ObjectNotFoundException, SQLException {
+        var movieId = node.get("movieId").asInt();
         Movie commentMovie = getCommentMovie(movieId);
         commentMovie.addComment(newComment);
     }

@@ -10,6 +10,7 @@ import ie.iemdb.model.Movie;
 import ie.iemdb.repository.ActorRepo;
 import ie.iemdb.repository.MovieRepo;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MovieAPIConsumer extends APIConsumer {
@@ -25,7 +26,7 @@ public class MovieAPIConsumer extends APIConsumer {
                 try{
                     var newMovie = makeNewMovie(node);
                     repo.addElement(newMovie);
-                }catch (ActorNotFoundException | MovieAlreadyExistsException e){
+                }catch (ActorNotFoundException | SQLException e){
                     //ignore
                 };                ;
             }
@@ -34,7 +35,7 @@ public class MovieAPIConsumer extends APIConsumer {
         }
     }
 
-    private Movie makeNewMovie(JsonNode node) throws ObjectNotFoundException {
+    private Movie makeNewMovie(JsonNode node) throws ObjectNotFoundException, SQLException {
         Integer id = node.get("id").asInt();
         String name = node.get("name").asText();
         String summary = node.get("summary").asText();
@@ -46,7 +47,7 @@ public class MovieAPIConsumer extends APIConsumer {
         String coverImgUrl = node.get("coverImage").asText();
         String imgUrl = node.get("image").asText();
 
-        ArrayList<Actor> cast = getCastsForMovie(getStringCollection(node.get("cast")));
+        ArrayList<Actor> cast = getCastsForMovie(getIntegerCollection(node.get("cast")));
         ArrayList<String> writers = getStringCollection(node.get("writers"));
         ArrayList<String> genres =  getStringCollection(node.get("genres"));
 
@@ -67,7 +68,7 @@ public class MovieAPIConsumer extends APIConsumer {
                 imgUrl);
     }
 
-    private ArrayList<Actor> getCastsForMovie(ArrayList<Integer> ids) throws ObjectNotFoundException {
+    private ArrayList<Actor> getCastsForMovie(ArrayList<Integer> ids) throws ObjectNotFoundException, SQLException {
         var repo = ActorRepo.getInstance();
         return (ArrayList<Actor>) repo.getElementsById(ids);
     }

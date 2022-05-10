@@ -18,19 +18,15 @@ public class ActorAPIConsumer extends APIConsumer {
     }
 
     protected void loadRepo(JsonNode arrayNode) {
-        try {
-            var repo = ActorRepo.getInstance();
-            for (var node : arrayNode) {
-                try {
-                    var newActor = makeNewActor(node);
-                    repo.addElement(newActor);
-                } catch (SQLException | DateTimeParseException e) {
-                    //ignore
-                }
-
+        var repo = ActorRepo.getInstance();
+        for (var node : arrayNode) {
+            try {
+                var newActor = makeNewActor(node);
+                repo.addElement(newActor);
+            } catch (SQLException | DateTimeParseException e) {
+                //ignore
             }
-        } catch (CustomException e) {
-            e.printStackTrace();
+
         }
     }
 

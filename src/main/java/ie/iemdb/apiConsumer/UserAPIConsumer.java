@@ -6,6 +6,7 @@ import ie.iemdb.exception.UserAlreadyExistsException;
 import ie.iemdb.model.User;
 import ie.iemdb.repository.UserRepo;
 
+import java.sql.SQLException;
 import java.time.format.DateTimeParseException;
 
 public class UserAPIConsumer extends APIConsumer{
@@ -20,7 +21,7 @@ public class UserAPIConsumer extends APIConsumer{
                 try {
                     var newUser = makeNewUser(node);
                     repo.addElement(newUser);
-                }catch (UserAlreadyExistsException | DateTimeParseException e){
+                }catch (UserAlreadyExistsException | DateTimeParseException | SQLException e){
                     //ignore
                 };
 
