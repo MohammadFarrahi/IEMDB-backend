@@ -78,60 +78,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 )
         );
     }
-//    private String nameFilter;
-//    private String sortType;
-//    private boolean filterFlag;
-//    private boolean sortFlag;
-//
-//    public void setNameFilter(String nameFilter) {
-//        this.nameFilter = nameFilter;
-//        filterFlag = true;
-//    }
-//
-//    public void setSortType(String sortType) {
-//        this.sortType = sortType;
-//        sortFlag = true;
-//    }
-//
-//    public List<Movie> fetchMoviesForUser() {
-//        try {
-//            var movies = getAllElements();
-//            if (filterFlag) {
-//                movies = filterElementsByName(movies, nameFilter);
-//                filterFlag = false;
-//            }
-//            if (sortFlag) {
-//                movies = sortElements(movies, sortType);
-//                sortFlag = false;
-//            }
-//            return movies;
-//        } catch (ObjectNotFoundException e) {
-//        }
-//        return null;
-//
-//    }
-//
-//    public List<Movie> filterElementsByName(List<Movie> movies, String name) {
-//        if (name == null)
-//            return movies;
-//        return movies.stream().filter(movie -> movie.getName().toLowerCase().contains(name.toLowerCase()))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public List<Movie> sortElements(List<Movie> movies, String type) {
-//        if (type == null)
-//            return movies;
-//        switch (type) {
-//            case Constant.ActionType.SORT_IMDB ->
-//                Collections.sort(movies, (f1, f2) -> f2.getImdbRate().compareTo(f1.getImdbRate()));
-//            case Constant.ActionType.SORT_DATE ->
-//                Collections.sort(movies, (f1, f2) -> f2.getReleaseDate().compareTo(f1.getReleaseDate()));
-//            default -> {
-//            }
-//        }
-//        return movies;
-//    }
-
     public static MovieRepo getInstance() {
         if (instance == null) {
             instance = new MovieRepo();
