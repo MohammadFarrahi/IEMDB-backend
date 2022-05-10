@@ -13,13 +13,14 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response loginUser(@RequestBody String loginInfoForm) {
+    public Response loginUser(@RequestBody String loginInfoForm) throws SQLException {
         try {
             var loginJson = new ObjectMapper().readTree(loginInfoForm);
             var userEmail = loginJson.get("email").asText();
@@ -38,7 +39,7 @@ public class UserService {
         return new Response(true, "okeb", null);
     }
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getWatchlist(@PathVariable(value = "id") String userId) {
+    public Response getWatchlist(@PathVariable(value = "id") String userId) throws SQLException {
         try {
             return new Response(true, "okeb", UserDomainManager.getInstance().getWatchlistDTO(userId));
         } catch (CustomException e) {
@@ -48,7 +49,7 @@ public class UserService {
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response postNewWatchlist(@PathVariable(value = "id") String userId, @RequestBody String watchlistInfo) {
         try {
-            var movieId = new ObjectMapper().readTree(watchlistInfo).get("movieId").asText();
+            var movieId = new ObjectMapper().readTree(watchlistInfo).get("movieId").asInt();
             return new Response(true, "okeb", UserDomainManager.getInstance().addToWatchlist(userId, movieId));
         } catch (Exception e) {
             if(e instanceof ObjectNotFoundException) {
@@ -59,16 +60,16 @@ public class UserService {
 
     }
     @RequestMapping(value = "/users/{userId}/watchlist/{movieId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response deleteWatchlist(@PathVariable(value = "userId") String userId, @PathVariable(value = "movieId") String movieId) {
+    public Response deleteWatchlist(@PathVariable(value = "userId") String userId, @PathVariable(value = "movieId") Integer movieId) {
         try {
             UserDomainManager.getInstance().removeFromWatchList(userId, movieId);
             return new Response(true, "okeb", null);
-        } catch (ObjectNotFoundException e) {
+        } catch (ObjectNotFoundException | SQLException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Related Source Not Found", e);
         }
     }
     @RequestMapping(value = "/users/{userId}/recommended", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getRecommendedMovies(@PathVariable(value = "userId") String userId) {
+    public Response getRecommendedMovies(@PathVariable(value = "userId") String userId) throws SQLException {
         try {
             return new Response(true, "okeb", UserDomainManager.getInstance().getRecommendedWatchlist(userId));
         } catch (ObjectNotFoundException e) {

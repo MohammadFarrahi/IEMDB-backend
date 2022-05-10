@@ -6,6 +6,7 @@ import ie.iemdb.exception.MovieNotFoundException;
 import ie.iemdb.repository.Retriever;
 import ie.iemdb.util.types.Email;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -39,13 +40,11 @@ public class User {
     }
 
     public void addToWatchList(Movie movie) {
-        getWatchList();
         if (!watchList.contains(movie))
             watchList.add(movie);
     }
 
     public void removeFromWatchList(Integer id) throws MovieNotFoundException {
-        getWatchList();
         for (var movie : this.watchList) {
             if (movie.getId().equals(id)) {
                 watchList.remove(movie);
@@ -59,13 +58,13 @@ public class User {
         return age <= Period.between(birthDate, LocalDate.now()).getYears();
     }
 
-    public ArrayList<Movie> getWatchList() {
+    public ArrayList<Movie> getWatchList() throws SQLException {
         if(this.watchList == null)
             this.watchList = this.retriever.getWatchlistForUser(this.email.toString());
         return watchList;
     }
 
-    public Boolean hasMovieInWatchList(Movie movie) {
+    public Boolean hasMovieInWatchList(Movie movie) throws SQLException {
         return getWatchList().contains(movie);
     }
 

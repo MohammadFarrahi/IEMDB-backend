@@ -13,11 +13,13 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLException;
+
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CommentService {
     @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response postNewComment(@RequestBody CommentDTO newComment) {
+    public Response postNewComment(@RequestBody CommentDTO newComment) throws SQLException {
         if(newComment.getCommentMovieId() == null || newComment.getText() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -31,7 +33,7 @@ public class CommentService {
     public Response voteComment(@PathVariable(value = "id") Integer commentId, @RequestBody String voteObj) {
         try {
             var voteValue = new ObjectMapper().readTree(voteObj).get("vote").asInt();
-            return new Response(true, "okeb", CommentDomainManager.getInstance().voteComment(commentId.toString(), voteValue));
+            return new Response(true, "okeb", CommentDomainManager.getInstance().voteComment(commentId, voteValue));
         }
         catch (Exception e) {
             if(e instanceof ObjectNotFoundException) {
