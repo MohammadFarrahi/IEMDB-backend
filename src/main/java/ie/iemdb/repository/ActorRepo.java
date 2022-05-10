@@ -2,6 +2,7 @@ package ie.iemdb.repository;
 
 
 import ie.iemdb.exception.ActorNotFoundException;
+import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.Actor;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,11 +92,12 @@ public class ActorRepo extends Repo<Actor, Integer> {
         executeUpdate(getAddElementStatement(), List.of(dbTuple.get("id"), dbTuple.get("name"), dbTuple.get("birthDate"), dbTuple.get("nationality"), dbTuple.get("imgUrl")));
     }
 
-    public String getGetCastForMovieStatement() {
-        return String.format("SELECT a.id, a.name, a.birthDate, a.nationality, a.imgUrl FROM %s a, %s c WHERE a.id = c.actorId AND c.movieId = ?;", ACTOR_TABLE, MovieRepo.CAST_TABLE);
-    }
     public ArrayList<Actor> getCastForMovie(int movieId) throws SQLException {
-        var resultSet = executeQuery(getGetCastForMovieStatement(), List.of(Integer.valueOf(movieId).toString()));
-        return convertResultSetToDomainModelList(resultSet);
+        var actorIds = MovieRepo.getInstance().getCastIdsForMovie(movieId);
+        try {
+            return (ArrayList<Actor>) getElementsById(actorIds);
+        } catch (ObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

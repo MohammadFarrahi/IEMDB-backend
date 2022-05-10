@@ -14,19 +14,19 @@ public class Retriever {
         return ActorRepo.getInstance().getCastForMovie(movieId);
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId) {
+    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
         return MovieRepo.getInstance().getMoviesForActor(actorId);
     }
 
-    public ArrayList<Movie> getWatchlistForUser(String username) {
+    public ArrayList<Movie> getWatchlistForUser(String username) throws SQLException {
         return MovieRepo.getInstance().getWatchlistForUser(username);
     }
 
-    public Movie getMovieForComment(int commentId){
+    public Movie getMovieForComment(int commentId) throws SQLException {
         return MovieRepo.getInstance().getMovieForComment(commentId);
     }
 
-    public User getUserForComment(int commentId){
+    public User getUserForComment(int commentId) throws SQLException {
         return UserRepo.getInstance().getUserForComment(commentId);
     }
 }
