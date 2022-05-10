@@ -54,8 +54,25 @@ public class CommentRepo extends Repo<Comment, Integer> {
     }
 
 
-    public void updateCommentVotes(String commentId, String userId, int vote) throws CustomException {
+    public void updateCommentVotes(Integer commentId, String userId, int vote) throws CustomException {
         getElementById(commentId).updateCommentVotes(userId, vote);
     }
 
+    public Integer getMovieIdForComment(Integer commentId) throws SQLException {
+        String sql = String.format(
+                "SELECT commentMovie\n" +
+                        "FROM %s\n" +
+                        "WHERE id=?;", COMMENT_TABLE);
+        var res = executeQuery(sql, List.of(commentId.toString()));
+        return res.getInt("commentMovie");
+    }
+
+    public Integer getUserIdForComment(Integer commentId) throws SQLException {
+        String sql = String.format(
+                "SELECT commentOwner\n" +
+                        "FROM %s\n" +
+                        "WHERE id=?;", COMMENT_TABLE);
+        var res = executeQuery(sql, List.of(commentId.toString()));
+        return res.getInt("commentOwner");
+    }
 }
