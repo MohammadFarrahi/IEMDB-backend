@@ -5,6 +5,7 @@ import ie.iemdb.model.Actor;
 import ie.iemdb.model.Movie;
 import ie.iemdb.util.types.Constant;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -184,6 +185,36 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 tupleMap.get("coverImgUrl"),
                 tupleMap.get("imgUrl")
         ));
+        addMovieGenres(newObject.getId(), newObject.getGenres());
+        addMovieCast(newObject.getId(), newObject.getCast());
+    }
+
+    private void addMovieCast(Integer movieId, ArrayList<Actor> cast) throws SQLException {
+        var sql = String.format(
+                "INSERT INTO %s(movieId, actorId)\nVALUES (?,?);", CAST_TABLE
+        );
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(sql);
+        for(var actor : cast) {
+            fillValues(st, List.of(movieId.toString(), actor.getId().toString()));
+            st.executeUpdate();
+        }
+        st.close();
+        con.close();
+    }
+
+    private void addMovieGenres(Integer movieId, ArrayList<String> genres) throws SQLException {
+        var sql = String.format(
+                "INSERT INTO %s(movieId, genre)\nVALUES (?,?);", GENRE_TABLE
+        );
+        Connection con = ConnectionPool.getConnection();
+        PreparedStatement st = con.prepareStatement(sql);
+        for(var genre : genres) {
+            fillValues(st, List.of(movieId.toString(), genre));
+            st.executeUpdate();
+        }
+        st.close();
+        con.close();
     }
 
 
