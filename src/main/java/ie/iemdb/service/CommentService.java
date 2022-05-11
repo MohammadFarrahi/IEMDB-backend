@@ -30,12 +30,15 @@ public class CommentService {
         }
     }
     @RequestMapping(value = "/comments/{id}/vote", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response voteComment(@PathVariable(value = "id") Integer commentId, @RequestBody String voteObj) {
+    public Response voteComment(@PathVariable(value = "id") Integer commentId, @RequestBody String voteObj) throws SQLException {
         try {
             var voteValue = new ObjectMapper().readTree(voteObj).get("vote").asInt();
             return new Response(true, "okeb", CommentDomainManager.getInstance().voteComment(commentId, voteValue));
         }
         catch (Exception e) {
+            if(e instanceof SQLException){
+                throw (SQLException) e;
+            }
             if(e instanceof ObjectNotFoundException) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Related Source Not Found", e);
             }

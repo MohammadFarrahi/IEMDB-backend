@@ -47,11 +47,14 @@ public class UserService {
         }
     }
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response postNewWatchlist(@PathVariable(value = "id") String userId, @RequestBody String watchlistInfo) {
+    public Response postNewWatchlist(@PathVariable(value = "id") String userId, @RequestBody String watchlistInfo) throws SQLException {
         try {
             var movieId = new ObjectMapper().readTree(watchlistInfo).get("movieId").asInt();
             return new Response(true, "okeb", UserDomainManager.getInstance().addToWatchlist(userId, movieId));
         } catch (Exception e) {
+            if(e instanceof SQLException){
+                throw (SQLException) e;
+            }
             if(e instanceof ObjectNotFoundException) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Related Source Not Found", e);
             }
