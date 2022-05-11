@@ -4,6 +4,7 @@ import ie.iemdb.apiConsumer.CommentAPIConsumer;
 import ie.iemdb.apiConsumer.MovieAPIConsumer;
 import ie.iemdb.apiConsumer.UserAPIConsumer;
 import ie.iemdb.exception.ObjectNotFoundException;
+import ie.iemdb.repository.ActorRepo;
 import ie.iemdb.repository.CommentRepo;
 import ie.iemdb.repository.UserRepo;
 import ie.iemdb.util.types.Constant;
@@ -19,7 +20,7 @@ import java.sql.SQLException;
 public class IemdbBackendApplication {
 	private static void fetchData() {
 		try {
-			if(CommentRepo.getInstance().getAllElements().size() == 0) {
+			if(ActorRepo.getInstance().getAllElements().size() == 0) {
 				System.out.println("h1");
 			(new ActorAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.ACTOR)).importData();
 				System.out.println("h2");

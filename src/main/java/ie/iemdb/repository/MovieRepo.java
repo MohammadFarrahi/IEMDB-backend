@@ -241,9 +241,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
         String sql = String.format("""
                         SELECT *
                         FROM %s
-                        WHERE name LIKE '%%?%%';
-                        """, MOVIE_TABLE);
-        var res = executeQuery(sql, List.of(name));
+                        WHERE name LIKE '%%%s%%';
+                        """, MOVIE_TABLE, name);
+        System.out.println(sql);
+        System.out.println(name);
+        var res = executeQuery(sql, List.of());
         var movies = convertResultSetToDomainModelList(res.getFirst());
         finishWithResultSet(res.getSecond());
         return movies;
@@ -253,11 +255,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
         String sql = String.format("""
                         SELECT *
                         FROM %s
-                        WHERE releasedDate>? AND releasedDate<?;
-                        """, MOVIE_TABLE);
-        var res = executeQuery(sql, List.of(String.valueOf(from), String.valueOf(to)));
+                        WHERE releaseDate>'%s-01-01' AND releaseDate<'%s-12-29';
+                        """, MOVIE_TABLE, String.valueOf(from), String.valueOf(to));
+        var res = executeQuery(sql, List.of());
         var movies = convertResultSetToDomainModelList(res.getFirst());
-        finishWithResultSet(res.getSecond());
+        finishWithResultSet(res.getSecond()) ;
         return movies;
     }
 
@@ -297,7 +299,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     public void rateMovie(Integer movieId, String userEmail, int rate) throws CustomException, SQLException {
         String sql = String.format(
-                "INSERT INTO %s (movieId, userId, rate\n" +
+                "INSERT INTO %s(movieId, userId, rate)\n" +
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "rate=?;", RATE_TABLE);
         executeUpdate(sql, List.of(movieId.toString(), userEmail, String.valueOf(rate), String.valueOf(rate)));

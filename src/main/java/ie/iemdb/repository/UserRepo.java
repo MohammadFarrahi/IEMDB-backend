@@ -120,7 +120,7 @@ public class UserRepo extends Repo<User, String> {
     }
 
     private String getAddToWatchListStatement() {
-        return String.format("INSERT INTO %s (email, movieId)\n" +
+        return String.format("INSERT INTO %s (userId, movieId)\n" +
                 "VALUES (?, ?);", WATCH_LIST_TABLE);
     }
 
@@ -153,7 +153,7 @@ public class UserRepo extends Repo<User, String> {
         String sql = String.format(
                 "SELECT movieId\n" +
                         "FROM %s\n" +
-                        "WHERE email=?;", userId);
+                        "WHERE userId=?;", WATCH_LIST_TABLE);
         var dbOutput = executeQuery(sql, List.of(userId));
         var res = dbOutput.getFirst();
         while(res.next()){
