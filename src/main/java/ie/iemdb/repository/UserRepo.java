@@ -58,7 +58,6 @@ public class UserRepo extends Repo<User, String> {
                                 ");", WATCH_LIST_TABLE
                 )
         );
-        System.out.println("hll");
     }
 
     @Override
@@ -77,7 +76,8 @@ public class UserRepo extends Repo<User, String> {
     }
 
     @Override
-    protected User convertResultSetToDomainModel(ResultSet rs) throws SQLException, CustomException {
+    protected User convertResultSetToDomainModel(ResultSet rs) throws SQLException {
+        try {
             var newUser = new User(
                     rs.getString("email"),
                     rs.getString("password"),
@@ -87,10 +87,14 @@ public class UserRepo extends Repo<User, String> {
             );
             newUser.setRetriever(new Retriever());
             return newUser;
+        } catch (CustomException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) throws SQLException, CustomException {
+    protected ArrayList<User> convertResultSetToDomainModelList(ResultSet rs) throws SQLException {
             ArrayList<User> users = new ArrayList<>();
             while (rs.next()) {
                 users.add(this.convertResultSetToDomainModel(rs));

@@ -261,16 +261,20 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return movies;
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
+    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException, ObjectNotFoundException {
         String sql = String.format(
                 "SELECT movieId\n" +
                         "FROM %s\n" +
                         "WHERE actorId=?;", CAST_TABLE
         );
         var res = executeQuery(sql, List.of(String.valueOf(actorId)));
-        var movies = convertResultSetToDomainModelList(res.getFirst());
+        var movieIds = new ArrayList<Integer>(); var rs = res.getFirst();
+        while (rs.next()) {
+            movieIds.add(rs.getInt("movieId"));
+        }
+        var movies = getElementsById(movieIds);
         finishWithResultSet(res.getSecond());
-        return movies;
+        return (ArrayList)movies;
     }
 
     public ArrayList<Movie> getWatchlistForUser(String userId) throws SQLException {
@@ -306,7 +310,10 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "WHERE movieId=?;", CAST_TABLE
         );
         var res = executeQuery(sql, List.of(String.valueOf(movieId)));
-        var castIds = (List<Integer>) res.getFirst().getArray("actorId").getArray();
+        List<Integer> castIds = new ArrayList<>(); var rs = res.getFirst();
+        while (rs.next()) {
+            castIds.add(rs.getInt("actorId"));
+        }
         finishWithResultSet(res.getSecond());
         return castIds;
     }

@@ -1,6 +1,7 @@
 package ie.iemdb.repository;
 
 
+import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.Actor;
 import ie.iemdb.model.Comment;
 import ie.iemdb.model.Movie;
@@ -15,7 +16,7 @@ public class Retriever {
         return ActorRepo.getInstance().getCastForMovie(movieId);
     }
 
-    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
+    public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException, ObjectNotFoundException {
         return MovieRepo.getInstance().getMoviesForActor(actorId);
     }
 

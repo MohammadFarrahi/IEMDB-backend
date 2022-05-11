@@ -20,8 +20,8 @@ public abstract class Repo<T, PK> {
     abstract protected String getGetAllElementsStatement();
     abstract protected String getAddElementStatement();
     public abstract void addElement(T newObject) throws SQLException;
-    abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException, CustomException;
-    abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException, CustomException;
+    abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException;
+    abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException;
     public T getElementById(PK id) throws SQLException, ObjectNotFoundException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getGetElementByIdStatement());
@@ -43,8 +43,6 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.find query.");
             e.printStackTrace();
             throw e;
-        } catch (CustomException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -71,8 +69,6 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.find query.");
             e.printStackTrace();
             throw e;
-        } catch (CustomException e) {
-            throw new RuntimeException(e);
         }
         return result;
     }
@@ -93,8 +89,6 @@ public abstract class Repo<T, PK> {
             System.out.println("error in Repository.findAll query.");
             e.printStackTrace();
             throw e;
-        } catch (CustomException e) {
-            throw new RuntimeException(e);
         }
     }
 

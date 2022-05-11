@@ -1,5 +1,6 @@
 package ie.iemdb.model;
 
+import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.model.DTO.ActorBriefDTO;
 import ie.iemdb.model.DTO.ActorDTO;
 import ie.iemdb.model.DTO.MovieBriefDTO;
@@ -35,7 +36,7 @@ public class Actor {
         this.retriever = retriever;
     }
 
-    private ArrayList<Movie> getPerformedMovies() throws SQLException {
+    private ArrayList<Movie> getPerformedMovies() throws SQLException, ObjectNotFoundException {
         if(this.performedMovies == null)
             this.performedMovies = this.retriever.getMoviesForActor(this.id);
         return this.performedMovies;
@@ -50,7 +51,7 @@ public class Actor {
         return this.id;
     }
 
-    public ActorDTO getDTO() throws SQLException {
+    public ActorDTO getDTO() throws SQLException, ObjectNotFoundException {
         var actorDTO = new ActorDTO();
         actorDTO.setId(id);
         actorDTO.setBirthDate(birthDate);

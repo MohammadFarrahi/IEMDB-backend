@@ -142,22 +142,24 @@ public class CommentRepo extends Repo<Comment, Integer> {
 
     public Integer getMovieIdForComment(Integer commentId) throws SQLException {
         String sql = String.format(
-                "SELECT commentMovie\n" +
+                "SELECT movieId\n" +
                         "FROM %s\n" +
                         "WHERE id=?;", COMMENT_TABLE);
         var dbOutput = executeQuery(sql, List.of(commentId.toString()));
-        var res = dbOutput.getFirst().getInt("commentMovie");
+        dbOutput.getFirst().next();
+        var res = dbOutput.getFirst().getInt("movieId");
         finishWithResultSet(dbOutput.getSecond());
         return res;
     }
 
     public String getUserIdForComment(Integer commentId) throws SQLException {
         String sql = String.format(
-                "SELECT commentOwner\n" +
+                "SELECT userId\n" +
                         "FROM %s\n" +
                         "WHERE id=?;", COMMENT_TABLE);
         var dbOutput = executeQuery(sql, List.of(commentId.toString()));
-        var res = dbOutput.getFirst().getString("commentOwner");
+        dbOutput.getFirst().next();
+        var res = dbOutput.getFirst().getString("userId");
         finishWithResultSet(dbOutput.getSecond());
         return res;
     }
