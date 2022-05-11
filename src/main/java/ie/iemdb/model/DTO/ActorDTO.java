@@ -1,12 +1,11 @@
 package ie.iemdb.model.DTO;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ActorDTO {
     private int id;
     private String name;
-    private LocalDate birthDate;
+    private String birthDate;
     private String nationality;
     private ArrayList<MovieBriefDTO> performedMovies;
     private String imgUrl;
@@ -43,7 +42,7 @@ public class ActorDTO {
         this.name = name;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 

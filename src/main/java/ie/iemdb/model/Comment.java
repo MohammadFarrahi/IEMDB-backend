@@ -120,4 +120,8 @@ public class Comment {
         tuple.put("createdDate", this.createdDate.toString());
         return tuple;
     }
+
+    public String getText() {
+        return text;
+    }
 }

@@ -82,7 +82,7 @@ public class ActorRepo extends Repo<Actor, Integer> {
     }
     @Override
     protected String getAddElementStatement() {
-        return String.format("INSERT INTO %s (id, name, birthDate, nationality, imgUrl) VALUES (?,?,?,?,?);", ACTOR_TABLE);
+        return String.format("INSERT IGNORE INTO %s (id, name, birthDate, nationality, imgUrl) VALUES (?,?,?,?,?);", ACTOR_TABLE);
     }
 
 

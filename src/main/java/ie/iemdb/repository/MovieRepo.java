@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class MovieRepo extends Repo<Movie, Integer> {
     private static MovieRepo instance = null;
-    public static final String CAST_TABLE = "Cast";
+    public static final String CAST_TABLE = "Casts";
     public static final String MOVIE_TABLE = "Movie";
     public static final String GENRE_TABLE = "Genre";
     public static final String RATE_TABLE = "MovieRate";
@@ -25,7 +25,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(id INTEGER," +
                                 "\nname VARCHAR(225)," +
-                                "\nsummary VARCHAR(225)," +
+                                "\nsummary VARCHAR(1024)," +
                                 "\nreleaseDate VARCHAR(225)," +
                                 "\ndirector VARCHAR(225)," +
                                 "\nwriters VARCHAR(225)," +
@@ -46,7 +46,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "CREATE TABLE IF NOT EXISTS %s(movieId INTEGER," +
                                 "\nactorId INTEGER," +
                                 "\nFOREIGN KEY (actorId) REFERENCES " + ActorRepo.ACTOR_TABLE + "(id)," +
-                                "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
+                                "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id) ON DELETE CASCADE," +
                                 "\nPRIMARY KEY(movieId, actorId));",
                         CAST_TABLE
                 )
@@ -87,7 +87,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     private MovieRepo() {
-        this.initCastTable();
+        this.initMovieTable();
         this.initGenreTable();
         this.initCastTable();
         this.initMovieRateTable();
@@ -116,20 +116,24 @@ public class MovieRepo extends Repo<Movie, Integer> {
     private ArrayList<String> getMovieGenres(Integer movieId) throws SQLException {
         var genres = new ArrayList<String>();
         String sql = String.format("SELECT G.genre FROM %s G WHERE G.movieId = ?;", GENRE_TABLE);
-        var res = executeQuery(sql, List.of(movieId.toString()));
+        var dbOutput = executeQuery(sql, List.of(movieId.toString()));
+        var res = dbOutput.getFirst();
         while (res.next()) {
             genres.add(res.getString("genre"));
         }
+        finishWithResultSet(dbOutput.getSecond());
         return genres;
     }
 
     private HashMap<String, Integer> getUserRateMap(Integer movieId) throws SQLException {
         var hashMap = new HashMap<String, Integer>();
         String sql = String.format("SELECT userId, rate FROM %s WHERE movieId=?;", RATE_TABLE);
-        var res = executeQuery(sql, List.of(movieId.toString()));
+        var dbOutput = executeQuery(sql, List.of(movieId.toString()));
+        var res = dbOutput.getFirst();
         while (res.next()) {
             hashMap.put(res.getString("userId"), res.getInt("rate"));
         }
+        finishWithResultSet(dbOutput.getSecond());
         return hashMap;
     }
 
@@ -176,12 +180,12 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 tupleMap.get("id"),
                 tupleMap.get("name"),
                 tupleMap.get("summary"),
+                tupleMap.get("releaseDate"),
                 tupleMap.get("director"),
                 tupleMap.get("writers"),
-                tupleMap.get("releaseDate"),
-                tupleMap.get("ageLimit"),
-                tupleMap.get("duration"),
                 tupleMap.get("imdbRate"),
+                tupleMap.get("duration"),
+                tupleMap.get("ageLimit"),
                 tupleMap.get("coverImgUrl"),
                 tupleMap.get("imgUrl")
         ));
@@ -228,7 +232,9 @@ public class MovieRepo extends Repo<Movie, Integer> {
                             WHERE genre=?);
                         """, MOVIE_TABLE, GENRE_TABLE);
         var res = executeQuery(sql, List.of(genre));
-        return convertResultSetToDomainModelList(res);
+        var movies = convertResultSetToDomainModelList(res.getFirst());
+        finishWithResultSet(res.getSecond());
+        return movies;
     }
 
     public ArrayList<Movie> getFilteredElementsByName(String name) throws SQLException {
@@ -238,7 +244,9 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         WHERE name LIKE '%%?%%';
                         """, MOVIE_TABLE);
         var res = executeQuery(sql, List.of(name));
-        return convertResultSetToDomainModelList(res);
+        var movies = convertResultSetToDomainModelList(res.getFirst());
+        finishWithResultSet(res.getSecond());
+        return movies;
     }
 
     public ArrayList<Movie> getFilteredElementsByYear(int from, int to) throws SQLException {
@@ -248,7 +256,9 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         WHERE releasedDate>? AND releasedDate<?;
                         """, MOVIE_TABLE);
         var res = executeQuery(sql, List.of(String.valueOf(from), String.valueOf(to)));
-        return convertResultSetToDomainModelList(res);
+        var movies = convertResultSetToDomainModelList(res.getFirst());
+        finishWithResultSet(res.getSecond());
+        return movies;
     }
 
     public ArrayList<Movie> getMoviesForActor(int actorId) throws SQLException {
@@ -258,7 +268,9 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "WHERE actorId=?;", CAST_TABLE
         );
         var res = executeQuery(sql, List.of(String.valueOf(actorId)));
-        return convertResultSetToDomainModelList(res);
+        var movies = convertResultSetToDomainModelList(res.getFirst());
+        finishWithResultSet(res.getSecond());
+        return movies;
     }
 
     public ArrayList<Movie> getWatchlistForUser(String userId) throws SQLException {
@@ -294,6 +306,8 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "WHERE movieId=?;", CAST_TABLE
         );
         var res = executeQuery(sql, List.of(String.valueOf(movieId)));
-        return (List<Integer>) res.getArray("actorId").getArray();
+        var castIds = (List<Integer>) res.getFirst().getArray("actorId").getArray();
+        finishWithResultSet(res.getSecond());
+        return castIds;
     }
 }

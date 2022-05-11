@@ -37,14 +37,14 @@ public class CommentRepo extends Repo<Comment, Integer> {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
-                                "id INT NOT NULL AUTO_INCREMENT,\n" +
+                                "id INTEGER NOT NULL AUTO_INCREMENT,\n" +
                                 "userId VARCHAR(255),\n" +
-                                "movieId INT,\n" +
+                                "movieId INTEGER,\n" +
                                 "text VARCHAR(255),\n" +
-                                "createdDate VARCHAR(255)\n" +
+                                "createdDate VARCHAR(255),\n" +
                                 "PRIMARY KEY(id),\n" +
                                 "FOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id)\n" +
                                 ");", COMMENT_TABLE
                 )
         );
@@ -53,13 +53,13 @@ public class CommentRepo extends Repo<Comment, Integer> {
     private void initVoteMapTable() {
         initTable(
                 String.format(
-                        "CREATE TABLE IF NOT EXISTS %s( \n" +
+                        "CREATE TABLE IF NOT EXISTS %s(\n" +
                                 "userId VARCHAR(255),\n" +
-                                "commentId INT), \n" +
-                                "vote INT,\n" +
+                                "commentId INTEGER,\n" +
+                                "vote INTEGER,\n" +
                                 "PRIMARY KEY(userId, commentId), \n" +
                                 "FOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (commentId) REFERENCES " + COMMENT_TABLE + "(id),\n" +
+                                "FOREIGN KEY (commentId) REFERENCES " + COMMENT_TABLE + "(id)\n" +
                                 ");", VOTE_MAP_TABLE
                 )
         );
@@ -96,10 +96,12 @@ public class CommentRepo extends Repo<Comment, Integer> {
     private HashMap<String, Short> getUserVoteMap(Integer commentId) throws SQLException {
         var userVoteMap = new HashMap<String, Short>();
         String sql = String.format("SELECT userId, vote FROM %s WHERE commentId=?;", VOTE_MAP_TABLE);
-        var res = executeQuery(sql, List.of(commentId.toString()));
+        var dbOutput = executeQuery(sql, List.of(commentId.toString()));
+        var res = dbOutput.getFirst();
         while (res.next()) {
             userVoteMap.put(res.getString("userId"), res.getShort("vote"));
         }
+        finishWithResultSet(dbOutput.getSecond());
         return userVoteMap;
     }
 
@@ -114,7 +116,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
 
     @Override
     protected String getAddElementStatement() {
-        return String.format("INSERT INTO %s (text, userId, movieId, createdDate,)\n" +
+        return String.format("INSERT INTO %s(text, userId, movieId, createdDate)\n" +
                 "VALUES (?, ?, ?, ?);", COMMENT_TABLE);
     }
 
@@ -143,8 +145,10 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 "SELECT commentMovie\n" +
                         "FROM %s\n" +
                         "WHERE id=?;", COMMENT_TABLE);
-        var res = executeQuery(sql, List.of(commentId.toString()));
-        return res.getInt("commentMovie");
+        var dbOutput = executeQuery(sql, List.of(commentId.toString()));
+        var res = dbOutput.getFirst().getInt("commentMovie");
+        finishWithResultSet(dbOutput.getSecond());
+        return res;
     }
 
     public String getUserIdForComment(Integer commentId) throws SQLException {
@@ -152,8 +156,10 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 "SELECT commentOwner\n" +
                         "FROM %s\n" +
                         "WHERE id=?;", COMMENT_TABLE);
-        var res = executeQuery(sql, List.of(commentId.toString()));
-        return res.getString("commentOwner");
+        var dbOutput = executeQuery(sql, List.of(commentId.toString()));
+        var res = dbOutput.getFirst().getString("commentOwner");
+        finishWithResultSet(dbOutput.getSecond());
+        return res;
     }
 
     public ArrayList<Comment> getCommentsForMovie(Integer movieId) throws SQLException {
@@ -162,7 +168,9 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 "SELECT c.id, c.text, c.createdDate\n" +
                         "FROM %s c\n" +
                         "WHERE c.movieId=?;", COMMENT_TABLE);
-        var res = executeQuery(sql, List.of(movieId.toString()));
-        return convertResultSetToDomainModelList(res);
+        var dbOutput = executeQuery(sql, List.of(movieId.toString()));
+        var res = convertResultSetToDomainModelList(dbOutput.getFirst());
+        finishWithResultSet(dbOutput.getSecond());
+        return res;
     }
 }

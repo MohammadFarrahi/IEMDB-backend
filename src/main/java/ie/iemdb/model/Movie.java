@@ -89,7 +89,7 @@ public class Movie {
         this.name = name;
         this.summary = summary;
         this.director = director;
-        this.releaseDate = LocalDate.parse(releaseDate, DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        this.releaseDate = LocalDate.parse(releaseDate);
         this.writers = writers;
         this.genres = genres;
         this.ageLimit = ageLimit;

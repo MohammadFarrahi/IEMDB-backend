@@ -13,7 +13,7 @@ import java.util.*;
 
 public class UserRepo extends Repo<User, String> {
     private static UserRepo instance = null;
-    public static final String USER_TABLE = "User";
+    public static final String USER_TABLE = "Users";
     private static final String WATCH_LIST_TABLE = "Watchlist";
 
     public static User loggedInUser = null;
@@ -49,20 +49,21 @@ public class UserRepo extends Repo<User, String> {
     private void initWatchlistTable() {
         initTable(
                 String.format(
-                        "CREATE TABLE IF NOT EXISTS %s( \n" +
+                        "CREATE TABLE IF NOT EXISTS %s(" +
                                 "userId VARCHAR(255),\n" +
                                 "movieId INTEGER, \n" +
                                 "PRIMARY KEY(userId, movieId), \n" +
-                                "FOREIGN KEY (userId) REFERENCES " + USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                "FOREIGN KEY (userId) REFERENCES " + USER_TABLE + "(email) ON DELETE CASCADE,\n" +
+                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id)\n" +
                                 ");", WATCH_LIST_TABLE
                 )
         );
+        System.out.println("hll");
     }
 
     @Override
     protected String getGetElementByIdStatement() {
-        return String.format("SELECT* FROM %s a WHERE a.id = ?;", USER_TABLE);
+        return String.format("SELECT * FROM %s a WHERE a.email = ?;", USER_TABLE);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class UserRepo extends Repo<User, String> {
     @Override
     protected String getAddElementStatement() {
         return String.format("INSERT INTO %s\n" +
-                "VALUES (?, ?, ?, ?, ?);", WATCH_LIST_TABLE);
+                "VALUES (?, ?, ?, ?, ?);", USER_TABLE);
     }
 
     @Override
@@ -149,10 +150,12 @@ public class UserRepo extends Repo<User, String> {
                 "SELECT movieId\n" +
                         "FROM %s\n" +
                         "WHERE email=?;", userId);
-        var res = executeQuery(sql, List.of(userId));
+        var dbOutput = executeQuery(sql, List.of(userId));
+        var res = dbOutput.getFirst();
         while(res.next()){
             list.add(res.getInt("movieId"));
         }
+        finishWithResultSet(dbOutput.getSecond());
         return list;
     }
 

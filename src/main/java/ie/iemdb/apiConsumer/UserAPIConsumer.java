@@ -20,9 +20,10 @@ public class UserAPIConsumer extends APIConsumer{
             for (var node : arrayNode) {
                 try {
                     var newUser = makeNewUser(node);
+                    System.out.println(newUser.getName());
                     repo.addElement(newUser);
                 }catch (UserAlreadyExistsException | DateTimeParseException | SQLException e){
-                    //ignore
+                    e.printStackTrace();
                 };
 
             }

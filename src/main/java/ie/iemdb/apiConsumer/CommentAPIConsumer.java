@@ -27,9 +27,10 @@ public class CommentAPIConsumer extends APIConsumer {
                 try {
 
                     var newComment = makeNewComment(node);
+                    System.out.println(newComment.getText());
                     repo.addElement(newComment);
                 } catch (UserNotFoundException | MovieNotFoundException | SQLException e) {
-                    //ignore
+                    e.printStackTrace();
                 }
             }
         } catch (CustomException e) {

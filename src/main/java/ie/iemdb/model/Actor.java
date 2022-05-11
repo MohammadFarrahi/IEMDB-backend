@@ -10,14 +10,13 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
 public class Actor {
     private Integer id;
     private String name;
-    private LocalDate birthDate;
+    private String birthDate;
     private String nationality;
     private ArrayList<Movie> performedMovies = null;
     private String imgUrl;
@@ -27,7 +26,7 @@ public class Actor {
     public Actor ( Integer id, String name, String birthDate, String nationality, String imgUrl ) {
         this.id = id;
         this.name = name;
-        this.birthDate = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MMMM d, yyyy"));
+        this.birthDate = birthDate;
         this.nationality = nationality;
         this.imgUrl = imgUrl;
     }
@@ -42,8 +41,8 @@ public class Actor {
         return this.performedMovies;
     }
 
-    public int getAge() {
-        return Period.between(birthDate, LocalDate.now()).getYears();
+    public Integer getAge() {
+        return Period.between(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("MMMM d, yyyy")), LocalDate.now()).getYears();
     }
 
 
@@ -73,5 +72,9 @@ public class Actor {
     }
     public Map<String, String> getDBTuple() {
         return Map.of("id", id.toString(), "name", name, "birthDate", birthDate.toString(), "nationality", nationality, "imgUrl", imgUrl);
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -1,5 +1,7 @@
 package ie.iemdb.model.DTO;
 
+import java.time.Period;
+
 public class ActorBriefDTO {
     private int id;
     private String name;

@@ -2,6 +2,7 @@ package ie.iemdb.repository;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
+import kotlin.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,14 +110,12 @@ public abstract class Repo<T, PK> {
         }
     }
 
-    protected ResultSet executeQuery(String sql, List<String> fillValues) throws SQLException {
+    protected Pair<ResultSet, Pair<Connection, PreparedStatement>> executeQuery(String sql, List<String> fillValues) throws SQLException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(sql);
         fillValues(st, fillValues);
         var result = st.executeQuery();
-        st.close();
-        con.close();
-        return result;
+        return new Pair<>(result, new Pair<>(con, st));
     }
 
     protected int executeUpdate(String sql, List<String> fillValues) throws SQLException {
@@ -135,5 +134,10 @@ public abstract class Repo<T, PK> {
             st.setString(valuePosition, value);
             valuePosition++;
         }
+    }
+
+    protected void finishWithResultSet(Pair<Connection, PreparedStatement> closables) throws SQLException {
+        closables.getFirst().close();
+        closables.getSecond().close();
     }
 }

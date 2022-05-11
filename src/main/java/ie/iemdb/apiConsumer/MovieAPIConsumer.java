@@ -11,6 +11,8 @@ import ie.iemdb.repository.ActorRepo;
 import ie.iemdb.repository.MovieRepo;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class MovieAPIConsumer extends APIConsumer {
@@ -25,10 +27,11 @@ public class MovieAPIConsumer extends APIConsumer {
             for (var node : arrayNode) {
                 try{
                     var newMovie = makeNewMovie(node);
+                    System.out.println(newMovie.getName());
                     repo.addElement(newMovie);
                 }catch (ActorNotFoundException | SQLException e){
-                    //ignore
-                };                ;
+                    e.printStackTrace();
+                }
             }
         } catch (CustomException e) {
             e.printStackTrace();
@@ -40,7 +43,7 @@ public class MovieAPIConsumer extends APIConsumer {
         String name = node.get("name").asText();
         String summary = node.get("summary").asText();
         String director = node.get("director").asText();
-        String releaseDate = node.get("releaseDate").asText();
+        String releaseDate = LocalDate.parse(node.get("releaseDate").asText(), DateTimeFormatter.ofPattern("yyyy/MM/dd")).toString();
         Integer ageLimit = node.get("ageLimit").asInt();
         Integer duration = node.get("duration").asInt();
         Double imdbRate = node.get("imdbRate").asDouble();
