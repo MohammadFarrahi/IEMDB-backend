@@ -2,6 +2,7 @@ package ie.iemdb.repository;
 
 
 import ie.iemdb.model.Actor;
+import ie.iemdb.model.Comment;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 
@@ -28,5 +29,9 @@ public class Retriever {
 
     public User getUserForComment(int commentId) throws SQLException {
         return UserRepo.getInstance().getUserForComment(commentId);
+    }
+
+    public ArrayList<Comment> getCommentsForMovie(Integer movieId) throws SQLException {
+        return CommentRepo.getInstance().getCommentsForMovie(movieId);
     }
 }

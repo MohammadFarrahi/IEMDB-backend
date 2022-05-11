@@ -45,10 +45,7 @@ public class Actor {
     public int getAge() {
         return Period.between(birthDate, LocalDate.now()).getYears();
     }
-    
-    public void addToPerformedMovies(Movie movie) throws SQLException {
-        getPerformedMovies().add(movie);
-    }
+
 
     public Integer getId() {
         return this.id;

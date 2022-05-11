@@ -28,7 +28,6 @@ public class CommentDomainManager {
         var commentMovie = MovieRepo.getInstance().getElementById(commentDTO.getCommentMovieId());
         var newComment = new Comment(commentMovie, UserRepo.loggedInUser, commentDTO.getText());
         CommentRepo.getInstance().addElement(newComment);
-        commentMovie.addComment(newComment);
         return newComment.getDTO();
     }
 }

@@ -257,7 +257,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "rate=?;", RATE_TABLE);
         executeUpdate(sql, List.of(movieId.toString(), userEmail, String.valueOf(rate), String.valueOf(rate)));
-        getElementById(movieId).updateMovieRating(userEmail, rate);
     }
 
     public List<Integer> getCastIdsForMovie(Integer movieId) throws SQLException {
