@@ -115,7 +115,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
     @Override
     protected String getAddElementStatement() {
         return String.format("INSERT INTO %s (text, userId, movieId, createdDate,)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?);", COMMENT_TABLE);
+                "VALUES (?, ?, ?, ?);", COMMENT_TABLE);
     }
 
     @Override
