@@ -9,6 +9,7 @@ import ie.iemdb.repository.MovieRepo;
 import ie.iemdb.repository.UserRepo;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +24,9 @@ public class MovieDomainManager {
     }
     public List<MovieBriefDTO> getMoviesDTOList() throws ObjectNotFoundException, SQLException {
         var movies = MovieRepo.getInstance().getAllElements();
-        List<MovieBriefDTO> moviesDTO = new ArrayList<>();
-        movies.forEach(movie -> moviesDTO.add(movie.getShortDTO()));
-        return moviesDTO;
+        return getMoviesDTO(movies);
     }
-
+//    public List<MovieBriefDTO> get
     public MovieDTO getMovieDTO(Integer movieId) throws ObjectNotFoundException, SQLException {
         var movie = MovieRepo.getInstance().getElementById(movieId);
         return getMovieDTO(movie);
@@ -46,5 +45,26 @@ public class MovieDomainManager {
             DTO.setUserRate(movie.getUserRate(UserRepo.loggedInUser.getId()));
         }
         return DTO;
+    }
+    private List<MovieBriefDTO> getMoviesDTO(List<Movie> movies) throws SQLException {
+        List<MovieBriefDTO> moviesDTO = new ArrayList<>();
+        movies.forEach(movie -> moviesDTO.add(movie.getShortDTO()));
+        return moviesDTO;
+    }
+
+    public List<MovieBriefDTO> getFilteredMoviesByName(String filterValue) throws SQLException {
+        var movies = MovieRepo.getInstance().getFilteredElementsByName(filterValue);
+        return getMoviesDTO(movies);
+    }
+
+    public List<MovieBriefDTO> getFilteredMoviesByGenre(String filterValue) throws SQLException {
+        var movies = MovieRepo.getInstance().getFilteredElementsByGenre(filterValue);
+        return getMoviesDTO(movies);
+    }
+
+    public List<MovieBriefDTO> getFilteredMoviesByYear(Integer from, Integer to) throws CustomException, SQLException {
+        if(to < from) throw new CustomException("Invalid date points");
+        var movies = MovieRepo.getInstance().getFilteredElementsByYear(from, to);
+        return getMoviesDTO(movies);
     }
 }
