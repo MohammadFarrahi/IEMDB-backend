@@ -115,11 +115,11 @@ public class Comment {
         return DTO;
     }
 
-    public Map<String, String> getDBTuple(){
+    public Map<String, String> getDBTuple() throws SQLException {
         Map<String, String> tuple = new HashMap<>();
         tuple.put("text", this.text);
-        tuple.put("userId", this.commentOwner.getId());
-        tuple.put("movieId", this.commentMovie.getId().toString());
+        tuple.put("userId", this.getCommentOwner().getId());
+        tuple.put("movieId", this.getMovie().getId().toString());
         tuple.put("createdDate", this.createdDate.toString());
         tuple.put("commentLikes", this.commentLikes.toString());
         tuple.put("commentDislikes", this.commentDislikes.toString());

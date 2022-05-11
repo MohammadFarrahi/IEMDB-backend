@@ -51,7 +51,7 @@ public class UserRepo extends Repo<User, String> {
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s( \n" +
                                 "userId VARCHAR(255),\n" +
-                                "movieId INT), \n" +
+                                "movieId INTEGER, \n" +
                                 "PRIMARY KEY(userId, movieId), \n" +
                                 "FOREIGN KEY (userId) REFERENCES " + USER_TABLE + "(email),\n" +
                                 "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +

@@ -148,9 +148,9 @@ public class Movie {
         return this.cast;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
+//    public void addComment(Comment comment) {
+//        this.comments.add(comment);
+//    }
 
     public boolean includeGenre(String genre) {
         return genres.contains(genre);
@@ -228,16 +228,18 @@ public class Movie {
         DTO.setRateCount(userRateMap.size());
 
         var castDTO = new ArrayList<ActorBriefDTO>();
-        cast.forEach(actor -> castDTO.add(actor.getBriefDTO()));
+        getCast().forEach(actor -> castDTO.add(actor.getBriefDTO()));
         DTO.setCast(castDTO);
 
         var commentsDTO = new ArrayList<CommentDTO>();
-        for (Comment comment : comments) {
+        for (Comment comment : getComments()) {
             commentsDTO.add(comment.getDTO());
         }
         DTO.setComments(commentsDTO);
         return DTO;
     }
+
+
 
     public Map<String, String> getDBTuple() {
         Map<String, String> tuple = new HashMap<>();
@@ -260,5 +262,11 @@ public class Movie {
             return null;
         }
         return userRateMap.get(userId);
+    }
+
+    private ArrayList<Comment> getComments() throws SQLException {
+        if (this.comments == null)
+            this.comments = retriever.getCommentsForMovie(this.id);
+        return this.comments;
     }
 }

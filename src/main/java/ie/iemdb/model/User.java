@@ -39,13 +39,13 @@ public class User {
         return this.email.toString();
     }
 
-    public void addToWatchList(Movie movie) {
-        if (!watchList.contains(movie))
-            watchList.add(movie);
+    public void addToWatchList(Movie movie) throws SQLException {
+        if (!getWatchList().contains(movie))
+            getWatchList().add(movie);
     }
 
-    public void removeFromWatchList(Integer id) throws MovieNotFoundException {
-        for (var movie : this.watchList) {
+    public void removeFromWatchList(Integer id) throws MovieNotFoundException, SQLException {
+        for (var movie : this.getWatchList()) {
             if (movie.getId().equals(id)) {
                 watchList.remove(movie);
                 return;

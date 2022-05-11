@@ -159,4 +159,14 @@ public class CommentRepo extends Repo<Comment, Integer> {
         var res = executeQuery(sql, List.of(commentId.toString()));
         return res.getString("commentOwner");
     }
+
+    public ArrayList<Comment> getCommentsForMovie(Integer movieId) throws SQLException {
+        var comments = new ArrayList<Comment>();
+        String sql = String.format(
+                "SELECT c.id, c.text, c.createdDate\n" +
+                        "FROM %s c\n" +
+                        "WHERE c.movieId=?;", COMMENT_TABLE);
+        var res = executeQuery(sql, List.of(movieId.toString()));
+        return convertResultSetToDomainModelList(res);
+    }
 }
