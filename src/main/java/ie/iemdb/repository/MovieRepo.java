@@ -200,7 +200,17 @@ public class MovieRepo extends Repo<Movie, Integer> {
         return convertResultSetToDomainModelList(res);
     }
 
-    public ArrayList<Movie> getFilteredElementsByYear(int from, int to) throws CustomException, SQLException {
+    public ArrayList<Movie> getFilteredElementsByName(String name) throws SQLException {
+        String sql = String.format("""
+                        SELECT *
+                        FROM %s
+                        WHERE name LIKE '%%?%%';
+                        """, MOVIE_TABLE);
+        var res = executeQuery(sql, List.of(name));
+        return convertResultSetToDomainModelList(res);
+    }
+
+    public ArrayList<Movie> getFilteredElementsByYear(int from, int to) throws SQLException {
         String sql = String.format("""
                         SELECT *
                         FROM %s
