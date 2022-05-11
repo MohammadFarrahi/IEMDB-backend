@@ -19,8 +19,10 @@ public class CommentDomainManager {
         return instance;
     }
     public CommentDTO voteComment(Integer commentId, int vote) throws CustomException, SQLException {
+        var comment = CommentRepo.getInstance().getElementById(commentId);
+        comment.updateCommentVotes(UserRepo.loggedInUser.getId(), vote);
         CommentRepo.getInstance().updateCommentVotes(commentId, UserRepo.loggedInUser.getId(), vote);
-        return CommentRepo.getInstance().getElementById(commentId).getDTO();
+        return comment.getDTO();
     }
 
     public CommentDTO postNewComment(CommentDTO commentDTO) throws CustomException, SQLException {

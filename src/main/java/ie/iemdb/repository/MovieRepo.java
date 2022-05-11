@@ -239,9 +239,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     public void rateMovie(Integer movieId, String userEmail, int rate) throws CustomException, SQLException {
-        if (!UserRepo.getInstance().isIdValid(userEmail)) {
-            throw new UserNotFoundException();
-        }
         String sql = String.format(
                 "INSERT INTO %s (movieId, userId, rate\n" +
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +

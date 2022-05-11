@@ -21,10 +21,6 @@ public abstract class Repo<T, PK> {
     public abstract void addElement(T newObject) throws SQLException;
     abstract protected T convertResultSetToDomainModel(ResultSet rs) throws SQLException, CustomException;
     abstract protected ArrayList<T> convertResultSetToDomainModelList(ResultSet rs) throws SQLException, CustomException;
-    public boolean isIdValid(PK id) {
-        // TODO: refactor
-        return true;
-    }
     public T getElementById(PK id) throws SQLException, ObjectNotFoundException {
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(getGetElementByIdStatement());

@@ -139,10 +139,8 @@ public class UserRepo extends Repo<User, String> {
     }
 
     public void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException, SQLException {
-
-        executeUpdate(getRemoveFromWatchListStatement(), List.of(user.getId(), movieId.toString()));
-
         user.removeFromWatchList(movieId);
+        executeUpdate(getRemoveFromWatchListStatement(), List.of(user.getId(), movieId.toString()));
     }
 
     public List<Integer> getMovieIdsForUserWatchList(String userId) throws SQLException {
