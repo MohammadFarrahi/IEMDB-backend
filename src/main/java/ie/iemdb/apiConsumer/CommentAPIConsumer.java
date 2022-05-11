@@ -28,7 +28,6 @@ public class CommentAPIConsumer extends APIConsumer {
 
                     var newComment = makeNewComment(node);
                     repo.addElement(newComment);
-                    addCommentToMovie(node, newComment);
                 } catch (UserNotFoundException | MovieNotFoundException | SQLException e) {
                     //ignore
                 }
