@@ -50,8 +50,17 @@ public class Comment {
         this.createdDate = LocalDate.parse(createdDate);
         this.id = id;
         this.userVoteMap = userVoteMap;
+        this.calculateCommetVotes();
         this.text = text;
         setLikesAndDislikes();
+    }
+
+    private void calculateCommetVotes() {
+        this.commentLikes = 0; this.commentDislikes = 0;
+        for(var vote : userVoteMap.values()){
+            if(vote == 1) commentLikes += 1;
+            else commentDislikes += 1;
+        }
     }
 
     private void setLikesAndDislikes(){
@@ -121,8 +130,6 @@ public class Comment {
         tuple.put("userId", this.getCommentOwner().getId());
         tuple.put("movieId", this.getMovie().getId().toString());
         tuple.put("createdDate", this.createdDate.toString());
-        tuple.put("commentLikes", this.commentLikes.toString());
-        tuple.put("commentDislikes", this.commentDislikes.toString());
         return tuple;
     }
 }

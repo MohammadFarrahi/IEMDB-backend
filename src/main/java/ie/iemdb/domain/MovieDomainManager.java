@@ -36,6 +36,7 @@ public class MovieDomainManager {
     public MovieDTO rateMovie(Integer movieId, int rate) throws CustomException, SQLException {
         var ratingUser = UserRepo.loggedInUser;
         var movie = MovieRepo.getInstance().getElementById(movieId);
+        MovieRepo.getInstance().rateMovie(movieId, ratingUser.getId(), rate);
         movie.updateMovieRating(ratingUser.getId(), rate);
         return getMovieDTO(movie);
     }

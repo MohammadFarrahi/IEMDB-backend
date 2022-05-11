@@ -38,13 +38,13 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
                                 "id INT NOT NULL AUTO_INCREMENT,\n" +
-                                "commentOwner VARCHAR(255),\n" +
-                                "commentMovie INT,\n" +
+                                "userId VARCHAR(255),\n" +
+                                "movieId INT,\n" +
                                 "text VARCHAR(255),\n" +
                                 "createdDate VARCHAR(255)\n" +
                                 "PRIMARY KEY(id),\n" +
-                                "FOREIGN KEY (commentOwner) REFERENCES " + UserRepo.USER_TABLE + "(email),\n" +
-                                "FOREIGN KEY (commentMovie) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
+                                "FOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email),\n" +
+                                "FOREIGN KEY (movieId) REFERENCES " + MovieRepo.MOVIE_TABLE + "(id),\n" +
                                 ");", COMMENT_TABLE
                 )
         );
@@ -114,7 +114,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
 
     @Override
     protected String getAddElementStatement() {
-        return String.format("INSERT INTO %s (text, userId, movieId, createdDate, commentLies,  commentDislikes)\n" +
+        return String.format("INSERT INTO %s (text, userId, movieId, createdDate,)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?);", COMMENT_TABLE);
     }
 
@@ -125,9 +125,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 tupleMap.get("text"),
                 tupleMap.get("userId"),
                 tupleMap.get("movieId"),
-                tupleMap.get("createdDate"),
-                tupleMap.get("commentLikes"),
-                tupleMap.get("commentDislikes")
+                tupleMap.get("createdDate")
         ));
     }
 
@@ -138,8 +136,6 @@ public class CommentRepo extends Repo<Comment, Integer> {
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "vote=?;", VOTE_MAP_TABLE);
         executeUpdate(sql, List.of(userId, commentId.toString(), String.valueOf(vote), String.valueOf(vote)));
-
-        getElementById(commentId).updateCommentVotes(userId, vote);
     }
 
     public Integer getMovieIdForComment(Integer commentId) throws SQLException {
