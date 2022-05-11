@@ -25,9 +25,6 @@ public class Comment {
     private Retriever retriever;
 
 
-    public String getCommentOwnerNickName() throws SQLException {
-        return getCommentOwner().getNickname();
-    }
 
     private User getCommentOwner() throws SQLException {
         if(this.commentOwner == null)
@@ -50,17 +47,8 @@ public class Comment {
         this.createdDate = LocalDate.parse(createdDate);
         this.id = id;
         this.userVoteMap = userVoteMap;
-        this.calculateCommetVotes();
         this.text = text;
         setLikesAndDislikes();
-    }
-
-    private void calculateCommetVotes() {
-        this.commentLikes = 0; this.commentDislikes = 0;
-        for(var vote : userVoteMap.values()){
-            if(vote == 1) commentLikes += 1;
-            else commentDislikes += 1;
-        }
     }
 
     private void setLikesAndDislikes(){

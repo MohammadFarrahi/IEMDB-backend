@@ -148,9 +148,9 @@ public class Movie {
         return this.cast;
     }
 
-//    public void addComment(Comment comment) {
-//        this.comments.add(comment);
-//    }
+    public void addComment(Comment comment) throws SQLException {
+        this.getComments().add(comment);
+    }
 
     public boolean includeGenre(String genre) {
         return genres.contains(genre);
