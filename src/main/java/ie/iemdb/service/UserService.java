@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.iemdb.domain.UserDomainManager;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
+import ie.iemdb.exception.UserAlreadyExistsException;
 import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.Response;
+import ie.iemdb.model.DTO.UserDTO;
+import ie.iemdb.repository.UserRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,20 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
+    @RequestMapping(value = "/auth/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response registerUser(@RequestBody UserDTO newUserInfo) throws SQLException {
+        if(newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        try {
+            UserDomainManager.getInstance().registerNewUser(newUserInfo);
+            // TODO : generate JWT and return proper response
+            return new Response(true,null,null);
+        } catch (CustomException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+
+    }
+
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response loginUser(@RequestBody String loginInfoForm) throws SQLException {
         try {

@@ -4,6 +4,7 @@ import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.MovieAlreadyExistsException;
 import ie.iemdb.exception.MovieNotFoundException;
 import ie.iemdb.repository.Retriever;
+import ie.iemdb.security.PasswordEncoder;
 import ie.iemdb.util.types.Email;
 
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class User {
 
     public User(String email, String password, String nickname, String name, String birthDate) throws CustomException {
         this.email = new Email(email);
-        this.password = password;
+        this.password = PasswordEncoder.encode(password);
         this.nickname = nickname;
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate);
@@ -77,7 +78,7 @@ public class User {
     }
 
     public boolean checkPassword(String password) {
-        return this.password.equals(password);
+        return PasswordEncoder.matches(password, this.password);
     }
 
     public Map<String, String> getDBTuple() {
