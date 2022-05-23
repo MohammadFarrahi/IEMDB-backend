@@ -163,13 +163,13 @@ public class UserRepo extends Repo<User, String> {
         return list;
     }
 
-    public void loginUser(User user) {
-        loggedInUser = user;
-    }
+//    public void loginUser(User user) {
+//        loggedInUser = user;
+//    }
 
-    public void logoutUser() {
-        loggedInUser = null;
-    }
+//    public void logoutUser() {
+//        loggedInUser = null;
+//    }
 
     public User getUserForComment(int commentId) throws SQLException {
         var userId = CommentRepo.getInstance().getUserIdForComment(commentId);

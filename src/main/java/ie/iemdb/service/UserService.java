@@ -11,6 +11,10 @@ import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.Response;
 import ie.iemdb.model.DTO.UserDTO;
 import ie.iemdb.repository.UserRepo;
+import ie.iemdb.security.DTO.JwtRequestDTO;
+import ie.iemdb.security.DTO.JwtResponseDTO;
+import ie.iemdb.security.JwtTokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,9 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @RequestMapping(value = "/auth/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response registerUser(@RequestBody UserDTO newUserInfo) throws SQLException {
         if(newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -34,25 +41,19 @@ public class UserService {
         }
 
     }
-
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response loginUser(@RequestBody String loginInfoForm) throws SQLException {
+    public Response loginUser(@RequestBody JwtRequestDTO loginInfo) throws SQLException {
         try {
-            var loginJson = new ObjectMapper().readTree(loginInfoForm);
-            var userEmail = loginJson.get("email").asText();
-            var userPassword = loginJson.get("password").asText();
+            if(!loginInfo.checkNullability()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            var userEmail = loginInfo.getUserEmail();
+            var userPassword = loginInfo.getPassword();
             UserDomainManager.getInstance().loginUser(userEmail, userPassword);
-            return new Response(true, "okeb", userEmail);
+            return new Response(true, "okeb", new JwtResponseDTO(userEmail, jwtTokenUtil.generateToken(userEmail)));
         } catch (ObjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "InvalidCredential", e);
-        } catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-    }
-    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response logoutUser() {
-        UserDomainManager.getInstance().logoutUser();
-        return new Response(true, "okeb", null);
     }
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getWatchlist(@PathVariable(value = "id") String userId) throws SQLException {
