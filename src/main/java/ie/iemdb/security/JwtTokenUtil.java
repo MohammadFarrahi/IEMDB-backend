@@ -15,8 +15,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenUtil implements Serializable {
-    public static final long JWT_TOKEN_VALIDITY = 10 * 60 * 60;
-    pubclic static final String ISSUER = "IEMDB";
+    public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
+    public static final String ISSUER = "IEMDB";
     @Value("${jwt.secret}")
     private String secret;
 
@@ -53,11 +53,11 @@ public class JwtTokenUtil implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setIssuer(ISSUER).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS256 , secret).compact();
     }
     //validate token
     public Boolean validateToken(String token, String UserId) {
-        final String username = getUserIdFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String tokenUserId = getUserIdFromToken(token);
+        return (UserId.equals(tokenUserId) && !isTokenExpired(token));
     }
 }
