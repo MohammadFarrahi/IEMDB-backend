@@ -19,6 +19,11 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
+    @RequestMapping(value = "/auth/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response registerUser(@RequestBody String ) throws SQLException {
+
+    }
+
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response loginUser(@RequestBody String loginInfoForm) throws SQLException {
         try {
