@@ -32,12 +32,16 @@ public class LoginFilter implements Filter {
 
         String requestPath = request.getRequestURI();
         var jwtToken = request.getHeader("Authorization");
+        var needsAuthentication = needsAuthentication(requestPath, request.getMethod());
 
-        if (needsAuthentication(requestPath, request.getMethod()) && jwtTokenUtil.validateToken(jwtToken, null)) {
-            sendUnauthorizedResponse(response);
-        } else {
-            filterChain.doFilter(request, response);
+        if (needsAuthentication){
+            if (jwtToken == null || !jwtTokenUtil.validateToken(jwtToken)){
+                sendUnauthorizedResponse(response);
+            } else {
+                request.setAttribute("userEmail", jwtTokenUtil.getUserIdFromToken(jwtToken));
+            }
         }
+        filterChain.doFilter(request, response);
     }
 
     @Override
