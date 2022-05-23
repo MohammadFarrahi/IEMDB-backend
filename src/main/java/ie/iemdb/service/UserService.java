@@ -27,8 +27,7 @@ public class UserService {
         if(newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         try {
             UserDomainManager.getInstance().registerNewUser(newUserInfo);
-            // TODO : generate JWT and return proper response
-            return new Response(true,null,null);
+            return new Response(true, "okeb", null);
         } catch (CustomException e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
