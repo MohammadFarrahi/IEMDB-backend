@@ -123,4 +123,15 @@ public class UserDomainManager {
       UserRepo.getInstance().addElement(newUser);
     }
   }
+
+    public void registerOrLoinUser(UserDTO userInfo) throws CustomException, SQLException {
+      var newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), userInfo.getName(), userInfo.getBirthDate());
+      try {
+        if(UserRepo.getInstance().getElementById(newUser.getId()) != null) {
+          UserRepo.getInstance().updateElement(newUser);
+        }
+      } catch (ObjectNotFoundException e) {
+        UserRepo.getInstance().addElement(newUser);
+      }
+  }
 }

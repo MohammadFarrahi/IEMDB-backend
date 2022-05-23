@@ -26,7 +26,7 @@ public class User {
 
     public User(String email, String password, String nickname, String name, String birthDate) throws CustomException {
         this.email = new Email(email);
-        this.password = PasswordEncoder.encode(password);
+        this.password = password == null ? null : PasswordEncoder.encode(password);
         this.nickname = nickname;
         this.name = name;
         this.birthDate = LocalDate.parse(birthDate);
