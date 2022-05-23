@@ -2,7 +2,9 @@ package ie.iemdb.domain;
 
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
+import ie.iemdb.exception.UserAlreadyExistsException;
 import ie.iemdb.model.DTO.MovieBriefDTO;
+import ie.iemdb.model.DTO.UserDTO;
 import ie.iemdb.model.Movie;
 import ie.iemdb.model.User;
 import ie.iemdb.repository.MovieRepo;
@@ -114,5 +116,16 @@ public class UserDomainManager {
   public void removeFromWatchList(String userId, Integer movieId) throws ObjectNotFoundException, SQLException {
     var user = UserRepo.getInstance().getElementById(userId);
     UserRepo.getInstance().removeFromWatchList(user, movieId);
+  }
+
+  public void registerNewUser(UserDTO userInfo) throws CustomException, SQLException {
+    var newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), userInfo.getName(), userInfo.getBirthDate());
+    try {
+      if(UserRepo.getInstance().getElementById(newUser.getId()) != null) {
+        throw new UserAlreadyExistsException();
+      }
+    } catch (ObjectNotFoundException e) {
+      UserRepo.getInstance().addElement(newUser);
+    }
   }
 }
