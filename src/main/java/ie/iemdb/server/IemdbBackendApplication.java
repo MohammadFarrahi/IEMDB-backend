@@ -1,4 +1,5 @@
 package ie.iemdb.server;
+
 import ie.iemdb.apiConsumer.ActorAPIConsumer;
 import ie.iemdb.apiConsumer.CommentAPIConsumer;
 import ie.iemdb.apiConsumer.MovieAPIConsumer;
@@ -18,27 +19,29 @@ import java.sql.SQLException;
 @SpringBootApplication
 @ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
-	private static void fetchData() {
-		try {
+    private static void fetchData() {
+        try {
 			if(ActorRepo.getInstance().getAllElements().size() == 0) {
-				System.out.println("h1");
-			(new ActorAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.ACTOR)).importData();
-				System.out.println("h2");
-			(new MovieAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.MOVIE)).importData();
-				System.out.println("h3");
-			(new UserAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.USER)).importData();
-				System.out.println("h4");
-				(new CommentAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.COMMENT)).importData();
-				System.out.println("h6");
+            System.out.println("h1");
+            (new ActorAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.ACTOR)).importData();
+            System.out.println("h2");
+            (new UserAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.USER)).importData();
+            System.out.println("h3");
+            (new MovieAPIConsumer(Constant.FetchApiUrl.BASE_V2 + Constant.FetchApiUrl.MOVIE)).importData();
+            UserRepo.getInstance().initWatchlistTable();
+            System.out.println("h4");
+            (new CommentAPIConsumer(Constant.FetchApiUrl.BASE_V1 + Constant.FetchApiUrl.COMMENT)).importData();
+            System.out.println("h6");
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	public static void main(String[] args) {
-		fetchData();
-		SpringApplication.run(IemdbBackendApplication.class, args);
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        fetchData();
+        SpringApplication.run(IemdbBackendApplication.class, args);
+    }
 }

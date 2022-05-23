@@ -66,6 +66,16 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     private void initMovieRateTable() {
+        System.out.printf(
+                "CREATE TABLE IF NOT EXISTS %s(" +
+                        "movieId INTEGER," +
+                        "\nuserId VARCHAR(225)," +
+                        "\nrate INT," +
+                        "\nFOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email)," +
+                        "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
+                        "\nPRIMARY KEY(movieId, userId));%n",
+                RATE_TABLE
+        );
         this.initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
@@ -90,7 +100,9 @@ public class MovieRepo extends Repo<Movie, Integer> {
         this.initMovieTable();
         this.initGenreTable();
         this.initCastTable();
+        System.out.println("HELLO");
         this.initMovieRateTable();
+        System.out.println("FUCK");
         this.notFoundException = new MovieNotFoundException();
     }
 
@@ -160,7 +172,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     @Override
     protected String getAddElementStatement() {
-        return String.format("INSERT INTO %s\n" +
+        return String.format("INSERT IGNORE INTO %s\n" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);", MOVIE_TABLE);
     }
 
@@ -195,7 +207,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     private void addMovieCast(Integer movieId, ArrayList<Actor> cast) throws SQLException {
         var sql = String.format(
-                "INSERT INTO %s(movieId, actorId)\nVALUES (?,?);", CAST_TABLE
+                "INSERT IGNORE INTO %s(movieId, actorId)\nVALUES (?,?);", CAST_TABLE
         );
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(sql);
@@ -209,7 +221,7 @@ public class MovieRepo extends Repo<Movie, Integer> {
 
     private void addMovieGenres(Integer movieId, ArrayList<String> genres) throws SQLException {
         var sql = String.format(
-                "INSERT INTO %s(movieId, genre)\nVALUES (?,?);", GENRE_TABLE
+                "INSERT IGNORE INTO %s(movieId, genre)\nVALUES (?,?);", GENRE_TABLE
         );
         Connection con = ConnectionPool.getConnection();
         PreparedStatement st = con.prepareStatement(sql);

@@ -27,7 +27,7 @@ public class UserRepo extends Repo<User, String> {
 
     private UserRepo() {
         initUserTable();
-        initWatchlistTable();
+//        initWatchlistTable();
         this.notFoundException = new UserNotFoundException();
     }
 
@@ -46,7 +46,7 @@ public class UserRepo extends Repo<User, String> {
         );
     }
 
-    private void initWatchlistTable() {
+    public void initWatchlistTable() {
         initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
@@ -103,7 +103,7 @@ public class UserRepo extends Repo<User, String> {
     }
     @Override
     protected String getAddElementStatement() {
-        return String.format("INSERT INTO %s\n" +
+        return String.format("INSERT IGNORE INTO %s\n" +
                 "VALUES (?, ?, ?, ?, ?);", USER_TABLE);
     }
 
