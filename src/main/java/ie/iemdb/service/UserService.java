@@ -1,22 +1,19 @@
 package ie.iemdb.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ie.iemdb.domain.UserDomainManager;
 import ie.iemdb.exception.CustomException;
 import ie.iemdb.exception.ObjectNotFoundException;
-import ie.iemdb.exception.UserAlreadyExistsException;
-import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.Response;
 import ie.iemdb.model.DTO.UserDTO;
-import ie.iemdb.repository.UserRepo;
 import ie.iemdb.security.DTO.JwtRequestDTO;
 import ie.iemdb.security.DTO.JwtResponseDTO;
 import ie.iemdb.security.JwtTokenUtil;
 import ie.iemdb.util.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@ComponentScan(basePackages ={"ie.iemdb.security", "ie.iemdb.util"})
 public class UserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -88,11 +85,12 @@ public class UserService {
             if(!loginInfo.checkNullability()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
             }
-            var userEmail = loginInfo.getUserEmail();
+            var userEmail = loginInfo.getEmail();
             var userPassword = loginInfo.getPassword();
             UserDomainManager.getInstance().loginUser(userEmail, userPassword);
             return new Response(true, "okeb", new JwtResponseDTO(userEmail, jwtTokenUtil.generateToken(userEmail)));
         } catch (ObjectNotFoundException e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "InvalidCredential", e);
         }
     }

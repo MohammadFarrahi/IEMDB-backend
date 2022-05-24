@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import ie.iemdb.security.PasswordEncoder;
 import kotlin.Pair;
 
 public class UserDomainManager {
@@ -114,7 +116,7 @@ public class UserDomainManager {
   }
 
   public void registerNewUser(UserDTO userInfo) throws CustomException, SQLException {
-    var newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), userInfo.getName(), userInfo.getBirthDate());
+    var newUser = new User(userInfo.getEmail(), PasswordEncoder.encode(userInfo.getPassword()), userInfo.getNickname(), userInfo.getName(), userInfo.getBirthDate());
     try {
       if(UserRepo.getInstance().getElementById(newUser.getId()) != null) {
         throw new UserAlreadyExistsException();

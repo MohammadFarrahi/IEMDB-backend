@@ -253,7 +253,7 @@ public class Movie {
         tuple.put("duration", this.duration.toString());
         tuple.put("imdbRate", this.imdbRate.toString());
         tuple.put("coverImgUrl", this.coverImgUrl);
-        tuple.put("imgUrl", this.toString());
+        tuple.put("imgUrl", this.imgUrl);
         return tuple;
     }
 

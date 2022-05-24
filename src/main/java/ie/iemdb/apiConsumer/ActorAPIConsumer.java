@@ -22,7 +22,6 @@ public class ActorAPIConsumer extends APIConsumer {
         for (var node : arrayNode) {
             try {
                 var newActor = makeNewActor(node);
-
                 repo.addElement(newActor);
             } catch (SQLException | DateTimeParseException e) {
                 e.printStackTrace();

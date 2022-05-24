@@ -129,6 +129,8 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 tupleMap.get("movieId"),
                 tupleMap.get("createdDate")
         ));
+
+        System.out.println(tupleMap.get("text"));
     }
 
 
@@ -138,6 +140,8 @@ public class CommentRepo extends Repo<Comment, Integer> {
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "vote=?;", VOTE_MAP_TABLE);
         executeUpdate(sql, List.of(userId, commentId.toString(), String.valueOf(vote), String.valueOf(vote)));
+
+        System.out.println(userId + " " +  String.valueOf(vote));
     }
 
     public Integer getMovieIdForComment(Integer commentId) throws SQLException {

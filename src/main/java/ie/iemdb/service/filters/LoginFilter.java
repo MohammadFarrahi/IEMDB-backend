@@ -5,6 +5,7 @@ import ie.iemdb.model.DTO.Response;
 import ie.iemdb.repository.UserRepo;
 import ie.iemdb.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
+@ComponentScan(basePackages ={"ie.iemdb.security"})
 public class LoginFilter implements Filter {
 
     @Autowired
@@ -39,9 +41,12 @@ public class LoginFilter implements Filter {
                 sendUnauthorizedResponse(response);
             } else {
                 request.setAttribute("userEmail", jwtTokenUtil.getUserIdFromToken(jwtToken));
+                filterChain.doFilter(request, response);
             }
+        } else {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+
     }
 
     @Override
@@ -61,7 +66,7 @@ public class LoginFilter implements Filter {
             ) return false;
             return true;
         }
-        return url.matches("^/users/d+/watchlist$") || url.matches("^/users/d+/watchlist/$");
+        return url.matches("^/users/\\S+/watchlist$") || url.matches("^/users/\\S+/watchlist/$");
     }
 
     private void sendUnauthorizedResponse(HttpServletResponse response) throws IOException {

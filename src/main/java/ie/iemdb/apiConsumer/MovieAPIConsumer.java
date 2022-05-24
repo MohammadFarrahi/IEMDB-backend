@@ -27,7 +27,6 @@ public class MovieAPIConsumer extends APIConsumer {
             for (var node : arrayNode) {
                 try{
                     var newMovie = makeNewMovie(node);
-                    System.out.println(newMovie.getName());
                     repo.addElement(newMovie);
                 }catch (ActorNotFoundException | SQLException e){
                     e.printStackTrace();
