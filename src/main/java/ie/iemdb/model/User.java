@@ -78,6 +78,7 @@ public class User {
     }
 
     public boolean checkPassword(String password) {
+        if (this.password == null) return false;
         return PasswordEncoder.matches(password, this.password);
     }
 
