@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class CommentService {
     @RequestMapping(value = "/comments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response postNewComment(@RequestBody CommentDTO newComment, HttpServletRequest request) throws SQLException {

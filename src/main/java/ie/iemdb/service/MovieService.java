@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class MovieService {
     @RequestMapping(value = "/movies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getMoviesList(@RequestParam(required = false) String filterBy, @RequestParam(required = false) String filterValue) throws SQLException {

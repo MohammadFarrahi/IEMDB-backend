@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 @ComponentScan(basePackages ={"ie.iemdb.security", "ie.iemdb.util"})
 public class UserService {
     @Autowired
@@ -42,7 +42,7 @@ public class UserService {
             var accessTokenUrl = String.format("https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s",
                     oauthClientId, oauthClientSecret, code);
             var accessTokenCallResult = mapper.readTree(apiClient.post(accessTokenUrl, "Accept", "application/json"));
-            var userInfoCallResult = apiClient.get("https://github.com/user",
+            var userInfoCallResult = apiClient.get("https://api.github.com/user",
                             "Authorization",String.format("token %s", accessTokenCallResult.get("access_token").asText()));
             return authenticateUser(userInfoCallResult);
         } catch (JsonProcessingException e) {
@@ -60,7 +60,7 @@ public class UserService {
         userDTO.setEmail(jsonResult.get("email").asText());
         userDTO.setName(jsonResult.get("name").asText());
         userDTO.setPassword(null);
-        userDTO.setBirthDate(LocalDate.parse(jsonResult.get("created_at").asText()).minusYears(18).toString());
+        userDTO.setBirthDate(LocalDate.parse(jsonResult.get("created_at").asText().split("T")[0]).minusYears(18).toString());
 
         var userEmail = userDTO.getEmail();
         UserDomainManager.getInstance().registerOrLoinUser(userDTO);

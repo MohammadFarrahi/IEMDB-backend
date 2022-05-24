@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.SQLException;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "false")
 public class ActorService {
     @RequestMapping(value = "/actors/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getActorInfo(@PathVariable(value = "id") Integer actorId) throws SQLException {

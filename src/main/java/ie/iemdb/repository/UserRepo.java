@@ -80,7 +80,7 @@ public class UserRepo extends Repo<User, String> {
         try {
             var newUser = new User(
                     rs.getString("email"),
-                    rs.getString("password"),
+                    rs.getString("password").equals("")? null : rs.getString("password"),
                     rs.getString("nickname"),
                     rs.getString("name"),
                     rs.getString("birthDate")
@@ -112,7 +112,7 @@ public class UserRepo extends Repo<User, String> {
         var tupleMap = newObject.getDBTuple();
         executeUpdate(getAddElementStatement(), List.of(
                 tupleMap.get("email"),
-                tupleMap.get("password"),
+                tupleMap.get("password") == null? "" : tupleMap.get("password"),
                 tupleMap.get("nickname"),
                 tupleMap.get("name"),
                 tupleMap.get("birthDate")
@@ -125,7 +125,7 @@ public class UserRepo extends Repo<User, String> {
         var sql = String.format("UPDATE %s\nSET\npassword=?,nickname=?,name=?,birthDate=?\nWHERE\nemail=?", USER_TABLE);
         var tupleMap = newObject.getDBTuple();
         executeUpdate(sql, List.of(
-                tupleMap.get("password"),
+                tupleMap.get("password") == null? "" : tupleMap.get("password"),
                 tupleMap.get("nickname"),
                 tupleMap.get("name"),
                 tupleMap.get("birthDate"),

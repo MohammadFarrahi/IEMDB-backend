@@ -35,7 +35,6 @@ public class LoginFilter implements Filter {
         String requestPath = request.getRequestURI();
         var jwtToken = request.getHeader("Authorization");
         var needsAuthentication = needsAuthentication(requestPath, request.getMethod());
-
         if (needsAuthentication){
             if (jwtToken == null || !jwtTokenUtil.validateToken(jwtToken)){
                 sendUnauthorizedResponse(response);
@@ -55,6 +54,8 @@ public class LoginFilter implements Filter {
     }
 
     private boolean needsAuthentication(String url, String httpMethod) {
+        if(httpMethod.equals("OPTIONS"))
+            return false;
         if(!httpMethod.equals("GET")) {
             if(
                 url.matches("^/auth/login$") ||
