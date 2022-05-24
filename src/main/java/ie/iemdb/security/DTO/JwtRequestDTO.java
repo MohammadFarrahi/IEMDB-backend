@@ -1,15 +1,15 @@
 package ie.iemdb.security.DTO;
 
 public class JwtRequestDTO {
-    private String userEmail;
+    private String email;
     private String password;
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -21,6 +21,6 @@ public class JwtRequestDTO {
     }
 
     public boolean checkNullability() {
-        return userEmail != null && password != null;
+        return email != null && password != null;
     }
 }

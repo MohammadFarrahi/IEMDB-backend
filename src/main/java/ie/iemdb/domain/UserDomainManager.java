@@ -83,6 +83,8 @@ public class UserDomainManager {
   }
 
   public void loginUser(String userEmail, String userPassword) throws ObjectNotFoundException, SQLException {
+    System.out.println(userEmail);
+    System.out.println(userPassword);
       var user = UserRepo.getInstance().getElementById(userEmail);
       if(!user.checkPassword(userPassword)) {
         throw new ObjectNotFoundException();
