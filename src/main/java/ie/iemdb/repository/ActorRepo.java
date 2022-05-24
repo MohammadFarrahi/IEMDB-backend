@@ -90,6 +90,8 @@ public class ActorRepo extends Repo<Actor, Integer> {
     public void addElement(Actor newObject) throws SQLException {
         var dbTuple = newObject.getDBTuple();
         executeUpdate(getAddElementStatement(), List.of(dbTuple.get("id"), dbTuple.get("name"), dbTuple.get("birthDate"), dbTuple.get("nationality"), dbTuple.get("imgUrl")));
+
+        System.out.println(dbTuple.get("name"));
     }
 
     public ArrayList<Actor> getCastForMovie(int movieId) throws SQLException {

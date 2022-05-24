@@ -66,16 +66,6 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     private void initMovieRateTable() {
-        System.out.printf(
-                "CREATE TABLE IF NOT EXISTS %s(" +
-                        "movieId INTEGER," +
-                        "\nuserId VARCHAR(225)," +
-                        "\nrate INT," +
-                        "\nFOREIGN KEY (userId) REFERENCES " + UserRepo.USER_TABLE + "(email)," +
-                        "\nFOREIGN KEY (movieId) REFERENCES " + MOVIE_TABLE + "(id)," +
-                        "\nPRIMARY KEY(movieId, userId));%n",
-                RATE_TABLE
-        );
         this.initTable(
                 String.format(
                         "CREATE TABLE IF NOT EXISTS %s(" +
@@ -100,9 +90,8 @@ public class MovieRepo extends Repo<Movie, Integer> {
         this.initMovieTable();
         this.initGenreTable();
         this.initCastTable();
-        System.out.println("HELLO");
         this.initMovieRateTable();
-        System.out.println("FUCK");
+        UserRepo.getInstance().initWatchlistTable();
         this.notFoundException = new MovieNotFoundException();
     }
 
@@ -201,8 +190,11 @@ public class MovieRepo extends Repo<Movie, Integer> {
                 tupleMap.get("coverImgUrl"),
                 tupleMap.get("imgUrl")
         ));
+        System.out.println(tupleMap.get("name"));
+
         addMovieGenres(newObject.getId(), newObject.getGenres());
         addMovieCast(newObject.getId(), newObject.getCast());
+
     }
 
     private void addMovieCast(Integer movieId, ArrayList<Actor> cast) throws SQLException {
@@ -217,6 +209,8 @@ public class MovieRepo extends Repo<Movie, Integer> {
         }
         st.close();
         con.close();
+
+        System.out.println("cast added");
     }
 
     private void addMovieGenres(Integer movieId, ArrayList<String> genres) throws SQLException {
@@ -231,6 +225,8 @@ public class MovieRepo extends Repo<Movie, Integer> {
         }
         st.close();
         con.close();
+
+        System.out.println("genres added");
     }
 
 
@@ -250,14 +246,17 @@ public class MovieRepo extends Repo<Movie, Integer> {
     }
 
     public ArrayList<Movie> getFilteredElementsByName(String name) throws SQLException {
+//        String sql = String.format("""
+//                        SELECT *
+//                        FROM %s
+//                        WHERE name LIKE '%%%s%%';
+//                        """, MOVIE_TABLE, name);
         String sql = String.format("""
                         SELECT *
                         FROM %s
-                        WHERE name LIKE '%%%s%%';
-                        """, MOVIE_TABLE, name);
-        System.out.println(sql);
-        System.out.println(name);
-        var res = executeQuery(sql, List.of());
+                        WHERE name LIKE ?;
+                        """, MOVIE_TABLE);
+        var res = executeQuery(sql, List.of("%" + name + "%"));
         var movies = convertResultSetToDomainModelList(res.getFirst());
         finishWithResultSet(res.getSecond());
         return movies;
@@ -315,6 +314,8 @@ public class MovieRepo extends Repo<Movie, Integer> {
                         "VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE\n" +
                         "rate=?;", RATE_TABLE);
         executeUpdate(sql, List.of(movieId.toString(), userEmail, String.valueOf(rate), String.valueOf(rate)));
+
+        System.out.println("rate added " + userEmail + " " +  String.valueOf(rate));
     }
 
     public List<Integer> getCastIdsForMovie(Integer movieId) throws SQLException {

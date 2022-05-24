@@ -5,6 +5,7 @@ import ie.iemdb.model.DTO.Response;
 import ie.iemdb.repository.UserRepo;
 import ie.iemdb.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
+@ComponentScan(basePackages ={"ie.iemdb.security"})
 public class LoginFilter implements Filter {
 
     @Autowired
@@ -35,13 +37,18 @@ public class LoginFilter implements Filter {
         var needsAuthentication = needsAuthentication(requestPath, request.getMethod());
 
         if (needsAuthentication){
+            System.out.println("hell");
+            System.out.println(jwtToken);
             if (jwtToken == null || !jwtTokenUtil.validateToken(jwtToken)){
                 sendUnauthorizedResponse(response);
             } else {
                 request.setAttribute("userEmail", jwtTokenUtil.getUserIdFromToken(jwtToken));
+                filterChain.doFilter(request, response);
             }
+        } else {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+
     }
 
     @Override
@@ -50,6 +57,9 @@ public class LoginFilter implements Filter {
     }
 
     private boolean needsAuthentication(String url, String httpMethod) {
+        System.out.println("heellloo");
+        System.out.println(url.matches("^/users/d+/watchlist$") || url.matches("^/users/d+/watchlist/$"));
+        System.out.println(url);
         if(!httpMethod.equals("GET")) {
             if(
                 url.matches("^/auth/login$") ||

@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 @Component
 public class ApiClient {
     private final HttpClient internalClient = HttpClient.newHttpClient();

@@ -17,8 +17,10 @@ import ie.iemdb.security.JwtTokenUtil;
 import ie.iemdb.util.ApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,6 +30,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@ComponentScan(basePackages ={"ie.iemdb.security", "ie.iemdb.util"})
 public class UserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;

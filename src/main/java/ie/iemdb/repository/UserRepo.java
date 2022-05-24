@@ -117,6 +117,8 @@ public class UserRepo extends Repo<User, String> {
                 tupleMap.get("name"),
                 tupleMap.get("birthDate")
         ));
+
+        System.out.println(tupleMap.get("name"));
     }
 
     public void updateElement(User newObject) throws SQLException {
@@ -151,8 +153,8 @@ public class UserRepo extends Repo<User, String> {
             throw new AgeLimitException();
 
         executeUpdate(getAddToWatchListStatement(), List.of(user.getId(), movie.getId().toString()));
-
         user.addToWatchList(movie);
+        System.out.println("watch list added");
     }
 
     public void removeFromWatchList(User user, Integer movieId) throws MovieNotFoundException, SQLException {
