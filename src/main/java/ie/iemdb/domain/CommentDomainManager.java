@@ -31,6 +31,7 @@ public class CommentDomainManager {
         var user = UserRepo.getInstance().getElementById(commentDTO.getCommentOwnerId());
         var newComment = new Comment(commentMovie, user, commentDTO.getText());
         CommentRepo.getInstance().addElement(newComment);
+        newComment.setId(CommentRepo.lastCommentId);
         return newComment.getDTO();
     }
 }
