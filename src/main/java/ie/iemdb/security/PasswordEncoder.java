@@ -1,17 +1,15 @@
 package ie.iemdb.security;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.security.SecureRandom;
 
 public class PasswordEncoder {
     private static final int strength = 10;
-    private static final BCryptPasswordEncoder bCrypt = new BCryptPasswordEncoder(strength, new SecureRandom());
-
     public static String encode(String plainPassword) {
-        return bCrypt.encode(plainPassword);
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt(strength));
     }
     public static boolean matches(String rawPassword, String encodedPassword) {
-        return bCrypt.matches(rawPassword, encodedPassword);
+        return BCrypt.checkpw(rawPassword, encodedPassword);
     }
 
 }

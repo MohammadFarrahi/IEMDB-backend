@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -57,6 +58,10 @@ public class JwtTokenUtil implements Serializable {
     }
     //validate token
     public Boolean validateToken(String token) {
-        return (!isTokenExpired(token));
+        try {
+            return (!isTokenExpired(token));
+        } catch (SignatureException e) {
+            return false;
+        }
     }
 }
