@@ -129,7 +129,7 @@ public class CommentRepo extends Repo<Comment, Integer> {
                 tupleMap.get("movieId"),
                 tupleMap.get("createdDate")
         ));
-
+        CommentRepo.lastCommentId += 1;
         System.out.println(tupleMap.get("text"));
     }
 
