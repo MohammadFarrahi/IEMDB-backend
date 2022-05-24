@@ -11,49 +11,90 @@ import ie.iemdb.model.DTO.MovieBriefDTO;
 import ie.iemdb.model.DTO.Response;
 import ie.iemdb.model.DTO.UserDTO;
 import ie.iemdb.repository.UserRepo;
+import ie.iemdb.security.DTO.JwtRequestDTO;
+import ie.iemdb.security.DTO.JwtResponseDTO;
+import ie.iemdb.security.JwtTokenUtil;
+import ie.iemdb.util.ApiClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserService {
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private ApiClient apiClient;
+    @Value("${Oauth.client-secret}")
+    private String oauthClientSecret;
+    @Value("${Oauth.client-id}")
+    private String oauthClientId;
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    @RequestMapping(value = "/auth/oauth-login", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Response loginWithOauth(@RequestParam(value="code", required = true) String code) throws SQLException {
+        try {
+            var accessTokenUrl = String.format("https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s",
+                    oauthClientId, oauthClientSecret, code);
+            var accessTokenCallResult = mapper.readTree(apiClient.post(accessTokenUrl, "Accept", "application/json"));
+            var userInfoCallResult = apiClient.get("https://github.com/user",
+                            "Authorization",String.format("token %s", accessTokenCallResult.get("access_token").asText()));
+            return authenticateUser(userInfoCallResult);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "SomethingWentWrong", e);
+        } catch (CustomException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+    private Response authenticateUser(String userInfoCallResult) throws JsonProcessingException, SQLException, CustomException {
+        var jsonResult = mapper.readTree(userInfoCallResult);
+        var userDTO = new UserDTO();
+        userDTO.setNickname(jsonResult.get("login").asText());
+        userDTO.setEmail(jsonResult.get("email").asText());
+        userDTO.setName(jsonResult.get("name").asText());
+        userDTO.setPassword(null);
+        userDTO.setBirthDate(LocalDate.parse(jsonResult.get("created_at").asText()).minusYears(18).toString());
+
+        var userEmail = userDTO.getEmail();
+        UserDomainManager.getInstance().registerOrLoinUser(userDTO);
+        return new Response(true, "okeb", new JwtResponseDTO(userEmail, jwtTokenUtil.generateToken(userEmail)));
+    }
+
     @RequestMapping(value = "/auth/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response registerUser(@RequestBody UserDTO newUserInfo) throws SQLException {
         if(newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         try {
             UserDomainManager.getInstance().registerNewUser(newUserInfo);
-            // TODO : generate JWT and return proper response
-            return new Response(true,null,null);
+            return new Response(true, "okeb", null);
         } catch (CustomException e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
     }
-
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response loginUser(@RequestBody String loginInfoForm) throws SQLException {
+    public Response loginUser(@RequestBody JwtRequestDTO loginInfo) throws SQLException {
         try {
-            var loginJson = new ObjectMapper().readTree(loginInfoForm);
-            var userEmail = loginJson.get("email").asText();
-            var userPassword = loginJson.get("password").asText();
+            if(!loginInfo.checkNullability()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            }
+            var userEmail = loginInfo.getUserEmail();
+            var userPassword = loginInfo.getPassword();
             UserDomainManager.getInstance().loginUser(userEmail, userPassword);
-            return new Response(true, "okeb", userEmail);
+            return new Response(true, "okeb", new JwtResponseDTO(userEmail, jwtTokenUtil.generateToken(userEmail)));
         } catch (ObjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "InvalidCredential", e);
-        } catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-    }
-    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response logoutUser() {
-        UserDomainManager.getInstance().logoutUser();
-        return new Response(true, "okeb", null);
     }
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response getWatchlist(@PathVariable(value = "id") String userId) throws SQLException {
@@ -66,7 +107,7 @@ public class UserService {
     @RequestMapping(value = "/users/{id}/watchlist", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response postNewWatchlist(@PathVariable(value = "id") String userId, @RequestBody String watchlistInfo) throws SQLException {
         try {
-            var movieId = new ObjectMapper().readTree(watchlistInfo).get("movieId").asInt();
+            var movieId = mapper.readTree(watchlistInfo).get("movieId").asInt();
             return new Response(true, "okeb", UserDomainManager.getInstance().addToWatchlist(userId, movieId));
         } catch (Exception e) {
             if(e instanceof SQLException){

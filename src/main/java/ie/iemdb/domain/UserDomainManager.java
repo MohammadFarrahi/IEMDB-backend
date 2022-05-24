@@ -87,22 +87,17 @@ public class UserDomainManager {
       if(!user.checkPassword(userPassword)) {
         throw new ObjectNotFoundException();
       }
-      UserRepo.getInstance().loginUser(user);
   }
 
-  public void logoutUser() {
-    UserRepo.getInstance().logoutUser();
-  }
+//  public void logoutUser() {
+//    UserRepo.getInstance().logoutUser();
+//  }
 
   public List<MovieBriefDTO> getWatchlistDTO(String userId) throws CustomException, SQLException {
     List<MovieBriefDTO> DTOList = new ArrayList<>();
       var watchlist = UserRepo.getInstance().getWatchList(userId);
       watchlist.forEach(watchlistItem -> DTOList.add(watchlistItem.getShortDTO()));
       return DTOList;
-  }
-
-  public boolean isloggedIn(String userId) {
-    return UserRepo.loggedInUser.getId().equals(userId);
   }
 
   public MovieBriefDTO addToWatchlist(String userId, Integer movieId) throws CustomException, SQLException {
@@ -127,5 +122,16 @@ public class UserDomainManager {
     } catch (ObjectNotFoundException e) {
       UserRepo.getInstance().addElement(newUser);
     }
+  }
+
+    public void registerOrLoinUser(UserDTO userInfo) throws CustomException, SQLException {
+      var newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), userInfo.getName(), userInfo.getBirthDate());
+      try {
+        if(UserRepo.getInstance().getElementById(newUser.getId()) != null) {
+          UserRepo.getInstance().updateElement(newUser);
+        }
+      } catch (ObjectNotFoundException e) {
+        UserRepo.getInstance().addElement(newUser);
+      }
   }
 }

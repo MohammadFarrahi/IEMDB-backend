@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,18 +53,18 @@ public class MovieService {
     }
 
     @RequestMapping(value = "/movies/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response getMovieInfo(@PathVariable(value = "id") Integer movieId) throws SQLException {
+    public Response getMovieInfo(@PathVariable(value = "id") Integer movieId, HttpServletRequest request) throws SQLException {
         try {
-            return new Response(true, "okeb", MovieDomainManager.getInstance().getMovieDTO(movieId));
+            return new Response(true, "okeb", MovieDomainManager.getInstance().getMovieDTO(movieId, (String)request.getAttribute("userEmail")));
         } catch (ObjectNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
     @RequestMapping(value = "/movies/{id}/rate", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Response postMovieRate(@PathVariable(value = "id") Integer movieId, @RequestBody String rateObj) throws SQLException {
+    public Response postMovieRate(@PathVariable(value = "id") Integer movieId, @RequestBody String rateObj, HttpServletRequest request) throws SQLException {
         try {
             var rate = new ObjectMapper().readTree(rateObj).get("rate").asInt();
-            return new Response(true, "okeb", MovieDomainManager.getInstance().rateMovie(movieId, rate));
+            return new Response(true, "okeb", MovieDomainManager.getInstance().rateMovie(movieId, rate, (String)request.getAttribute("userEmail")));
         } catch (Exception e) {
             if(e instanceof SQLException){
                 throw (SQLException) e;

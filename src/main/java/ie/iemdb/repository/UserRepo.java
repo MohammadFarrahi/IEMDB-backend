@@ -119,6 +119,18 @@ public class UserRepo extends Repo<User, String> {
         ));
     }
 
+    public void updateElement(User newObject) throws SQLException {
+        var sql = String.format("UPDATE %s\nSET\npassword=?,nickname=?,name=?,birthDate=?\nWHERE\nemail=?", USER_TABLE);
+        var tupleMap = newObject.getDBTuple();
+        executeUpdate(sql, List.of(
+                tupleMap.get("password"),
+                tupleMap.get("nickname"),
+                tupleMap.get("name"),
+                tupleMap.get("birthDate"),
+                tupleMap.get("email")
+        ));
+    }
+
     private String getAddToWatchListStatement() {
         return String.format("INSERT INTO %s (userId, movieId)\n" +
                 "VALUES (?, ?);", WATCH_LIST_TABLE);
@@ -163,13 +175,13 @@ public class UserRepo extends Repo<User, String> {
         return list;
     }
 
-    public void loginUser(User user) {
-        loggedInUser = user;
-    }
+//    public void loginUser(User user) {
+//        loggedInUser = user;
+//    }
 
-    public void logoutUser() {
-        loggedInUser = null;
-    }
+//    public void logoutUser() {
+//        loggedInUser = null;
+//    }
 
     public User getUserForComment(int commentId) throws SQLException {
         var userId = CommentRepo.getInstance().getUserIdForComment(commentId);

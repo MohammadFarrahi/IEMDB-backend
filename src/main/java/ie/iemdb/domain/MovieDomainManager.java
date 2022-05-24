@@ -27,22 +27,21 @@ public class MovieDomainManager {
         return getMoviesDTO(movies);
     }
 //    public List<MovieBriefDTO> get
-    public MovieDTO getMovieDTO(Integer movieId) throws ObjectNotFoundException, SQLException {
+    public MovieDTO getMovieDTO(Integer movieId, String userId) throws ObjectNotFoundException, SQLException {
         var movie = MovieRepo.getInstance().getElementById(movieId);
-        return getMovieDTO(movie);
+        return getMovieDTO(movie, userId);
     }
 
-    public MovieDTO rateMovie(Integer movieId, int rate) throws CustomException, SQLException {
-        var ratingUser = UserRepo.loggedInUser;
+    public MovieDTO rateMovie(Integer movieId, int rate, String userId) throws CustomException, SQLException {
         var movie = MovieRepo.getInstance().getElementById(movieId);
-        movie.updateMovieRating(ratingUser.getId(), rate);
-        MovieRepo.getInstance().rateMovie(movieId, ratingUser.getId(), rate);
-        return getMovieDTO(movie);
+        movie.updateMovieRating(userId, rate);
+        MovieRepo.getInstance().rateMovie(movieId, userId, rate);
+        return getMovieDTO(movie, userId);
     }
-    private MovieDTO getMovieDTO(Movie movie) throws SQLException {
+    private MovieDTO getMovieDTO(Movie movie, String userId) throws SQLException {
         var DTO = movie.getDTO();
-        if(UserRepo.loggedInUser != null){
-            DTO.setUserRate(movie.getUserRate(UserRepo.loggedInUser.getId()));
+        if(userId != null){
+            DTO.setUserRate(movie.getUserRate(userId));
         }
         return DTO;
     }
