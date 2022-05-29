@@ -8,8 +8,8 @@ import java.sql.Statement;
 
 public class ConnectionPool {
     private static final BasicDataSource ds = new BasicDataSource();
-    private static final String dbURL = "jdbc:mysql://localhost:3306/iemdb_db";
-    private static final String dbUserName = "iemdb";
+    private static final String dbURL = "jdbc:mysql://mysqldb/iemdb_db";
+    private static final String dbUserName = "root";
     private static final String dbPassword = "1234IEMDB.ir";
 
     static {

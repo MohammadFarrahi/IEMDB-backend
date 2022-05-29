@@ -1,0 +1,20 @@
+services:
+  iemdb-backend:
+    image: iemdb-backend
+    ports:
+      - "8000:8000"
+    networks:
+      - iemdb-db
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    networks:
+      - iemdb-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234IEMDB.ir
+      - MYSQL_DATABASE=iemdb_db
+
+networks:
+  iemdb-db:
