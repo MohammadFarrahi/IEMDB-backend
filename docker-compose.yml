@@ -4,6 +4,9 @@ services:
     image: iemdb-backend
     ports:
       - "8000:8000"
+    restart: on-failure
+    environment:
+      - SLEEP_LENGTH=10
     networks:
       - iemdb-db
     depends_on:
@@ -11,15 +14,16 @@ services:
 
   mysqldb:
     image: mysql:8
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     networks:
       - iemdb-db
     environment:
-      - MYSQL_DATABASE=iemdb_db
-      - MYSQL_ROOT_HOST=172.21.0.4
       - MYSQL_ROOT_USER=root
       - MYSQL_ROOT_PASSWORD=1234IEMDB.ir
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=1234IEMDB.ir
+      - MYSQL_DATABASE=iemdb_db
 
 networks:
   iemdb-db:
