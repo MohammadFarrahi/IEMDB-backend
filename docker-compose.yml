@@ -1,3 +1,4 @@
+version: "3"
 services:
   iemdb-backend:
     image: iemdb-backend
@@ -13,8 +14,12 @@ services:
     networks:
       - iemdb-db
     environment:
-      - MYSQL_ROOT_PASSWORD=1234IEMDB.ir
       - MYSQL_DATABASE=iemdb_db
+      - MYSQL_ROOT_HOST=172.21.0.4
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=1234IEMDB.ir
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=1234IEMDB.ir
 
 networks:
   iemdb-db:
