@@ -69,7 +69,7 @@ public class UserService {
 
     @RequestMapping(value = "/auth/signup", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Response registerUser(@RequestBody UserDTO newUserInfo) throws SQLException {
-        if(newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if(!newUserInfo.checkNullability()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         try {
             UserDomainManager.getInstance().registerNewUser(newUserInfo);
             return new Response(true, "okeb", null);
