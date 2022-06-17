@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ie</groupId>
 	<artifactId>iemdb-backend</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>iemdb-backend</name>
 	<description>Backend of IEMDB web application</description>
 	<properties>
