@@ -1,0 +1,19 @@
+variables:
+    IMAGE_NAME: quay.io/ie_account/iemdb
+    IMAGE_TAG: back-end-1.0
+
+stages:
+    - build
+
+build_image:
+    stage: build
+    image: docker:20.10.17
+    services:
+        - docker:20.10.17-dind
+    before_script:
+        - docker login -u $IE_REGISTRY_USER -p $IE_REGISTRY_PASS quay.io
+    script:
+        - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        - docker push $IMAGE_NAME:$IMAGE_TAG
+    after_script:
+        - docker logout
