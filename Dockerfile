@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /build
 COPY . .
 
-RUN ./mvnw package
+RUN ./mvnw package -Dmaven.test.skip
 ARG JAR_FILE=target/*.jar
 RUN mv ${JAR_FILE} /app.jar
 
