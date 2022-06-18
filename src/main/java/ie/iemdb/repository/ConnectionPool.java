@@ -1,5 +1,6 @@
 package ie.iemdb.repository;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import java.sql.Connection;
@@ -8,9 +9,9 @@ import java.sql.Statement;
 
 public class ConnectionPool {
     private static final BasicDataSource ds = new BasicDataSource();
-    private static final String dbURL = "jdbc:mysql://mysqldb:3306/iemdb_db";
-    private static final String dbUserName = "root";
-    private static final String dbPassword = "1234IEMDB.ir";
+    private static String dbURL;
+    private static String dbUserName;
+    private static String dbPassword;
 
     static {
         try {
@@ -18,6 +19,11 @@ public class ConnectionPool {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
+        var dotenv = Dotenv.load();
+        dbURL = dotenv.get("DB_URL");
+        dbUserName = dotenv.get("DB_USERNAME");
+        dbPassword = dotenv.get("DB_PASSWORD");
+
         ds.setUsername(dbUserName);
         ds.setPassword(dbPassword);
         ds.setUrl(dbURL);
