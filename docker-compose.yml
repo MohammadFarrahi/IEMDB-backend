@@ -7,6 +7,10 @@ services:
     restart: on-failure
     environment:
       - SLEEP_LENGTH=10
+      - SEVER_ROOT=8000
+      - DB_URL=jdbc:mysql://mysqldb:3306/iemdb_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234IEMDB.ir
     networks:
       - iemdb-db
     depends_on:

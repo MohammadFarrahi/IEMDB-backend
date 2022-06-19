@@ -1,6 +1,5 @@
 package ie.iemdb.repository;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.commons.dbcp.BasicDataSource;
 
 import java.sql.Connection;
@@ -19,7 +18,6 @@ public class ConnectionPool {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-//        var dotenv = Dotenv.load();
         dbURL = System.getenv("DB_URL");
         dbUserName = System.getenv("DB_USERNAME");
         dbPassword = System.getenv("DB_PASSWORD");

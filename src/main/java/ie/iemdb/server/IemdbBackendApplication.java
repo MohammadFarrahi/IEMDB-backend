@@ -4,12 +4,8 @@ import ie.iemdb.apiConsumer.ActorAPIConsumer;
 import ie.iemdb.apiConsumer.CommentAPIConsumer;
 import ie.iemdb.apiConsumer.MovieAPIConsumer;
 import ie.iemdb.apiConsumer.UserAPIConsumer;
-import ie.iemdb.exception.ObjectNotFoundException;
 import ie.iemdb.repository.ActorRepo;
-import ie.iemdb.repository.CommentRepo;
-import ie.iemdb.repository.UserRepo;
 import ie.iemdb.util.types.Constant;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,7 +17,6 @@ import java.util.Collections;
 @SpringBootApplication
 @ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
-//    private static Dotenv dotenv = Dotenv.load();
     private static void fetchData() {
         try {
 			if(ActorRepo.getInstance().getAllElements().size() == 0) {
