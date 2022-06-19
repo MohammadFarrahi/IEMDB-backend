@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iemdb-back-config
+data:
+  backend-url: iemdb-back-service
