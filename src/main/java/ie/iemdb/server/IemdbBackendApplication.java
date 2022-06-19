@@ -21,7 +21,7 @@ import java.util.Collections;
 @SpringBootApplication
 @ComponentScan(basePackages = "ie.iemdb.service")
 public class IemdbBackendApplication {
-    private static Dotenv dotenv = Dotenv.load();
+//    private static Dotenv dotenv = Dotenv.load();
     private static void fetchData() {
         try {
 			if(ActorRepo.getInstance().getAllElements().size() == 0) {
@@ -45,7 +45,7 @@ public class IemdbBackendApplication {
     public static void main(String[] args) {
         fetchData();
         SpringApplication app = new SpringApplication(IemdbBackendApplication.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", dotenv.get("SERVER_PORT")));
+        app.setDefaultProperties(Collections.singletonMap("server.port", System.getenv("SERVER_PORT")));
         app.run(args);
     }
 }

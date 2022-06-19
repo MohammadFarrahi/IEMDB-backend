@@ -19,10 +19,10 @@ public class ConnectionPool {
         } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
-        var dotenv = Dotenv.load();
-        dbURL = dotenv.get("DB_URL");
-        dbUserName = dotenv.get("DB_USERNAME");
-        dbPassword = dotenv.get("DB_PASSWORD");
+//        var dotenv = Dotenv.load();
+        dbURL = System.getenv("DB_URL");
+        dbUserName = System.getenv("DB_USERNAME");
+        dbPassword = System.getenv("DB_PASSWORD");
 
         ds.setUsername(dbUserName);
         ds.setPassword(dbPassword);
