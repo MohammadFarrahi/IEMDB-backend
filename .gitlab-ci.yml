@@ -11,7 +11,7 @@ build_image:
     services:
         - docker:20.10.17-dind
     before_script:
-        - docker login -u $IE_REGISTRY_USER -p $IE_REGISTRY_PASS quay.io
+        - docker login -u $IE_REGISTRY_USER -p $IE_REGISTRY_PASS
     script:
         - docker build -t $IMAGE_NAME:$IMAGE_TAG .
         - docker push $IMAGE_NAME:$IMAGE_TAG
